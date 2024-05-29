@@ -1,8 +1,208 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management Solution</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: whitesmoke;
+        }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+        .container {
+            width: 80%;
+            margin: 0 auto;
+        }
+
+        .flex-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hero{
+            width:1000px;
+            padding: 60px 0;
+            background-color: antiquewhite;
+        }
+
+        .cta {
+            padding: 60px 0;
+            background-color: antiquewhite;
+        }
+
+        .hero-content, .cta-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .hero img, .cta img {
+            width: 45%;
+            max-width: 500px;
+            height: auto;
+        }
+
+        .hero-text, .cta-text {
+            width: 50%;
+        }
+
+            .hero-text h1, .cta-text h2 {
+                font-size: 2.5em;
+                color: #333;
+            }
+
+            .hero-text p, .cta-text p {
+                font-size: 1.2em;
+                color: #666;
+            }
+
+            .hero-text .signup, .cta-text .signup {
+                margin-top: 20px;
+                padding: 15px 30px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+            }
+
+        .features {
+            background-color: #fff;
+            padding: 60px 0;
+            text-align: center;
+        }
+
+            .features h2 {
+                font-size: 2em;
+                color: #333;
+            }
+
+        .features-grid {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+        }
+
+        .feature-item {
+            width: 30%;
+            text-align: left;
+        }
+
+            .feature-item h3 {
+                font-size: 1.5em;
+                color: #333;
+            }
+
+            .feature-item p {
+                font-size: 1em;
+                color: #666;
+            }
+
+        .cta-text {
+            text-align: left;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+            footer .footer-content {
+                display: flex;
+                justify-content: space-around;
+            }
+
+                footer .footer-content nav a {
+                    color: #fff;
+                    margin: 0 15px;
+                    text-decoration: none;
+                }
+
+            footer .footer-contact p {
+                margin: 5px 0;
+            }
+
+            footer .footer-logo img {
+                height: 40px;
+            }
+    </style>
+</head>
+<body>
+
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content flex-container">
+                <img src="~/assets/warehouse.png" alt="warehouse" class="hero-image" />
+                <div class="hero-text">
+                    <h1>Your Ultimate Inventory Management Solution</h1>
+                    <p>Simplify and optimize your stock management with Inventory, the ultimate inventory solution.</p>
+                    <button class="signup">Sign-up</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2>Unlock Powerful Capabilities</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <h3>Reporting and Analytics</h3>
+                    <p>Generate detailed reports on stock valuation, sales performance, and more, providing valuable insights for strategic planning.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Real-time Updates</h3>
+                    <p>Get immediate access to accurate stock movement information, ensuring a real-time and dynamic view of your inventory status.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Customizable Dashboards</h3>
+                    <p>Arrange widgets according to your preferences, providing a personalized and focused view of crucial metrics for your business.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <div class="container">
+            <div class="cta-content flex-container">
+                <img src="~/assets/inventory.png" alt="inventory" class="cta-image" />
+                <div class="cta-text">
+                    <h2>Experience the ultimate in speed and precision for your inventory needs.</h2>
+                    <p>Say goodbye to manual data entry and hello to unparalleled speed and accuracy.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!---<footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="~/images/logo.png" alt="Inventory Logo">
+                    <span>Inventory</span>
+                </div>
+                <nav>
+                    <a href="#">Home</a>
+                    <a href="#">Features</a>
+                    <a href="#">Hardware</a>
+                    <a href="#">Pricing</a>
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                </nav>
+            </div>
+            <div class="footer-contact">
+                <p>Your Ultimate Inventory Management Solution</p>
+                <p>name@email.com</p>
+                <p>(+1) 123 456 7893</p>
+            </div>
+        </div>
+    </footer>-->
+</body>
+</html>
