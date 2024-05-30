@@ -25,14 +25,13 @@
         }
 
         .hero{
-            width:1000px;
             padding: 60px 0;
-            background-color: antiquewhite;
+            background-color: white;
         }
 
         .cta {
             padding: 60px 0;
-            background-color: antiquewhite;
+            background-color: white;
         }
 
         .hero-content, .cta-content {
@@ -53,7 +52,7 @@
 
             .hero-text h1, .cta-text h2 {
                 font-size: 2.5em;
-                color: #333;
+                color: #0E9BA8
             }
 
             .hero-text p, .cta-text p {
@@ -64,37 +63,98 @@
             .hero-text .signup, .cta-text .signup {
                 margin-top: 20px;
                 padding: 15px 30px;
-                background-color: #007bff;
+                background-color: #0E9BA8;
                 color: #fff;
                 border: none;
                 cursor: pointer;
             }
 
         .features {
-            background-color: #fff;
             padding: 60px 0;
-            text-align: center;
+            background-color: #f0f0f0;
         }
 
             .features h2 {
+                text-align: center;
+                margin-bottom: 40px;
                 font-size: 2em;
                 color: #333;
             }
 
         .features-grid {
             display: flex;
-            justify-content: space-around;
-            margin-top: 40px;
+            justify-content: space-between;
+            gap: 20px;
         }
 
         .feature-item {
-            width: 30%;
-            text-align: left;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
         }
+
+            .feature-item img {
+                width: 80px; /* Adjust the size of the images as needed */
+                height: 80px;
+                margin-bottom: 20px;
+            }
 
             .feature-item h3 {
                 font-size: 1.5em;
-                color: #333;
+                color: #F7A072;
+                margin-bottom: 10px;
+            }
+
+            .feature-item p {
+                font-size: 1em;
+                color: #666;
+            }
+
+        .feature-item1 {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+        }
+
+            .feature-item1 img {
+                width: 80px; /* Adjust the size of the images as needed */
+                height: 80px;
+                margin-bottom: 20px;
+            }
+
+            .feature-item1 h3 {
+                font-size: 1.5em;
+                color: #27A5E9;
+                margin-bottom: 10px;
+            }
+
+            .feature-item1 p {
+                font-size: 1em;
+                color: #666;
+            }
+
+        .feature-item2 {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+        }
+
+            .feature-item2 img {
+                width: 80px; /* Adjust the size of the images as needed */
+                height: 80px;
+                margin-bottom: 20px;
+            }
+
+            .feature-item2 h3 {
+                font-size: 1.5em;
+                color: #27A5E9;
+                margin-bottom: 10px;
             }
 
             .feature-item p {
@@ -154,14 +214,17 @@
             <h2>Unlock Powerful Capabilities</h2>
             <div class="features-grid">
                 <div class="feature-item">
+                    <img src="~/assets/chartt.jpg" alt="Reporting and Analytics">
                     <h3>Reporting and Analytics</h3>
                     <p>Generate detailed reports on stock valuation, sales performance, and more, providing valuable insights for strategic planning.</p>
                 </div>
-                <div class="feature-item">
+                <div class="feature-item1">
+                    <img src="~/assets/realtime.jpg" alt="Real-time Updates">
                     <h3>Real-time Updates</h3>
                     <p>Get immediate access to accurate stock movement information, ensuring a real-time and dynamic view of your inventory status.</p>
                 </div>
-                <div class="feature-item">
+                <div class="feature-item2">
+                    <img src="~/assets/dash.jpg" alt="Customizable Dashboards">
                     <h3>Customizable Dashboards</h3>
                     <p>Arrange widgets according to your preferences, providing a personalized and focused view of crucial metrics for your business.</p>
                 </div>
