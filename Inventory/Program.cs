@@ -2,6 +2,13 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Inventory.Areas.Identity.Data;
 var builder = WebApplication.CreateBuilder(args);
+var Configuration = builder.Configuration;
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>{
+
+    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+
+});
 var connectionString = builder.Configuration.GetConnectionString("AuthContextConnection") ?? throw new InvalidOperationException("Connection string 'AuthContextConnection' not found.");
 
 builder.Services.AddDbContext<AuthContext>(options => options.UseSqlServer(connectionString));
