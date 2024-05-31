@@ -20,18 +20,10 @@ public class AuthContext : IdentityDbContext<AuthUser>
         // For example, you can rename the ASP.NET Identity table names and more.
 
         // Add your customizations after calling base.OnModelCreating(builder);
-        builder.ApplyConfiguration(new ApplicationUserEntityConfiguration());
+       
     }
 
 
 }
 
-public class ApplicationUserEntityConfiguration : IEntityTypeConfiguration<AuthUser>
-{
-    public void Configure(EntityTypeBuilder<AuthUser> builder)
-    {
-        builder.Property(x => x.FullName).HasMaxLength(100);
-        builder.Property(x => x.Contact).HasMaxLength(100);
-        builder.Property(x => x.address).HasMaxLength(100);
-    }
-}  
+
