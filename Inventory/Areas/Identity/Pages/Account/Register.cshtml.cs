@@ -46,68 +46,54 @@ namespace Inventory.Areas.Identity.Pages.Account
             _emailSender = emailSender;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public string ReturnUrl { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
 
+            [Required]
+            [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "The {0} can only contain letters.")]
+            [Display(Name = "Firstname")]
+            public string Firstname { get; set; }
 
-            public string? Firstname { get; set; }
-        public string? Lastname { get; set; }
-        public string? Address { get; set; }
-        public string? PhoneNumber { get; set; }
+            [Required]
+            [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "The {0} can only contain letters.")]
+            [Display(Name = "Lastname")]
+            public string Lastname { get; set; }
+
+            [Required]
+            [StringLength(200, ErrorMessage = "The {0} must be at most {1} characters long.")]
+            [RegularExpression(@"^[a-zA-Z0-9\s,.'-]{1,200}$", ErrorMessage = "The {0} contains invalid characters.")]
+            [Display(Name = "Address")]
+            public string Address { get; set; }
+
+            [Phone]
+            [RegularExpression(@"^\+?[1-9]\d{1,14}$", ErrorMessage = "The {0} is not a valid phone number.")]
+            [Display(Name = "Phone Number")]
+            public string PhoneNumber { get; set; }
         }
-
-        
-
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -123,12 +109,13 @@ namespace Inventory.Areas.Identity.Pages.Account
             {
                 var user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                // Set username to Firstname
+                await _userStore.SetUserNameAsync(user, Input.Firstname, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                user.Firstname =Input.Firstname;
-                user.Lastname =Input.Lastname;
-                user.Address =Input.Address;
-                user.PhoneNumber =Input.PhoneNumber;
+                user.Firstname = Input.Firstname;
+                user.Lastname = Input.Lastname;
+                user.Address = Input.Address;
+                user.PhoneNumber = Input.PhoneNumber;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
