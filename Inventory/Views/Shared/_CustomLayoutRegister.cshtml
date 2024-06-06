@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Inventory </title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+</head>
+<body>
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $.validator.addMethod("lettersOnly", function (value, element) {
+                return this.optional(element) || /^[a-zA-Z]+$/.test(value);
+            }, "Please enter only letters.");
+
+            $.validator.addMethod("passwordComplexity", function (value, element) {
+                return this.optional(element) || /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/.test(value);
+            }, "Password must have one uppercase, one lowercase, one number, and one special character.");
+
+            $("form").validate({
+                rules: {
+                    "Input.Firstname": {
+                        required: true,
+                        lettersOnly: true
+                    },
+                    "Input.Lastname": {
+                        required: true,
+                        lettersOnly: true
+                    },
+                    "Input.Email": {
+                        required: true,
+                        email: true
+                    },
+                    "Input.Address": {
+                        required: true
+                    },
+                    "Input.Password": {
+                        required: true,
+                        minlength: 6,
+                        passwordComplexity: true
+                    },
+                    "Input.ConfirmPassword": {
+                        required: true,
+                        equalTo: "#Input_Password"
+                    }
+                },
+                messages: {
+                    "Input.Firstname": {
+                        required: "k",
+                        lettersOnly: "First Name cannot contain numbers or special characters."
+                    },
+                    "Input.Lastname": {
+                        required: "Last Name is required.",
+                        lettersOnly: "Last Name cannot contain numbers or special characters."
+                    },
+                    "Input.Email": {
+                        required: "Emaesaetesresresil is required.",
+                        email: "hhhhhhhhhhhhhhhhhhhhhhh enter a valid email address."
+                    },
+                    "Input.Address": {
+                        required: "Address is required."
+                    },
+                    "Input.Password": {
+                        required: "Password is required.",
+                        minlength: "Password must be at least 6 characters long.",
+                        passwordComplexity: "Password must have one uppercase, one lowercase, one number, and one special character."
+                    },
+                    "Input.ConfirmPassword": {
+                        required: "Confirm Password is required.",
+                        equalTo: "Passwords do not match."
+                    }
+                }
+            });
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>
+
