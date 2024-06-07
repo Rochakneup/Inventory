@@ -3,17 +3,16 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Inventory </title>
+    <title>@ViewData["Title"] - Inventory</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
 </head>
 <body>
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
 
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -26,6 +25,10 @@
             $.validator.addMethod("passwordComplexity", function (value, element) {
                 return this.optional(element) || /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$/.test(value);
             }, "Password must have one uppercase, one lowercase, one number, and one special character.");
+
+            $.validator.addMethod("phoneNumber", function (value, element) {
+                return this.optional(element) || /^\d{10}$/.test(value);
+            }, "Please enter a valid 10-digit phone number.");
 
             $("form").validate({
                 rules: {
@@ -52,20 +55,24 @@
                     "Input.ConfirmPassword": {
                         required: true,
                         equalTo: "#Input_Password"
+                    },
+                    "Input.PhoneNumber": {
+                        required: true,
+                        phoneNumber: true
                     }
                 },
                 messages: {
                     "Input.Firstname": {
-                        required: "k",
+                        required: "Firstname is required.",
                         lettersOnly: "First Name cannot contain numbers or special characters."
                     },
                     "Input.Lastname": {
-                        required: "Last Name is required.",
+                        required: "Lastname is required.",
                         lettersOnly: "Last Name cannot contain numbers or special characters."
                     },
                     "Input.Email": {
-                        required: "Emaesaetesresresil is required.",
-                        email: "hhhhhhhhhhhhhhhhhhhhhhh enter a valid email address."
+                        required: "Email is required.",
+                        email: "Please enter a valid email address."
                     },
                     "Input.Address": {
                         required: "Address is required."
@@ -78,6 +85,10 @@
                     "Input.ConfirmPassword": {
                         required: "Confirm Password is required.",
                         equalTo: "Passwords do not match."
+                    },
+                    "Input.PhoneNumber": {
+                        required: "Phone number is required.",
+                        phoneNumber: "Please enter a valid 10-digit phone number."
                     }
                 }
             });
@@ -87,4 +98,3 @@
 
 </body>
 </html>
-

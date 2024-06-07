@@ -8,10 +8,23 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\assets - Copy\**" />
+    <Content Remove="wwwroot\assets - Copy\**" />
+    <EmbeddedResource Remove="wwwroot\assets - Copy\**" />
+    <None Remove="wwwroot\assets - Copy\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\assets\background.jpg" />
+    <Content Remove="wwwroot\assets\bg.jpg" />
     <Content Remove="wwwroot\assets\bg.png" />
+    <Content Remove="wwwroot\assets\chart.png" />
     <Content Remove="wwwroot\assets\google.jpg" />
     <Content Remove="wwwroot\assets\Image 5.jpg" />
     <Content Remove="wwwroot\assets\Image 5.png" />
+    <Content Remove="wwwroot\assets\inven1.jfif" />
+    <Content Remove="wwwroot\assets\log.jpg" />
+    <Content Remove="wwwroot\assets\loginbg.jpg" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,76 +5,46 @@
 }
 
 <h1 class="visually-hidden">@ViewData["Title"]</h1>
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="row shadow-lg rounded overflow-hidden" style="max-width: 900px; width: 100%;">
-        <div class="col-md-6 d-none d-md-block p-0">
-            <img src="/assets/inven.jpg" class="img-fluid h-100" alt="Background image" style="width: 450px; height: 550px">
-        </div>
-        <div class="col-md-6 bg-white p-5">
-            <section class="login-section">
-                <form id="account" method="post">
-                    <h2 class="text-center mb-4">Log in here</h2>
-                    <hr />
-                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
-                    <div class="form-floating mb-3">
-                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                        <label asp-for="Input.Email" class="form-label">Email</label>
-                        <span asp-validation-for="Input.Email" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating mb-3">
-                        <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="password" />
-                        <label asp-for="Input.Password" class="form-label">Password</label>
-                        <span asp-validation-for="Input.Password" class="text-danger"></span>
-                    </div>
-                    <div class="form-check mb-3">
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
-                        <label asp-for="Input.RememberMe" class="form-check-label">
-                            @Html.DisplayNameFor(m => m.Input.RememberMe)
-                        </label>
-                    </div>
-                    <div>
-                        <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                    </div>
-                    <div class="text-center mt-3">
-                        <p>
-                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-                        </p>
-                        <p>
-                            <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
-                        </p>
-                    </div>
-                </form>
-                <div class="text-center my-4">
-                    <h6 class="or-text">OR</h6>
+<div class="login-background">
+    <div class="login-container">
+        <div class="login-form">
+            <div class="login-title-container">
+                <img src="/assets/logo.png" alt="Logo" class="login-logo" />
+                <h2 class="login-title">Login</h2>
+            </div>
+            <form id="account" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+                <div class="form-group mb-3">
+                    <label for="email">Email</label>
+                    <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="Email" id="email" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
                 </div>
-                @{
-                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                <div class="form-group mb-3">
+                    <label for="password">Password</label>
+                    <input asp-for="Input.Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Password" id="password" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div>
+                    <button id="login-submit" type="submit" class="btn btn-primary">Login</button>
+                </div>
+            </form>
+            <div class="text-center my-4">
+                <h6 class="or-text">OR</h6>
+            </div>
+            <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                <div class="d-grid gap-2">
+                    @foreach (var provider in Model.ExternalLogins!)
                     {
-                        <div class="alert alert-info">
-                            <p>
-                                There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
-                                    article
-                                    about setting up this ASP.NET application to support logging in via external services
-                                </a>.
-                            </p>
-                        </div>
+                        <button type="submit" class="btn btn-outline-primary d-flex align-items-center justify-content-center" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
+                            <img src="/assets/google.png" alt="Google logo" class="me-2" style="width: 20px; height: 20px;" />
+                            @provider.DisplayName
+                        </button>
                     }
-                    else
-                    {
-                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                            <div class="d-grid gap-2">
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-outline-primary d-flex align-items-center justify-content-center" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">
-                                        <img src="/assets/google.png" alt="Google logo" class="me-2" style="width: 20px; height: 20px;" />
-                                        Log in with @provider.DisplayName
-                                    </button>
-                                }
-                            </div>
-                        </form>
-                    }
-                }
-            </section>
+                </div>
+            </form>
+        </div>
+        <div class="login-illustration">
+            <img src="/assets/inven.jpg" alt="Illustration" style="height:300px" />
         </div>
     </div>
 </div>
@@ -85,55 +55,126 @@
 
 <style>
     body {
-        background-color: gainsboro;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow: hidden;
+        background-color: #f0f4fa;
     }
 
-    .container {
+    .login-background {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         height: 100vh;
     }
 
-    .login-section {
-        background-color: #ffffff;
+    .login-container {
+        display: flex;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        max-width: 900px;
+        width: 100%;
     }
 
+    .login-form {
+        padding: 40px;
+        flex: 1;
+    }
+
+    .login-illustration {
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+    }
+
+        .login-illustration img {
+            max-width: 100%;
+            height: auto;
+        }
+
+    .login-title-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .login-title {
+        font-size: 24px;
+        margin-left: 10px;
+        color: #333;
+    }
+
+    .login-logo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        color: #333;
+    }
+
+        .form-control::placeholder {
+            color: #bbb;
+        }
+
     .btn-primary {
+        width: 100%;
+        padding: 10px;
         background-color: #007bff;
-        border-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
     }
 
     .btn-outline-primary {
-        border-color: #007bff;
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #007bff;
         color: #007bff;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+
+        .btn-outline-primary img {
+            margin-right: 10px;
+        }
 
         .btn-outline-primary:hover {
             background-color: #007bff;
-            color: #ffffff;
+            color: white;
         }
 
-    .form-floating label {
-        color: #6c757d;
+    .text-danger {
+        color: #ff6b6b;
     }
 
-    .form-floating input {
-        padding: 20px 10px;
-    }
-
-    .shadow-lg {
-        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
-    }
-
-    .rounded {
-        border-radius: 0.25rem;
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
     }
 
     .or-text {
         position: relative;
         display: inline-block;
-        padding: 0 15px;
-        background: #ffffff;
-        z-index: 1;
+        padding: 0 1rem;
+        background: white;
+        color: #333;
     }
 
         .or-text::before {
@@ -143,23 +184,7 @@
             left: 0;
             right: 0;
             height: 1px;
-            background: #d3d3d3;
+            background: #ddd;
             z-index: -1;
         }
-
-    h2, h3 {
-        color: #343a40;
-    }
-
-    a {
-        color: #007bff;
-    }
-
-        a:hover {
-            color: #0056b3;
-        }
-
-    .form-check-label {
-        color: #6c757d;
-    }
 </style>
