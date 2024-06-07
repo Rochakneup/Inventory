@@ -4,95 +4,222 @@
     Layout = "/Views/Shared/_CustomLayoutRegister.cshtml";
 }
 
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-group mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Email">Email</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.Password">Password</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword">Confirm Password</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-            </div>
-
-
-            <div class="form-group mb-3">
-                <input asp-for="Input.Firstname" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Firstname">Firstname</label>
-                <span asp-validation-for="Input.Firstname" class="text-danger"></span>
-            </div>
-
-
-            <div class="form-group mb-3">
-                <input asp-for="Input.Lastname" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Lastname">Lastname</label>
-                <span asp-validation-for="Input.Lastname" class="text-danger"></span>
-            </div>
-
-
-            <div class="form-group mb-3">
-                <input asp-for="Input.Address" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.Address">Address</label>
-                <span asp-validation-for="Input.Address" class="text-danger"></span>
-            </div>
-
-
-            <div class="form-group mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="username" aria-required="true" placeholder="name@example.com" />
-                <label asp-for="Input.PhoneNumber">PhoneNumber</label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-
-
-
-
-
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3>Use another service to register.</h3>
-            <hr />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div>
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
-                        </p>
+<h1 class="visually-hidden">@ViewData["Title"]</h1>
+<div class="register-background">
+    <div class="register-container">
+        <div class="register-form">
+            <img src="/assets/logo.png" alt="Logo" class="login-logo"  style="height:40px; width:40px; margin-left:110px"/>
+            <h2 class="register-title">Create a new account.</h2>
+            <form id="registerForm" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+                <div class="form-group mb-1 custom-form-group">
+                    <label for="firstname">First Name</label>
+                    <div class="input-wrapper">
+                        <input asp-for="Input.Firstname" class="form-control" autocomplete="username" aria-required="true" placeholder="First Name" id="firstname" />
+                        <span asp-validation-for="Input.Firstname" class="text-danger"></span>
                     </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
+                </div>
+                <div class="form-group mb-1 custom-form-group">
+                    <label for="lastname">Last Name</label>
+                    <div class="input-wrapper">
+                        <input asp-for="Input.Lastname" class="form-control" autocomplete="username" aria-required="true" placeholder="Last Name" id="lastname" />
+                        <span asp-validation-for="Input.Lastname" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group mb-1 custom-form-group">
+                    <label for="address">Address</label>
+                    <div class="input-wrapper">
+                        <input asp-for="Input.Address" class="form-control" autocomplete="username" aria-required="true" placeholder="Address" id="address" />
+                        <span asp-validation-for="Input.Address" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group mb-1 custom-form-group">
+                    <label for="phoneNumber">Phone Number</label>
+                    <div class="input-wrapper">
+                        <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="username" aria-required="true" placeholder="Phone Number" id="phoneNumber" />
+                        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group mb-1 custom-form-group">
+                    <label for="email">Email</label>
+                    <div class="input-wrapper">
+                        <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="Email" id="email" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group mb-1 custom-form-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrapper">
+                        <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Password" id="password" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group mb-1 custom-form-group">
+                    <label for="confirmPassword">Confirm Password</label>
+                    <div class="input-wrapper">
+                        <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Confirm Password" id="confirmPassword" />
+                        <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+                <button id="registerSubmit" type="submit" class="btn btn-primary">Register</button>
+            </form>
+        </div>
+        <div class="register-illustration">
+            <img src="/assets/inven.jpg" alt="Illustration" style="height:400px;" />
+        </div>
     </div>
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow: hidden;
+        background-color: #f0f4fa;
+    }
+
+    .register-background {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+    }
+
+    .register-container {
+        display: flex;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        align-items: flex-start; 
+        height: 550px;
+        width: 900px;
+    }
+
+    .register-form {
+        padding: 40px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    .register-illustration {
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+        padding: 20px;
+    }
+
+        .register-illustration img {
+            width: 100%; 
+            height: 300px;
+            max-width: 100%; 
+            margin-top: 60px;
+            margin-right: 50px;
+        }
+
+    .register-title {
+        font-size: 24px;
+        color: #333;
+        text-align: center;
+        margin-left: 150px;
+        margin-top: -30px;
+    }
+
+    .custom-form-group {
+        margin-bottom: 0.5rem;
+        font-size: 12px;
+    }
+
+    .input-wrapper {
+        display: flex;
+        align-items: center;
+    }
+
+        .input-wrapper span {
+            margin-left: 10px;
+            font-size: 12px;
+        }
+
+    .form-control {
+        width: 200px;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 10px;
+        color: #333;
+        height: 30px;
+    }
+
+        .form-control::placeholder {
+            color: #bbb;
+            font-size: 8px;
+        }
+
+    .btn-primary {
+        width: 50%;
+        padding: 10px;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        color: white;
+        font-size: 16px;
+        height: 40px;
+        margin-top: 10px;
+    }
+
+    .btn-outline-primary {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #007bff;
+        color: #007bff;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .btn-outline-primary img {
+            margin-right: 10px;
+        }
+
+        .btn-outline-primary:hover {
+            background-color: #007bff;
+            color: white;
+        }
+
+    .text-danger {
+        color: #ff6b6b;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    .or-text {
+        position: relative;
+        display: inline-block;
+        padding: 0 1rem;
+        background: white;
+        color: #333;
+    }
+
+        .or-text::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #ddd;
+            z-index: -1;
+        }
+</style>
