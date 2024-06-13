@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Inventory.Areas.Identity.Pages.Account
 {
@@ -26,13 +27,15 @@ namespace Inventory.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<AuthUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly AdminSettings _adminsetings;
 
         public RegisterModel(
             UserManager<AuthUser> userManager,
             IUserStore<AuthUser> userStore,
             SignInManager<AuthUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IOptions<AdminSettings>  adminsetings)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -40,6 +43,7 @@ namespace Inventory.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _adminsetings = adminsetings?.Value??  throw new ArgumentNullException(nameof(adminsetings));
         }
 
         [BindProperty]
@@ -125,7 +129,18 @@ namespace Inventory.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    if (Input.Email == _adminsetings.AdminEmail)
+                    {
+                        await _userManager.AddToRoleAsync(user, "Admin");
+
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, "User");
+
+                    }
                     _logger.LogInformation("User created a new account with password.");
+
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
