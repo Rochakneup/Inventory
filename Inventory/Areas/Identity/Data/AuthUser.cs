@@ -16,5 +16,8 @@ public class AuthUser : IdentityUser
     public string? Firstname { get; set; }
     public string? Lastname { get; set; }
     public string? Address { get; set; }
+
+    public DateTime? LoginDate { get; set; }
+    public string? Status { get; set; } = "Active";
 }
 

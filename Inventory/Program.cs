@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 
             builder.Services.AddDbContext<AuthContext>(options => options.UseSqlServer(connectionString));
 
-            builder.Services.AddDefaultIdentity<AuthUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            builder.Services.AddDefaultIdentity<AuthUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AuthContext>();
             builder.Services.Configure<AdminSettings>(builder.Configuration.GetSection("AdminSettings"));
