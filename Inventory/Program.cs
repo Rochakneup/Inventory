@@ -1,6 +1,9 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Inventory.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
+
 
     
 
@@ -16,16 +19,20 @@ using Inventory.Areas.Identity.Data;
 
             builder.Services.AddDbContext<AuthContext>(options => options.UseSqlServer(connectionString));
 
-            builder.Services.AddDefaultIdentity<AuthUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            builder.Services.AddDefaultIdentity<AuthUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AuthContext>();
             builder.Services.Configure<AdminSettings>(builder.Configuration.GetSection("AdminSettings"));
 
-            // Add services to the container.
+// Add services to the container.
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
+            options.TokenLifespan = TimeSpan.FromHours(24));
             builder.Services.AddControllersWithViews();
+            builder.Services.Configure<EmailSender.EmailSettings>(builder.Configuration.GetSection("emailsettings"));
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 
-            var app = builder.Build();
+var app = builder.Build();
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
