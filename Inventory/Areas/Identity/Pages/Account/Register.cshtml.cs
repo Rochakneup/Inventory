@@ -27,15 +27,15 @@ namespace Inventory.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<AuthUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
-        private readonly AdminSettings _adminsetings;
+        private readonly AdminSettings _adminSettings;
 
         public RegisterModel(
-            UserManager<AuthUser> userManager,
-            IUserStore<AuthUser> userStore,
-            SignInManager<AuthUser> signInManager,
-            ILogger<RegisterModel> logger,
-            IEmailSender emailSender,
-            IOptions<AdminSettings>  adminsetings)
+             UserManager<AuthUser> userManager,
+             IUserStore<AuthUser> userStore,
+             SignInManager<AuthUser> signInManager,
+             ILogger<RegisterModel> logger,
+             IEmailSender emailSender,
+             IOptions<AdminSettings> adminSettings)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -43,57 +43,70 @@ namespace Inventory.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
-            _adminsetings = adminsetings?.Value??  throw new ArgumentNullException(nameof(adminsetings));
+            _adminSettings = adminSettings?.Value ?? throw new ArgumentNullException(nameof(adminSettings));
         }
 
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public string ReturnUrl { get; set; }
 
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public IList<AuthenticationScheme> ExternalLogins { get; set; }
+
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
 
         public class InputModel
         {
+            [Required]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "First Name cannot contain numbers or special characters.")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Last Name cannot contain numbers or special characters.")]
+            public string LastName { get; set; }
+
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
             [Required]
+            public string PhoneNumber { get; set; }
+
+            [Required]
+            public string Address { get; set; }
+
+            [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
-            [DataType(DataType.Password)]
+            [DataType(DataType.Password) ] 
             [Display(Name = "Password")]
+            [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).+$", ErrorMessage = "Password must have one uppercase, one lowercase, one number, and one special character.")]
             public string Password { get; set; }
 
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
-
-            [Required]
-            [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
-            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "The {0} can only contain letters.")]
-            [Display(Name = "Firstname")]
-            public string Firstname { get; set; }
-
-            [Required]
-            [StringLength(50, ErrorMessage = "The {0} must be at most {1} characters long.")]
-            [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "The {0} can only contain letters.")]
-            [Display(Name = "Lastname")]
-            public string Lastname { get; set; }
-
-            [Required]
-            [StringLength(200, ErrorMessage = "The {0} must be at most {1} characters long.")]
-            [RegularExpression(@"^[a-zA-Z0-9\s,.'-]{1,200}$", ErrorMessage = "The {0} contains invalid characters.")]
-            [Display(Name = "Address")]
-            public string Address { get; set; }
-
-            [Phone]
-            [RegularExpression(@"^\+?[1-9]\d{1,14}$", ErrorMessage = "The {0} is not a valid phone number.")]
-            [Display(Name = "Phone Number")]
-            public string PhoneNumber { get; set; }
         }
+
+
+
+
 
         public async Task OnGetAsync(string returnUrl = null)
         {
@@ -107,40 +120,41 @@ namespace Inventory.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = CreateUser();
-
-                // Check for existing user with the same email
-                var existingUser = await _userManager.FindByEmailAsync(Input.Email);
-                if (existingUser != null)
+                var existingEmail = await _userManager.FindByEmailAsync(Input.Email);
+                if (existingEmail != null)
                 {
                     ModelState.AddModelError(string.Empty, "A user with this email already exists.");
                     return Page();
                 }
-
-                // Set username to Firstname
-                await _userStore.SetUserNameAsync(user, Input.Firstname, CancellationToken.None);
-                await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-                user.Firstname = Input.Firstname;
-                user.Lastname = Input.Lastname;
-                user.Address = Input.Address;
-                user.PhoneNumber = Input.PhoneNumber;
-
+                var existingUsername = await _userManager.FindByEmailAsync(Input.FirstName);
+                if (existingUsername != null)
+                {
+                    ModelState.AddModelError(string.Empty, "Username is already taken");
+                    return Page();
+                }
+                var user = new AuthUser()
+                {
+                    Firstname = Input.FirstName,
+                    Lastname = Input.LastName,
+                    UserName = Input.FirstName,
+                    Email = Input.Email,
+                    Address = Input.Address,
+                    EmailConfirmed = true,
+                    PhoneNumber = Input.PhoneNumber,
+                };
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
-                    if (Input.Email == _adminsetings.AdminEmail)
+                    if (Input.Email == _adminSettings.AdminEmail)
                     {
                         await _userManager.AddToRoleAsync(user, "Admin");
-
                     }
                     else
                     {
                         await _userManager.AddToRoleAsync(user, "User");
-
                     }
                     _logger.LogInformation("User created a new account with password.");
-
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -161,18 +175,21 @@ namespace Inventory.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        return RedirectToPage("/Account/Login", new { area = "Identity" });
+
                     }
                 }
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
+
                 }
             }
 
             // If we got this far, something failed, redisplay form
             return Page();
         }
+
 
         private AuthUser CreateUser()
         {
