@@ -6,19 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Inventory.Migrations
 {
     /// <inheritdoc />
-    public partial class useractivity : Migration
+    public partial class userstatus : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Discriminator",
-                table: "AspNetUsers",
-                type: "nvarchar(13)",
-                maxLength: 13,
-                nullable: false,
-                defaultValue: "");
-
             migrationBuilder.AddColumn<DateTime>(
                 name: "LoginDate",
                 table: "AspNetUsers",
@@ -35,10 +27,6 @@ namespace Inventory.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Discriminator",
-                table: "AspNetUsers");
-
             migrationBuilder.DropColumn(
                 name: "LoginDate",
                 table: "AspNetUsers");

@@ -1,9 +1,11 @@
 ﻿using Inventory.Areas.Identity.Data;
+using Inventory.Migrations;
 using Inventory.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace Inventory.Areas.Identity.Data;
 
@@ -16,7 +18,7 @@ public class AuthContext : IdentityDbContext<AuthUser>
 
 
     public DbSet<AuthUser> applicationUsers { get; set; }
-    public DbSet<UseActivity>UserActivity {  get; set; }
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
 
@@ -27,7 +29,7 @@ public class AuthContext : IdentityDbContext<AuthUser>
         // For example, you can rename the ASP.NET Identity table names and more.
 
         // Add your customizations after calling base.OnModelCreating(builder);
-       
+            
     }
 
 

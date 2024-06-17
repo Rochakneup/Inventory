@@ -93,7 +93,9 @@ namespace Inventory.Areas.Identity.Pages
 
             if (resetPasswordResult.Succeeded)
             {
+                
                 _logger.LogInformation("User password reset successfully.");
+                user.EmailConfirmed = true;
 
                 // Optionally update the user entity to reflect password change
                 await _userManager.UpdateAsync(user);
