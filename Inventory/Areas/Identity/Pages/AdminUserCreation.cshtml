@@ -3,33 +3,115 @@
 @model AdminUserCreationModel
 @{
 }
-<h2>Create User</h2>
-<form method="post">
-    <div class="form-group">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <label asp-for="Input.FirstName">First Name</label>
-        <input asp-for="Input.FirstName" class="form-control" placeholder="First Name">
-        <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create User</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        .container-box {
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 20px;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+        }
+
+            .form-container h2 {
+                margin-bottom: 20px;
+            }
+
+            .form-container .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-container label {
+                font-weight: bold;
+            }
+
+            .form-container input[type="text"],
+            .form-container input[type="email"],
+            .form-container input[type="tel"] {
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                padding: 10px;
+                width: 100%;
+            }
+
+            .form-container .btn-block {
+                padding: 10px;
+                font-size: 16px;
+            }
+
+        .center-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .row img{
+            margin-top:100px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="container-box">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="/assets/create_user.png" alt="Image" class="img-fluid">
+                        </div>
+                        <div class="col-md-6 center-content">
+                            <div class="form-container">
+                                <h2>Create User</h2>
+                                <form method="post">
+                                    <div class="form-group">
+                                        <label for="Input_FirstName">First Name</label>
+                                        <input type="text" id="Input_FirstName" name="Input.FirstName" class="form-control" placeholder="First Name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Input_LastName">Last Name</label>
+                                        <input type="text" id="Input_LastName" name="Input.LastName" class="form-control" placeholder="Last Name" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Input_PhoneNumber">User Name</label>
+                                        <input type="text" id="Input_PhoneNumber" name="Input.PhoneNumber" class="form-control" placeholder="UserName" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Input_Email">Email</label>
+                                        <input type="email" id="Input_Email" name="Input.Email" class="form-control" placeholder="Email" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="Input_Address">Address</label>
+                                        <input type="text" id="Input_Address" name="Input.Address" class="form-control" placeholder="Address" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-dark btn-block">Create User</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Input.LastName">Last Name</label>
-        <input asp-for="Input.LastName" class="form-control" placeholder="Last Name">
-        <span asp-validation-for="Input.LastName" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Input.PhoneNumber">User Name</label>
-        <input asp-for="Input.PhoneNumber" class="form-control" placeholder="UserName">
-        <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Input.Email">Email</label>
-        <input asp-for="Input.Email" class="form-control" placeholder="Email">
-        <span asp-validation-for="Input.Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Input.Address">Address</label>
-        <input asp-for="Input.Address" class="form-control" placeholder="Address">
-        <span asp-validation-for="Input.Address" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-dark btn-block">Register User</button>
-</form>
+
+
+
+</body>
+</html>
+
