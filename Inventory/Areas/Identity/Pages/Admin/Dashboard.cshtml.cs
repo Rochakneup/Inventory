@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Inventory.Areas.Identity.Pages.Admin
 {
-    public class IndexModel : PageModel
+    public class DashboardModel : PageModel
     {
         private readonly UserManager<AuthUser> _userManager;
 
-        public IndexModel(UserManager<AuthUser> userManager)
+        public DashboardModel(UserManager<AuthUser> userManager)
         {
             _userManager = userManager;
         }

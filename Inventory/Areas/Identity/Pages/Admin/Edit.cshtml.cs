@@ -22,6 +22,7 @@ namespace Inventory.Areas.Identity.Pages.Admin
             public string Id { get; set; }
             public string UserName { get; set; }
             public string Email { get; set; }
+            public string Status { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(string id)
@@ -37,7 +38,8 @@ namespace Inventory.Areas.Identity.Pages.Admin
             {
                 Id = user.Id,
                 UserName = user.UserName,
-                Email = user.Email
+                Email = user.Email,
+                Status = user.Status // Set the status property
             };
 
             return Page();
@@ -56,12 +58,13 @@ namespace Inventory.Areas.Identity.Pages.Admin
 
                 user.UserName = Input.UserName;
                 user.Email = Input.Email;
+                user.Status = Input.Status; // Update the status property
 
                 var result = await _userManager.UpdateAsync(user);
 
                 if (result.Succeeded)
                 {
-                    return RedirectToPage("/Index");
+                    return RedirectToPage("/Privacy");
                 }
 
                 foreach (var error in result.Errors)
