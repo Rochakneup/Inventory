@@ -64,7 +64,7 @@ namespace Inventory.Areas.Identity.Pages.Admin
 
                 if (result.Succeeded)
                 {
-                    return RedirectToPage("/Privacy");
+                    return RedirectToPage("/Admin/Dashboard", new { area = "Identity" });
                 }
 
                 foreach (var error in result.Errors)
