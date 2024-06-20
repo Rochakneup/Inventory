@@ -11,16 +11,14 @@ namespace Inventory.Areas.Identity.Pages.Admin
     {
         private readonly UserManager<AuthUser> _userManager;
 
-        public DashboardModel(UserManager<AuthUser> userManager)
+        public DashboardModel()
         {
-            _userManager = userManager;
+
         }
 
-        public List<AuthUser> Users { get; set; }
-
-        public async Task OnGetAsync()
+        public async Task OnGet()
         {
-            Users = await _userManager.Users.ToListAsync();
+          
         }
     }
 }

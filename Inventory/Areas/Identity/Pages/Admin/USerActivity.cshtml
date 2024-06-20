@@ -1,0 +1,82 @@
+﻿@page
+@model Inventory.Areas.Identity.Pages.Admin.UserActivityModel
+@{
+}
+
+<h1>User List</h1>
+
+<div class="mb-3">
+    <a asp-area="Identity" asp-page="/AdminUserCreation" class="btn btn-success">Create New User</a>
+</div>
+
+<form method="get">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Search users" aria-label="Search users" aria-describedby="button-search" asp-for="SearchString">
+        <button class="btn btn-outline-secondary" type="submit" id="button-search">Search</button>
+    </div>
+</form>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Email</th>
+            <th>Login Date</th>
+            <th>Status</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>
+                    @if (user.LoginDate.HasValue)
+                    {
+                        @user.LoginDate?.ToString("g")
+                    }
+                    else
+                    {
+                       
+                    }
+                </td>
+
+                <td>
+                    @if (user.LoginDate.HasValue)
+                    {
+                        @user.Status
+                    }
+                    else
+                    {
+                       
+                    }
+                </td>
+
+                <td>
+                    @{
+                        var roles = await Model.GetUserRolesAsync(user);
+                        if (roles.Any())
+                        {
+                            foreach (var role in roles)
+                            {
+                                <span>@role</span>
+                            }
+                        }
+                        else
+                        {
+                            <span>No roles assigned</span>
+                        }
+                    }
+                </td>
+
+                <td>
+                    <a asp-page="Edit" asp-route-id="@user.Id" class="btn btn-primary">Edit</a>
+                    <a asp-page="Delete" asp-route-id="@user.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

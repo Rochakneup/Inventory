@@ -95,14 +95,14 @@ namespace Inventory.Areas.Identity.Pages.Account
 
                         if (await _userManager.IsInRoleAsync(user, "Admin"))
                         {
-                            return RedirectToPage("/Privacy");
+                            return RedirectToPage("/Admin/Dashboard", new { area = "Identity" });
                         }
                         else
                         {
-                            return LocalRedirect(returnUrl);
+                            return RedirectToPage("/User/Dasboard", new { area = "Identity" });
                         }
                     }
-                    if (result.RequiresTwoFactor)
+                    if (result.RequiresTwoFactor)   
                     {
                         return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                     }

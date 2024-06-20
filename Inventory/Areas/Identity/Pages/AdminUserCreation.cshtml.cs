@@ -113,7 +113,7 @@ namespace Inventory.Areas.Identity.Pages
 
             if (result.Succeeded)
             {
-
+                await _userManager.AddToRoleAsync(user, "User");
 
                 _logger.LogInformation("User created a new account with temporary password.");
 
@@ -133,7 +133,7 @@ namespace Inventory.Areas.Identity.Pages
                     await _emailSender.SendEmailAsync(Input.Email, "Set up your password",
                         $"Your temporary password is {temporaryPassword}. Please set up your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
-                    return RedirectToPage("/AdminUserCreatedConfirmation");
+                    return RedirectToPage("/Admin/Dashboard", new { area = "Identity" });
                 }
                 catch (Exception ex)
                 {
