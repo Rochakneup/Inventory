@@ -81,11 +81,9 @@ namespace Inventory.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // Find user by email
                 var user = await _userManager.FindByEmailAsync(Input.Email);
                 if (user != null)
                 {
-                    // Attempt to sign in using the username (which is now the first name)
                     var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                     if (result.Succeeded)
                     {
@@ -94,7 +92,15 @@ namespace Inventory.Areas.Identity.Pages.Account
                         await _userManager.UpdateAsync(user);
 
                         _logger.LogInformation("User logged in.");
-                        return LocalRedirect(returnUrl);
+
+                        if (await _userManager.IsInRoleAsync(user, "Admin"))
+                        {
+                            return RedirectToPage("/Privacy");
+                        }
+                        else
+                        {
+                            return LocalRedirect(returnUrl);
+                        }
                     }
                     if (result.RequiresTwoFactor)
                     {
