@@ -9,9 +9,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create User</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Custom CSS -->
     <style>
         .container-box {
             background-color: #ffffff;
@@ -21,12 +18,15 @@
             margin: 20px auto;
             max-width: 800px;
             padding: 20px;
+            font-family:'Times New Roman', Times, serif;
         }
 
         .form-container {
             background-color: #ffffff;
             padding: 20px;
             border-radius: 8px;
+            font-size: 16px;
+            width: 400px;
         }
 
             .form-container h2 {
@@ -46,14 +46,30 @@
             .form-container input[type="tel"] {
                 border: 1px solid #ced4da;
                 border-radius: 4px;
-                padding: 10px;
-                width: 100%;
+                padding: 15px;
+                width: 350px;
+                font-size: 16px;
+                height: 10px;
             }
 
-            .form-container .btn-block {
-                padding: 10px;
-                font-size: 16px;
-            }
+                .form-container input[type="text"]::placeholder,
+                .form-container input[type="email"]::placeholder,
+                .form-container input[type="tel"]::placeholder {
+                    color: #a8a8a8;
+                }
+
+
+        .btn-block {
+            padding: 10px;
+            font-size: 16px;
+            margin-left: 80px;
+            background-color: dodgerblue;
+            width: 200px;
+        }
+
+        .btn-block:hover{
+            background-color: darkslateblue;
+        }
 
         .center-content {
             display: flex;
@@ -61,8 +77,14 @@
             align-items: center;
         }
 
-        .row img{
-            margin-top:100px;
+        .row img {
+            margin-top: 100px;
+            height:300px;
+            width: 300px;
+        }
+
+        h2{
+            margin-left: 90px;
         }
     </style>
 </head>
@@ -82,23 +104,23 @@
                                 <form method="post">
                                     <div class="form-group">
                                         <label for="Input_FirstName">First Name</label>
-                                        <input type="text" id="Input_FirstName" name="Input.FirstName" class="form-control" placeholder="First Name" required>
+                                        <input type="text" id="Input_FirstName" name="Input.FirstName" class="form-control" placeholder="Enter your First name" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="Input_LastName">Last Name</label>
-                                        <input type="text" id="Input_LastName" name="Input.LastName" class="form-control" placeholder="Last Name" required>
+                                        <input type="text" id="Input_LastName" name="Input.LastName" class="form-control" placeholder="Enter your Last name" required>
                                     </div>
                                     <div class="form-group">
-                                        <label for="Input_PhoneNumber">User Name</label>
-                                        <input type="text" id="Input_PhoneNumber" name="Input.PhoneNumber" class="form-control" placeholder="UserName" required>
+                                        <label for="Input_PhoneNumber">Phone number</label>
+                                        <input type="text" id="Input_PhoneNumber" name="Input.PhoneNumber" class="form-control" placeholder="Enter your phone number" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="Input_Email">Email</label>
-                                        <input type="email" id="Input_Email" name="Input.Email" class="form-control" placeholder="Email" required>
+                                        <input type="email" id="Input_Email" name="Input.Email" class="form-control" placeholder="Enter your email" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="Input_Address">Address</label>
-                                        <input type="text" id="Input_Address" name="Input.Address" class="form-control" placeholder="Address" required>
+                                        <input type="text" id="Input_Address" name="Input.Address" class="form-control" placeholder="Enter your address" required>
                                     </div>
                                     <button type="submit" class="btn btn-dark btn-block">Create User</button>
                                 </form>
@@ -110,8 +132,5 @@
         </div>
     </div>
 
-
-
 </body>
 </html>
-
