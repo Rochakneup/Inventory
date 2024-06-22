@@ -17,40 +17,56 @@
             margin: 20px auto;
             max-width: 800px;
             padding: 20px;
+            height: auto;
+            font-family:'Times New Roman', Times, serif;
         }
 
         .form-container {
             background-color: #ffffff;
             padding: 20px;
             border-radius: 8px;
+            font-size: 16px;
+            width: 400px;
         }
 
-        .form-container h2 {
-            margin-bottom: 20px;
-        }
+            .form-container h2 {
+                margin-bottom: 20px;
+            }
 
-        .form-container .form-group {
-            margin-bottom: 20px;
-        }
+            .form-container .form-group {
+                margin-bottom: 20px;
+            }
 
-        .form-container label {
-            font-weight: bold;
-        }
+            .form-container label {
+                font-weight: bold;
+            }
 
-        .form-container input[type="text"],
-        .form-container input[type="email"],
-        .form-container input[type="tel"],
-        .form-container select {
-            border: 1px solid #ced4da;
-            border-radius: 4px;
-            padding: 10px;
-            width: 100%;
-        }
+            .form-container input[type="text"],
+            .form-container input[type="email"],
+            .form-container input[type="tel"],
+            .form-container select {
+                border: 1px solid #ced4da;
+                border-radius: 4px;
+                padding: 10px;
+                width: 100%;
+            }
 
-        .form-container .btn-block {
+            .form-container input[readonly] {
+                background-color: #e9ecef;
+                cursor: not-allowed;
+            }
+
+        .btn-block {
             padding: 10px;
             font-size: 16px;
+            margin-left: 70px;
+            background-color: dodgerblue;
+            width:200px;
         }
+
+            .btn-block:hover {
+                background-color: darkslateblue;
+            }
 
         .center-content {
             display: flex;
@@ -60,6 +76,10 @@
 
         .row img {
             margin-top: 100px;
+        }
+
+        h2{
+            margin-left: 90px;
         }
     </style>
 </head>
@@ -85,7 +105,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label asp-for="Input.Email">Email</label>
-                                        <input asp-for="Input.Email" class="form-control" required />
+                                        <input asp-for="Input.Email" class="form-control" readonly />
                                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                                     </div>
                                     <div class="form-group">

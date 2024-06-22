@@ -8,86 +8,97 @@
 <html>
 <head>
     <style>
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px; 
+            background-color: #f8f9fa; 
+        }
+
         .navbar-nav {
-            list-style-type: none; /* Remove bullets */
-            padding: 0; /* Remove padding */
-            margin: 0; /* Remove margin */
-            display: flex; /* Use flexbox for layout */
-            justify-content: flex-end; /* Align items to the right */
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
         }
 
         .nav-item {
-            margin-left: 15px; /* Optional: Add spacing between items */
+            margin-left: 15px;
         }
+
+            .nav-item #login {
+                margin-right: 200px;
+            }
+
 
         .nav-link {
-            text-decoration: none; /* Remove underline from links */
-            color: dark; /* Set text color */
-            padding: 10px; /* Add some padding */
+            text-decoration: none;
+            color: #343a40;
+            padding: 10px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        .form-inline {
-            display: inline-block; /* Ensure form is inline with other items */
+            .nav-link:hover {
+                background-color: #f8f9fa;
+                color: #007bff;
+                text-decoration: underline;
+            }
+
+        .navbar-right {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
         }
+
     </style>
 </head>
 <body>
-    <ul class="navbar-nav">
-        @if (SignInManager.IsSignedIn(User))
-        {
-            if (User.IsInRole("Admin"))
+    <div class="navbar">
+        <div class="navbar-nav">
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
             {
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Admin/Dashboard">Home</a>
+                    <a class="nav-link" asp-area="Identity" asp-page="/Admin/Dashboard">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="Admin" asp-page="/Products">Products</a>
+                    <a class="nav-link" asp-area="Admin" asp-page="/Products">Products</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Admin/USerActivity">UserActivity </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="Admin" asp-page="/Orders">Orders</a>
+                    <a class="nav-link" asp-area="Identity" asp-page="/Admin/UserActivity">Users</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="Admin" asp-page="/Suppliers">Suppliers</a>
+                    <a class="nav-link" asp-area="Admin" asp-page="/Orders">Orders</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
+                    <a class="nav-link" asp-area="Admin" asp-page="/Suppliers">Suppliers</a>
                 </li>
-
-
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-dark" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        
-                        @User?.Identity?.Name
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li class="nav-item">
-                            <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                <button id="logout" type="submit" class="nav-link btn btn-link text-dark border-0">Logout</button>
-                            </form>
-                        </li>
-                    </ul>
-                </li>
-
             }
-            /*<li class="nav-item">
-                <a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-            </li>*/
-           
-        }
+        </div>
 
-        else
-        {
-            <li class="nav-item">
-                <a class="nav-link text-dark" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-            </li>
-        }
-    </ul>
+        <div class="navbar-right">
+            @if (SignInManager.IsSignedIn(User))
+            {
+                <li class="nav-item">
+                    <a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+                </li>
+                <li class="nav-item">
+                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                        <button id="logout" type="submit" class="nav-link btn btn-link">Logout</button>
+                    </form>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                </li>
+            }
+        </div>
+    </div>
 </body>
 </html>
