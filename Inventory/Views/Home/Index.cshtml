@@ -1,4 +1,6 @@
-﻿
+﻿@{
+    Layout = "/Views/Shared/_LayoutWithFooter.cshtml";
+}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +10,7 @@
     <title>Inventory Management Solution</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family:'Times New Roman', Times, serif;
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -155,7 +157,7 @@
 
             .feature-item2 h3 {
                 font-size: 1.5em;
-                color: #27A5E9;
+                color: #FFC956;
                 margin-bottom: 10px;
             }
 
@@ -168,37 +170,7 @@
             text-align: left;
         }
 
-        footer {
-            background-color: #053D42;
-            color: #fff;
-            text-align: center;
-            width: 1265px;
-            margin-left:-140px
-        }
-
-            footer .footer-content {
-                display: flex;
-                justify-content: space-around;
-            }
-
-                footer .footer-content nav a {
-                    color: #fff;
-                    margin: 0 15px;
-                    text-decoration: none;
-                }
-
-            footer .footer-contact p {
-                margin: 5px 0;
-                color: white;
-            }
-
-            footer .footer-logo img {
-                height: 40px;
-            }
-
-            footer .footer-logo p{
-                color: white;
-            }
+        
     </style>
 </head>
 <body>
@@ -251,21 +223,5 @@
             </div>
         </div>
     </section>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <img src="~/assets/logo.png" alt="Inventory"> <br />
-                    <span style="color: white">Inventory</span>
-                </div>
-            </div>
-            <div class="footer-contact">
-                <p>Your Ultimate Inventory Management Solution</p>
-                <p>name@email.com</p>
-                <p>(+1) 123 456 7893</p>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>
