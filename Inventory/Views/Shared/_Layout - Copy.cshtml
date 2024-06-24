@@ -7,6 +7,41 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Inventory_Management_System.styles.css" asp-append-version="true" />
+    <style>
+        footer {
+            background-color: #053D42;
+            color: #fff;
+            text-align: center;
+            height: 200px;
+            padding:40px;
+        }
+
+            footer .footer-content {
+                display: flex;
+                justify-content: space-around;
+            }
+
+                footer .footer-content nav a {
+                    color: #fff;
+                    text-decoration: none;
+                }
+
+            footer .footer-contact p {
+                color: white;
+            }
+
+            footer .footer-logo img {
+                height: 40px;
+            }
+
+            footer .footer-logo p {
+                color: white;
+            }
+
+            span{
+                color:white;
+            }
+    </style>
 </head>
 <body>
     <header>
@@ -44,7 +79,21 @@
         </main>
     </div>
 
-    
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <img src="~/assets/logo.png" alt="Inventory">
+                    <span>Inventory</span>
+                </div>
+            </div>
+            <div class="footer-contact">
+                <p>Your Ultimate Inventory Management Solution</p>
+                <p>name@email.com</p>
+                <p>(+1) 123 456 7893</p>
+            </div>
+        </div>
+    </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

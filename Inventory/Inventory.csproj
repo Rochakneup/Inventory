@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Shared\_Layout - Copy.cshtml" />
     <Content Remove="wwwroot\assets\background.jpg" />
     <Content Remove="wwwroot\assets\bg.jpg" />
     <Content Remove="wwwroot\assets\bg.png" />
@@ -25,6 +26,10 @@
     <Content Remove="wwwroot\assets\inven1.jfif" />
     <Content Remove="wwwroot\assets\log.jpg" />
     <Content Remove="wwwroot\assets\loginbg.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Views\Shared\_Layout - Copy.cshtml.css" />
   </ItemGroup>
 
   <ItemGroup>
