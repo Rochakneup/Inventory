@@ -10,8 +10,8 @@
     <title>Edit User</title>
 
     <style>
-        body{
-            font-family:'Times New Roman', Times, serif;
+        body {
+            font-family: 'Times New Roman', Times, serif;
         }
 
         .container-box {
@@ -66,11 +66,9 @@
             width: 200px;
         }
 
-
-
             .btn-block:hover {
-            background-color: #0C8B97 !important;
-            border-color: #0C8B97 !important;
+                background-color: #0C8B97 !important;
+                border-color: #0C8B97 !important;
             }
 
         .center-content {
@@ -111,9 +109,23 @@
                                         <option value="Active">Active</option>
                                         <option value="Inactive">Inactive</option>
                                     </select>
+                                    <span asp-validation-for="Input.Status" class="text-danger"></span>
                                 </div>
                                 <button type="submit" class="btn btn-dark btn-block">Save</button>
                             </form>
+                            <div class="validation-summary">
+                                @if (!ViewData.ModelState.IsValid)
+                                {
+                                    <div class="alert alert-danger mt-3">
+                                        <ul>
+                                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                            {
+                                                <li>@error.ErrorMessage</li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -125,4 +137,3 @@
 
 </body>
 </html>
-
