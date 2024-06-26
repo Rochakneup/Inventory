@@ -29,18 +29,6 @@ namespace Inventory.Areas.Identity.Pages.Admin
         {
             IQueryable<AuthUser> usersQuery = _userManager.Users;
 
-            // Get the Admin role
-            var adminRole = await _roleManager.FindByNameAsync("Admin");
-
-            if (adminRole != null)
-            {
-                // Get the users in the Admin role
-                var adminUsers = await _userManager.GetUsersInRoleAsync(adminRole.Name);
-
-                // Exclude admin users from the list
-                usersQuery = usersQuery.Where(u => !adminUsers.Contains(u));
-            }
-
             if (!string.IsNullOrEmpty(SearchString))
             {
                 usersQuery = usersQuery.Where(u => u.UserName.Contains(SearchString)

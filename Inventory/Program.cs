@@ -32,6 +32,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
             builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 
+
+
+
 var app = builder.Build();
             using (var scope = app.Services.CreateScope())
             {

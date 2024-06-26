@@ -1,8 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-#nullable disable
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -63,7 +59,7 @@ namespace Inventory.Areas.Identity.Pages.Account
                 ModelState.AddModelError(string.Empty, ErrorMessage);
             }
 
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl ??= Url.Content("~/");
 
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
@@ -75,47 +71,74 @@ namespace Inventory.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            returnUrl = returnUrl ?? Url.Content("~/");
+            returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
-                if (user != null)
+
+                if (user == null)
                 {
-                    var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
-                    if (result.Succeeded)
-                    {
-                        user.LoginDate = DateTime.Now;
-                        user.Status = "Active";
-                        await _userManager.UpdateAsync(user);
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    return Page();
+                }
 
-                        _logger.LogInformation("User logged in.");
+                // Allow login if user has never logged in before, even if status is inactive
+                if (user.LoginDate == null && user.Status == "Inactive")
+                {
+                    user.Status = "Active";
+                }
 
-                        if (await _userManager.IsInRoleAsync(user, "Admin"))
-                        {
-                            return RedirectToPage("/Admin/Dashboard", new { area = "Identity" });
-                        }
-                        else
-                        {
-                            return RedirectToPage("/User/Dasboard", new { area = "Identity" });
-                        }
-                    }
-                    if (result.RequiresTwoFactor)   
+                // Check if the user is inactive and has logged in before
+                if (user.Status == "Inactive" && user.LoginDate != null)
+                {
+                    ModelState.AddModelError(string.Empty, "Your account is inactive. Please contact support.");
+                    return Page();
+                }
+
+                // Check if the user has not logged in for a week
+                if (user.LoginDate.HasValue && (DateTime.UtcNow - user.LoginDate.Value).TotalDays > 7)
+                {
+                    user.Status = "Inactive";
+                    await _userManager.UpdateAsync(user);
+
+                    ModelState.AddModelError(string.Empty, "Your account has been locked due to inactivity. Please contact support.");
+                    return Page();
+                }
+
+                // Sign in the user
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
+                if (result.Succeeded)
+                {
+                    // Update the login date
+                    user.LoginDate = DateTime.UtcNow;
+                    user.Status = "Active";
+                    await _userManager.UpdateAsync(user);
+
+                    _logger.LogInformation("User logged in.");
+
+                    // Check the user's roles and redirect accordingly
+                    var roles = await _userManager.GetRolesAsync(user);
+                    if (roles.Contains("Admin"))
                     {
-                        return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                    }
-                    if (result.IsLockedOut)
-                    {
-                        _logger.LogWarning("User account locked out.");
-                        return RedirectToPage("./Lockout");
+                        return RedirectToPage("/Admin/Dashboard", new { area = "Identity" });
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-                        return Page();
+                        return LocalRedirect("~/UserDashboard");
                     }
+                }
+                if (result.RequiresTwoFactor)
+                {
+                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
+                }
+                if (result.IsLockedOut)
+                {
+                    _logger.LogWarning("User account locked out.");
+                    return RedirectToPage("./Lockout");
                 }
                 else
                 {
