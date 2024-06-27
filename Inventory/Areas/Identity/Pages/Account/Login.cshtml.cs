@@ -128,7 +128,7 @@ namespace Inventory.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        return LocalRedirect("~/UserDashboard");
+                        return LocalRedirect("~/Home/Index");
                     }
                 }
                 if (result.RequiresTwoFactor)

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Inventory.Areas.Identity.Data; // Adjust namespace as per your project structure
 using Inventory.Models;
+using System.Reflection.Emit;
 
 namespace Inventory.Areas.Identity.Data
 {
@@ -25,7 +26,11 @@ namespace Inventory.Areas.Identity.Data
             // Configure decimal precision and scale for UnitPrice
             builder.Entity<OrderItem>()
                 .Property(oi => oi.UnitPrice)
-                .HasColumnType("decimal(18,2)"); // Adjust precision and scale as per your requirements
+                .HasColumnType("decimal(18,2)");
+            builder.Entity<Product>()
+               .Property(p => p.Price)
+               .HasColumnType("decimal(18, 2)");
+            // Adjust precision and scale as per your requirements
 
             // Add other configurations as needed
 
@@ -41,6 +46,9 @@ namespace Inventory.Areas.Identity.Data
 
             // Example: To configure other entities, follow similar patterns
 
+
+
         }
+
     }
 }

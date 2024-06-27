@@ -1,35 +1,82 @@
 ﻿@model Inventory.Models.Product
 
-<h1>Create Product</h1>
+<style>
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Price"></label>
-        <input asp-for="Price" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="ImageUrl"></label>
-        <input type="file" asp-for="ImageUrl" class="form-control-file" />
-    </div>
-    <div class="form-group">
-        <label asp-for="SupplierId"></label>
-        <select asp-for="SupplierId" asp-items="ViewBag.SupplierId" class="form-control">
-            <option value="">-- Select Supplier --</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label asp-for="Quantity"></label>
-        <input asp-for="Quantity" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Description"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-    </div>
+    h1 {
+        text-align: center;
+        font-family: 'Times New Roman', Times, serif;
+        font-weight: bold;
+        font-size: 30px;
+    }
 
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</form>
+    .form-group {
+        padding: 5px;
+    }
+
+    .btn-primary {
+        background-color: #0E9BA8 !important;
+        border-color: #0E9BA8 !important;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #0C8B97 !important;
+            border-color: #0C8B97 !important;
+            color: white;
+        }
+
+    .btn-secondary {
+        background-color: #51969D !important;
+        border-color: #51969D !important;
+        color: white;
+    }
+
+        .btn-secondary:hover {
+            background-color: #0C8B97 !important;
+            color: white;
+        }
+</style>
+
+<h1>Add New Product</h1>
+
+<div class="form-container">
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" placeholder="Enter product name" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Price"></label>
+            <input asp-for="Price" class="form-control" placeholder="Enter product price" />
+        </div>
+        <div class="form-group">
+            <label asp-for="ImageUrl"></label>
+            <input type="file" asp-for="ImageUrl" class="form-control-file" />
+        </div>
+        <div class="form-group">
+            <label asp-for="SupplierId"></label>
+            <select asp-for="SupplierId" asp-items="ViewBag.SupplierId" class="form-control">
+                <option value="">-- Select Supplier --</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="Quantity"></label>
+            <input asp-for="Quantity" class="form-control" placeholder="Enter quantity" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Description"></label>
+            <textarea asp-for="Description" class="form-control" placeholder="Enter product description"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </form>
+</div>
