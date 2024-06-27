@@ -4,34 +4,96 @@
     ViewData["Title"] = "Supplier List";
 }
 
+<style>
+    .form-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        text-align: center;
+        font-family: 'Times New Roman', Times, serif;
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        background-color: #0E9BA8 !important;
+        border-color: #0E9BA8 !important;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #0C8B97 !important;
+            border-color: #0C8B97 !important;
+            color: white;
+        }
+
+    .btn-secondary {
+        background-color: #51969D !important;
+        border-color: #51969D !important;
+        color: white;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+        color: #333;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    tr:hover {
+        background-color: #f2f2f2;
+    }
+</style>
+
 <h1>Supplier List</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New</a>
-</p>
+<div class="form-container">
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Add New Supplier</a>
+    </p>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Contact Info</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var supplier in Model)
-        {
+    <table>
+        <thead>
             <tr>
-                <td>@supplier.Id</td>
-                <td>@supplier.Name</td>
-                <td>@supplier.ContactInfo</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@supplier.Id">Details</a> |
-                    <a asp-action="Edit" asp-route-id="@supplier.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@supplier.Id">Delete</a>
-                </td>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Contact Info</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var supplier in Model)
+            {
+                <tr>
+                    <td>@supplier.Id</td>
+                    <td>@supplier.Name</td>
+                    <td>@supplier.ContactInfo</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@supplier.Id">Details</a> |
+                        <a asp-action="Edit" asp-route-id="@supplier.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@supplier.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

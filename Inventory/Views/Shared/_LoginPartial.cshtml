@@ -8,7 +8,9 @@
 <html>
 <head>
     <style>
-
+        body{
+            font-family:'Times New Roman', Times, serif;
+        }
 
         .navbar {
             display: flex;
@@ -47,7 +49,7 @@
 
             .nav-link:hover {
                 background-color: #f8f9fa;
-                color: #007bff;
+                color: black;
                 text-decoration: underline;
             }
 
@@ -69,7 +71,7 @@
                     <a class="nav-link" asp-area="Identity" asp-page="/Admin/Dashboard">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
+                    <a class="nav-link " asp-area="" asp-controller="Products" asp-action="Index">Products</a>
 
                 </li>
                 <li class="nav-item">
@@ -79,7 +81,7 @@
                     <a class="nav-link" asp-area="Admin" asp-page="/Orders">Orders</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-area="" asp-controller="Suppliers" asp-action="Index">Suppliers</a>
+                    <a class="nav-link" asp-area="" asp-controller="Suppliers" asp-action="Index">Suppliers</a>
                 </li>
             }
         </div>

@@ -4,19 +4,67 @@
     ViewData["Title"] = "Create Supplier";
 }
 
-<h1>Create Supplier</h1>
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: auto;
+        padding: 20px;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="ContactInfo"></label>
-        <input asp-for="ContactInfo" class="form-control" />
-        <span asp-validation-for="ContactInfo" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</form>
+    h1 {
+        text-align: center;
+        font-family: 'Times New Roman', Times, serif;
+        font-weight: bold;
+        font-size: 30px;
+        margin-top: 40px;
+    }
+
+    .form-group{
+        padding: 5px;
+    }
+
+    .btn-primary {
+        background-color: #0E9BA8 !important;
+        border-color: #0E9BA8 !important;
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #0C8B97 !important;
+            border-color: #0C8B97 !important;
+            color: white;
+        }
+
+    .btn-secondary {
+        background-color: #51969D !important;
+        border-color: #51969D !important;
+        color: white;
+    }
+
+    .btn-secondary:hover{
+            background-color: #0C8B97 !important;
+            color: white;
+        }
+</style>
+
+<h1>Add Supplier</h1>
+
+<div class="form-container">
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" class="form-control" placeholder="Enter supplier name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ContactInfo"></label>
+            <input asp-for="ContactInfo" class="form-control" placeholder="Enter contact info" />
+            <span asp-validation-for="ContactInfo" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Create</button>
+        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    </form>
+</div>

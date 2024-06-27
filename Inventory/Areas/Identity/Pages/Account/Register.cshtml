@@ -8,53 +8,55 @@
 <div class="register-background">
     <div class="register-container">
         <div class="register-form">
-            <img src="/assets/logo.png" alt="Logo" class="login-logo" style="height:40px; width:40px; margin-left:110px" />
-            <h2 class="register-title">Create a new account.</h2>
+            <div class="header-container">
+                <img src="/assets/logo.png" alt="Logo" class="login-logo" />
+                <h2 class="register-title">Create a new account.</h2>
+            </div>
             <form id="registerForm" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3" ></div>
-                <div class="form-group mb-1 custom-form-group">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div class="form-group mb-3 custom-form-group">
                     <label asp-for="Input.FirstName"></label>
                     <div class="input-wrapper">
                         <input asp-for="Input.FirstName" class="form-control" autocomplete="username" aria-required="true" placeholder="First Name" />
                         <span asp-validation-for="Input.FirstName" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group mb-1 custom-form-group">
+                <div class="form-group mb-3 custom-form-group">
                     <label asp-for="Input.LastName"></label>
                     <div class="input-wrapper">
                         <input asp-for="Input.LastName" class="form-control" autocomplete="username" aria-required="true" placeholder="Last Name" />
                         <span asp-validation-for="Input.LastName" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group mb-1 custom-form-group">
+                <div class="form-group mb-3 custom-form-group">
                     <label asp-for="Input.Address"></label>
                     <div class="input-wrapper">
                         <input asp-for="Input.Address" class="form-control" autocomplete="username" aria-required="true" placeholder="Address" />
                         <span asp-validation-for="Input.Address" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group mb-1 custom-form-group">
+                <div class="form-group mb-3 custom-form-group">
                     <label asp-for="Input.PhoneNumber"></label>
                     <div class="input-wrapper">
                         <input asp-for="Input.PhoneNumber" class="form-control" autocomplete="username" aria-required="true" placeholder="Phone Number" />
                         <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group mb-1 custom-form-group">
+                <div class="form-group mb-3 custom-form-group">
                     <label asp-for="Input.Email"></label>
                     <div class="input-wrapper">
                         <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true" placeholder="Email" />
                         <span asp-validation-for="Input.Email" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group mb-1 custom-form-group">
+                <div class="form-group mb-3 custom-form-group">
                     <label asp-for="Input.Password"></label>
                     <div class="input-wrapper">
                         <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Password" />
                         <span asp-validation-for="Input.Password" class="text-danger"></span>
                     </div>
                 </div>
-                <div class="form-group mb-1 custom-form-group">
+                <div class="form-group mb-3 custom-form-group">
                     <label asp-for="Input.ConfirmPassword"></label>
                     <div class="input-wrapper">
                         <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="Confirm Password" />
@@ -74,12 +76,13 @@
     <partial name="_ValidationScriptsPartial" />
 }
 
-
 <style>
     body {
-        font-family:'Times New Roman', Times, serif;
-        overflow: hidden;
+        font-family: 'Times New Roman', Times, serif;
         background-color: #f0f4fa;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Prevent body from scrolling */
     }
 
     .register-background {
@@ -87,6 +90,7 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
+        overflow: hidden; /* Prevent background from scrolling */
     }
 
     .register-container {
@@ -96,7 +100,7 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         overflow: hidden;
         align-items: flex-start;
-        height: auto;
+        height: 90%; /* Adjust the container height */
         width: 900px;
     }
 
@@ -105,7 +109,32 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start; /* Align items at the start */
+        overflow-y: auto; /* Enable vertical scrolling */
+        max-height: 100%; /* Ensure it takes full available height */
+    }
+
+        /* Hide scrollbar for Chrome, Safari, and Opera */
+        .register-form::-webkit-scrollbar {
+            display: none;
+        }
+
+    /* Hide scrollbar for IE, Edge, and Firefox */
+    .register-form {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+    }
+
+    .header-container {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .login-logo {
+        height: 40px;
+        width: 40px;
+        margin-right: 20px;
     }
 
     .register-illustration {
@@ -115,27 +144,24 @@
         align-items: center;
         flex: 1;
         padding: 20px;
+        overflow: hidden; /* Prevent the image container from scrolling */
     }
 
         .register-illustration img {
-            width: 100%; 
-            height: 300px;
-            max-width: 100%; 
+            width: 100%;
+            height: auto;
+            max-width: 100%;
             margin-top: 60px;
             margin-right: 50px;
         }
 
     .register-title {
-        font-size: 24px;
+        font-size: 28px;
         color: #333;
-        text-align: center;
-        margin-left: 150px;
-        margin-top: -30px;
     }
 
     .custom-form-group {
-        margin-bottom: 0.5rem;
-        font-size: 12px;
+        margin-bottom: 1rem;
     }
 
     .input-wrapper {
@@ -145,88 +171,49 @@
 
         .input-wrapper span {
             margin-left: 10px;
-            font-size: 12px;
+            font-size: 14px;
         }
 
     .form-control {
-        width: 200px;
-        padding: 10px;
+        width: 100%;
+        padding: 12px;
         border: 1px solid #ddd;
         border-radius: 5px;
-        font-size: 10px;
+        font-size: 14px;
         color: #333;
-        height: 30px;
+        height: 40px;
     }
 
         .form-control::placeholder {
             color: #bbb;
-            font-size: 8px;
+            font-size: 12px;
         }
 
     .btn-primary {
-        width: 50%;
-        padding: 10px;
+        width: 100%;
+        padding: 12px;
         background-color: #0E9BA8;
         border: none;
         border-radius: 5px;
         color: white;
-        font-size: 16px;
-        height: 40px;
+        font-size: 18px;
+        height: 45px;
         margin-top: 10px;
     }
 
-    .btn-primary:hover{
+        .btn-primary:hover {
             background-color: #0C8B97;
-    }
-
-    .btn-outline-primary {
-        width: 100%;
-        padding: 10px;
-        border: 1px solid #0E9BA8;
-        color: #0E9BA8;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-        .btn-outline-primary img {
-            margin-right: 10px;
-        }
-
-        .btn-outline-primary:hover {
-            background-color: #0E9BA8;
-            color: white;
         }
 
     .text-danger {
         color: #ff6b6b;
-        font-size:12px;
-
+        font-size: 14px;
     }
 
     label {
         display: block;
         margin-bottom: 5px;
         color: #333;
+        font-size: 16px;
     }
-
-    .or-text {
-        position: relative;
-        display: inline-block;
-        padding: 0 1rem;
-        background: white;
-        color: #333;
-    }
-
-        .or-text::before {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: #ddd;
-            z-index: -1;
-        }
 </style>
