@@ -1,0 +1,37 @@
+﻿@model List<Inventory.Models.Supplier>
+
+@{
+    ViewData["Title"] = "Supplier List";
+}
+
+<h1>Supplier List</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Contact Info</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var supplier in Model)
+        {
+            <tr>
+                <td>@supplier.Id</td>
+                <td>@supplier.Name</td>
+                <td>@supplier.ContactInfo</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@supplier.Id">Details</a> |
+                    <a asp-action="Edit" asp-route-id="@supplier.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@supplier.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
