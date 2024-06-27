@@ -1,0 +1,35 @@
+﻿@model Inventory.Models.Product
+
+<h1>Create Product</h1>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="ImageUrl"></label>
+        <input type="file" asp-for="ImageUrl" class="form-control-file" />
+    </div>
+    <div class="form-group">
+        <label asp-for="SupplierId"></label>
+        <select asp-for="SupplierId" asp-items="ViewBag.SupplierId" class="form-control">
+            <option value="">-- Select Supplier --</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label asp-for="Quantity"></label>
+        <input asp-for="Quantity" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
