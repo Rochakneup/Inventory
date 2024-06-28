@@ -36,7 +36,7 @@ namespace Inventory.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,ContactInfo,Quantity")] Supplier supplier)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 _context.Add(supplier);
                 await _context.SaveChangesAsync();
@@ -71,7 +71,7 @@ namespace Inventory.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {
@@ -133,13 +133,19 @@ namespace Inventory.Controllers
         // POST: Suppliers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var supplier = await _context.Suppliers.FindAsync(id);
+            if (supplier == null)
+            {
+                return NotFound();
+            }
+
             _context.Suppliers.Remove(supplier);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
 
         private bool SupplierExists(int id)
         {

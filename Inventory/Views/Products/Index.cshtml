@@ -11,6 +11,7 @@
                 <th>Description</th>
                 <th>Price</th>
                 <th>Supplier</th>
+                <th>Image</th> <!-- Added Image column header -->
                 <th>Action</th>
             </tr>
         </thead>
@@ -23,6 +24,7 @@
                     <td>@item.Description</td>
                     <td>@item.Price</td>
                     <td>@item.Supplier.Name</td>
+                    <td><img src="@item.ImageUrl" alt="@item.Name" style="max-width: 100px; max-height: 100px;" /></td>
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                         <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
@@ -32,14 +34,11 @@
             }
         </tbody>
     </table>
-
-    <!--<a asp-action="Create">Create New</a>-->
-
 </div>
 
 <style>
-    h1{
-        text-align:center;
+    h1 {
+        text-align: center;
         font-family: 'Times New Roman', Times, serif;
         font-weight: bold;
     }
@@ -57,7 +56,8 @@
         border-collapse: collapse;
     }
 
-        .table th, .table td {
+        .table th,
+        .table td {
             border: 1px solid #ddd;
             padding: 8px;
         }

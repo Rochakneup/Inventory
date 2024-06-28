@@ -1,6 +1,4 @@
-﻿@model List<Product>
-
-<div class="row">
+﻿<div class="row">
     @foreach (var product in Model)
     {
         <div class="col-md-4 mb-4">
@@ -10,7 +8,14 @@
                     <h5 class="card-title">@product.Name</h5>
                     <p class="card-text">@product.Description</p>
                     <p class="card-text">Price: $@product.Price</p>
-                    <a href="@Url.Action("Details", "PublicProducts", new { id = product.Id })" class="btn btn-primary">View Details</a>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a href="@Url.Action("Buy", "PublicProducts", new { id = product.Id })" class="btn btn-primary">Buy</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "Account")" class="btn btn-primary">Login to Buy</a>
+                    }
                 </div>
             </div>
         </div>
