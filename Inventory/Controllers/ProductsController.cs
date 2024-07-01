@@ -35,24 +35,26 @@ namespace Inventory.Controllers
             return View();
         }
 
-        // POST: Products/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Description,SupplierId")] Product product, IFormFile ImageFile)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,Description,Quantity,SupplierId")] Product product, IFormFile ImageFile)
         {
             if (!ModelState.IsValid)
             {
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
                     var fileName = Path.GetFileName(ImageFile.FileName);
-                    var filePath = Path.Combine("wwwroot/images", fileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                    // Ensure the directory exists
+                    Directory.CreateDirectory(Path.GetDirectoryName(filePath));
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await ImageFile.CopyToAsync(stream);
                     }
 
-                    product.ImageUrl = $"/images{fileName}";
+                    product.ImageUrl = $"/images/{fileName}";
                 }
 
                 _context.Add(product);
@@ -83,7 +85,7 @@ namespace Inventory.Controllers
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description,SupplierId")] Product product, IFormFile ImageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description,Quantity,SupplierId,ImageUrl")] Product product, IFormFile ImageFile)
         {
             if (id != product.Id)
             {
@@ -97,14 +99,19 @@ namespace Inventory.Controllers
                     if (ImageFile != null && ImageFile.Length > 0)
                     {
                         var fileName = Path.GetFileName(ImageFile.FileName);
-                        var filePath = Path.Combine("wwwroot/images/products", fileName);
+                        var filePath = Path.Combine("wwwroot/images", fileName);
 
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             await ImageFile.CopyToAsync(stream);
                         }
 
-                        product.ImageUrl = $"/images/products/{fileName}";
+                        product.ImageUrl = $"/images/{fileName}";
+                    }
+                    else
+                    {
+                        // Keep the existing image URL if no new image is uploaded
+                        _context.Entry(product).Property(p => p.ImageUrl).IsModified = false;
                     }
 
                     _context.Update(product);
@@ -126,6 +133,7 @@ namespace Inventory.Controllers
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name", product.SupplierId);
             return View(product);
         }
+
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)

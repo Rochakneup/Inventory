@@ -2,158 +2,63 @@
 @model Inventory.Areas.Identity.Pages.Admin.DashboardModel
 @{
 }
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Dashboard</title>
+<h1>Admin Dashboard</h1>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Times New Roman', Times, serif;
-        }
-
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-        }
-
-        h3 {
-            font-family: 'Times New Roman', Times, serif;
-        }
-
-        h4 {
-            font-family: 'Times New Roman', Times, serif;
-        }
-
-        div {
-            font-family: 'Times New Roman', Times, serif;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        main {
-            margin-top: 20px;
-        }
-
-        .getting-started {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .getting-started-header {
-            margin-bottom: 20px;
-        }
-
-        .card-container {
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .card {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            flex: 1;
-            margin-right: 20px;
-            text-align: center;
-        }
-
-            .card:last-child {
-                margin-right: 0;
-            }
-
-        .card-content {
-            height: 100px;
-            background-color: #e0e0e0;
-            margin-top: 10px;
-            border-radius: 4px;
-        }
-
-        .revenue-orders, .overview {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
-
-        .chart-placeholder {
-            height: 200px;
-            background-color: #e0e0e0;
-            border-radius: 4px;
-            margin-top: 10px;
-        }
-
-        .summary, .details {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-
-            .summary div, .details div {
-                flex: 1;
-                text-align: center;
-                margin-right: 20px;
-            }
-
-                .summary div:last-child, .details div:last-child {
-                    margin-right: 0;
-                }
-
-    </style>
-</head>
-<body>
-    <div class="container">
-        <main>
-            <section class="getting-started">
-                <h3 class="getting-started-header">Getting started with us</h3>
-                <div class="card-container">
-                    <div class="card">
-                        <h4>Stock</h4>
-                        <div class="card-content"></div>
-                    </div>
-                    <div class="card">
-                        <h4>Products</h4>
-                        <div class="card-content"></div>
-                    </div>
-                    <div class="card">
-                        <h4>Analyze performance</h4>
-                        <div class="card-content"></div>
-                    </div>
-                </div>
-            </section>
-            <section class="revenue-orders">
-                <h3>Orders</h3>
-                <div class="chart-placeholder"></div>
-                <div class="summary">
-                    <div>Total revenue<br>$1,200,000</div>
-                    <div>Total orders<br>1,870</div>
-                    <div>Average<br>$640 / order</div>
-                </div>
-            </section>
-            <section class="overview">
-                <h3>Overview</h3>
-                <div class="chart-placeholder"></div>
-                <div class="details">
-                    <div>Orders<br>300</div>
-                    <div>New customers<br>100</div>
-                    <div>Expenses<br>$72,000</div>
-                </div>
-            </section>
-        </main>
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Active Users</h5>
+                <p class="card-text">@Model.ActiveUsersCount</p>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Low Stock Products</h5>
+                <p class="card-text">@Model.LowStockProductsCount</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Suppliers</h5>
+                <p class="card-text">@Model.SuppliersCount</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <h2>Graphs</h2>
+    <canvas id="productsBySupplierChart" width="400" height="200"></canvas>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        var ctx = document.getElementById('productsBySupplierChart').getContext('2d');
+        var productsBySupplierChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @Html.Raw(Json.Serialize(Model.Suppliers.Select(s => s.Name))),
+                datasets: [{
+                    label: 'Products by Supplier',
+                    data: @Html.Raw(Json.Serialize(Model.Suppliers.Select(s => s.Products.Count))),
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+}
