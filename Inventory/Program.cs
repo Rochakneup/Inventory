@@ -9,13 +9,25 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 
             var builder = WebApplication.CreateBuilder(args);
             var Configuration = builder.Configuration;
-            builder.Services.AddAuthentication().AddGoogle(googleOptions =>{
+builder.Services.AddAuthentication()
+.AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+})
+.AddCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;
+    options.Cookie.Expiration = TimeSpan.FromHours(24);
+    options.SlidingExpiration = true;
+    options.LoginPath = "/Account/Login";
+    options.LogoutPath = "/Account/Logout";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+});
 
-                googleOptions.ClientId = Configuration["Authentication:Google:ClientId"];
-                googleOptions.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-
-            });
-            var connectionString = builder.Configuration.GetConnectionString("AuthContextConnection") ?? throw new InvalidOperationException("Connection string 'AuthContextConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("AuthContextConnection") ?? throw new InvalidOperationException("Connection string 'AuthContextConnection' not found.");
 
             builder.Services.AddDbContext<AuthContext>(options => options.UseSqlServer(connectionString));
 
@@ -30,7 +42,6 @@ using Microsoft.AspNetCore.Identity.UI.Services;
             builder.Services.AddControllersWithViews();
             builder.Services.Configure<EmailSender.EmailSettings>(builder.Configuration.GetSection("emailsettings"));
             builder.Services.AddTransient<IEmailSender, EmailSender>();
-
 
 
 

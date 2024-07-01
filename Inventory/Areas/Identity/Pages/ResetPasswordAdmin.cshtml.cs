@@ -7,9 +7,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Threading.Tasks;
 using Inventory.Areas.Identity.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Inventory.Areas.Identity.Pages
 {
+    [Authorize(Roles = "Admin")]
     public class ResetPasswordAdminModel : PageModel
     {
         private readonly UserManager<AuthUser> _userManager;
