@@ -5,24 +5,71 @@
     ViewData["ActivePage"] = ManageNavPages.PersonalData;
 }
 
-<h3>@ViewData["Title"]</h3>
 
-<div class="row">
-    <div class="col-md-6">
-        <p>Your account contains personal data that you have given us. This page allows you to download or delete that data.</p>
-        <p>
-            <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
-        </p>
-        <div class="d-flex">
-            <form id="download-data" asp-page="DownloadPersonalData" method="post" class="me-2">
-                <button class="btn btn-primary" type="submit">Download</button>
-            </form>
-            <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger">Delete</a>
-        </div>
+    <div class="info-table">
+    <strong><h5>Are you sure you want to delete your account?</h5></strong>
+    <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td colspan="2">
+                        Your account contains personal data that you have given us. This page allows you to download or delete that data.
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" class="text-danger">
+                        <strong>Deleting this data will permanently remove your account, and this cannot be recovered.</strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="text-center">
+                        <form id="download-data" asp-page="DownloadPersonalData" method="post">
+                            <button class="btn btn-primary w-100" type="submit">Download</button>
+                        </form>
+                    </td>
+                    <td class="text-center">
+                        <a id="delete" asp-page="DeletePersonalData" class="btn btn-danger w-100">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-</div>
 
 <style>
+
+
+    .info-table {
+        width: 100%;
+        max-width: 600px;
+        padding: 10px;
+        background-color: #ffffff;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 120px;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: #212529;
+    }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+        .table-bordered td, .table-bordered th {
+            border: 1px solid #dee2e6;
+        }
+
+        .table-bordered thead td, .table-bordered thead th {
+            border-bottom-width: 2px;
+        }
+
+    h5 {
+        text-align: center;
+    }
+
     .btn-primary {
         background-color: #0E9BA8 !important;
         border-color: #0E9BA8 !important;
@@ -31,6 +78,16 @@
         .btn-primary:hover {
             background-color: #0C8B97 !important;
             border-color: #0C8B97 !important;
+        }
+
+    .btn-danger {
+        background-color: #dc3545 !important;
+        border-color: #dc3545 !important;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333 !important;
+            border-color: #bd2130 !important;
         }
 </style>
 

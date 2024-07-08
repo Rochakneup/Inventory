@@ -1,0 +1,68 @@
+﻿h1 {
+    margin-top: 100px;
+    text-align: center; 
+}
+
+.table-container {
+    position: relative;
+    max-width: 800px; 
+    margin: 0 auto; 
+    padding: 20px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 5px; 
+}
+
+.custom-table-container {
+    max-width: 100%; 
+    margin: 0 auto; 
+}
+
+.table th, .table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.form-group.button-group {
+    text-align: center; 
+    margin-top: 20px; 
+}
+
+.btn-primary {
+    background-color: #0E9BA8 !important;
+    border-color: #0E9BA8 !important;
+    color: white;
+    font-size: 16px;
+    width: 100px;
+    margin-right: 10px;
+}
+
+    .btn-primary:hover {
+        background-color: #0C8B97 !important;
+        border-color: #0C8B97 !important;
+        color: white;
+    }
+
+.btn-secondary {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: white;
+    font-size: 16px;
+    width: 100px;
+}
+
+    .btn-secondary:hover {
+        background-color: #5a6268 !important;
+        color: white;
+    }
+
+@media (max-width: 991.98px) {
+    select.form-control {
+        width: 50%;
+        max-width: 100%; 
+        text-align: center; 
+    }
+}
+
+
+

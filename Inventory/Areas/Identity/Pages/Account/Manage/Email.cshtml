@@ -5,42 +5,124 @@
     ViewData["ActivePage"] = ManageNavPages.Email;
 }
 
-<h3>@ViewData["Title"]</h3>
+
 <partial name="_StatusMessage" for="StatusMessage" />
-<div class="row">
-    <div class="col-md-6">
-        <form id="email-form" method="post">
-            <div asp-validation-summary="All" class="text-danger" role="alert"></div>
-            @if (Model.IsEmailConfirmed)
-            {
-                <div class="form-floating mb-3 input-group">
-                    <input asp-for="Email" class="form-control" placeholder="Please enter your email." disabled />
-                        <div class="input-group-append">
-                            <span class="h-100 input-group-text text-success font-weight-bold">✓</span>
-                        </div>
-                    <label asp-for="Email" class="form-label"></label>
-                </div>
-            }
-            else
-            {
-                <div class="form-floating mb-3">
-                    <input asp-for="Email" class="form-control" placeholder="Please enter your email." disabled />
-                    <label asp-for="Email" class="form-label"></label>
-                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
-                </div>
-            }
-            <div class="form-floating mb-3">
-                <input asp-for="Input.NewEmail" class="form-control" autocomplete="email" aria-required="true" placeholder="Please enter new email." />
-                <label asp-for="Input.NewEmail" class="form-label"></label>
-                <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
-            </div>
-            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="w-100 btn btn-lg btn-primary">Change email</button>
-        </form>
-    </div>
+<div class="centered-container">
+    <h3>@ViewData["Title"]</h3>
+    <form id="email-form" method="post">
+        <div asp-validation-summary="All" class="text-danger" role="alert"></div>
+        <table class="table table-bordered">
+            <tbody>
+                @if (Model.IsEmailConfirmed)
+                {
+                    <tr>
+                        <td><label asp-for="Email" class="form-label"></label></td>
+                        <td>
+                            <div class="input-group">
+                                <input asp-for="Email" class="form-control" placeholder="Please enter your email." disabled />
+                                <div class="input-group-append">
+                                    <span class="input-group-text text-success font-weight-bold">✓</span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td><label asp-for="Email" class="form-label"></label></td>
+                        <td>
+                            <input asp-for="Email" class="form-control" placeholder="Please enter your email." disabled />
+                            <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <td><label asp-for="Input.NewEmail" class="form-label"></label></td>
+                    <td>
+                        <input asp-for="Input.NewEmail" class="form-control" autocomplete="email" aria-required="true" placeholder="Please enter new email." />
+                        <span asp-validation-for="Input.NewEmail" class="text-danger"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="form-group button-group">
+            <button id="change-email-button" type="submit" asp-page-handler="ChangeEmail" class="btn btn-primary">Change email</button>
+        </div>
+    </form>
 </div>
 
 <style>
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f8f9fa;
+    }
+
+    .centered-container {
+        text-align: center;
+        width: 100%;
+        max-width: 600px; /* Adjusted width for the container */
+        padding: 20px;
+        background-color: #ffffff; /* White background for the container */
+        border: 1px solid #dee2e6; /* Light border around the container */
+        border-radius: 5px; /* Rounded corners for the container */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Slight shadow for better visibility */
+    }
+
+    h3 {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        color: #212529;
+    }
+
+    .table-bordered {
+        border: 1px solid #dee2e6;
+    }
+
+        .table-bordered td, .table-bordered th {
+            border: 1px solid #dee2e6;
+        }
+
+        .table-bordered thead td, .table-bordered thead th {
+            border-bottom-width: 2px;
+        }
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-group {
+        display: flex;
+        align-items: center;
+    }
+
+    .input-group-append {
+        margin-left: -1px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+        text-align: left; /* Align the label and input to the left */
+    }
+
+        .form-group.button-group {
+            text-align: center; /* Center align the buttons */
+            margin-top: 20px; /* Add some margin at the top */
+        }
+
     .btn-primary {
+        font-size: 16px;
         background-color: #0E9BA8 !important;
         border-color: #0E9BA8 !important;
     }
@@ -48,6 +130,17 @@
         .btn-primary:hover {
             background-color: #0C8B97 !important;
             border-color: #0C8B97 !important;
+        }
+
+    .btn-secondary {
+        font-size: 16px;
+        background-color: #6C757D !important;
+        border-color: #6C757D !important;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5A6268 !important;
+            border-color: #545B62 !important;
         }
 </style>
 

@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Content Remove="Views\Shared\_Layout - Copy.cshtml" />
+    <Content Remove="Views\Shared\_ManageNav.cshtml" />
     <Content Remove="wwwroot\assets\background.jpg" />
     <Content Remove="wwwroot\assets\bg.jpg" />
     <Content Remove="wwwroot\assets\bg.png" />
@@ -26,10 +27,13 @@
     <Content Remove="wwwroot\assets\inven1.jfif" />
     <Content Remove="wwwroot\assets\log.jpg" />
     <Content Remove="wwwroot\assets\loginbg.jpg" />
+    <Content Remove="wwwroot\css\product_create.cs" />
+    <Content Remove="wwwroot\css\user_edit.css" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Views\Shared\_Layout - Copy.cshtml.css" />
+    <None Remove="Views\Shared\_ManageNav.cshtml.css" />
   </ItemGroup>
 
   <ItemGroup>

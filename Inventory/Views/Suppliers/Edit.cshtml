@@ -4,20 +4,102 @@
     ViewData["Title"] = "Edit Supplier";
 }
 
-<h1>Edit Supplier</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Supplier</title>
+    <style>
+       
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input asp-for="Name" class="form-control" />
-        <span asp-validation-for="Name" class="text-danger"></span>
+        h1 {
+            text-align: center;
+            margin-top: 80px;
+        }
+
+        .table-container {
+            position: relative;
+            max-width: 600px; 
+            margin: 0 auto; 
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-table-container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+
+        .form-group.button-group {
+            text-align: center; 
+            margin-top: 20px; 
+        }
+
+        .btn-primary {
+            background-color: #0E9BA8 !important;
+            border-color: #0E9BA8 !important;
+            color: white;
+            font-size: 16px;
+            width: 100px;
+            margin-right: 10px;
+        }
+
+            .btn-primary:hover {
+                background-color: #0C8B97 !important;
+                border-color: #0C8B97 !important;
+                color: white;
+            }
+
+        .btn-secondary {
+            background-color: #6c757d !important;
+            border-color: #6c757d !important;
+            color: white;
+            font-size: 16px;
+            width: 100px;
+        }
+
+            .btn-secondary:hover {
+                background-color: #5a6268 !important;
+                color: white;
+            }
+    </style>
+</head>
+<body>
+    <h1>Edit Supplier</h1>
+
+    <div class="table-container">
+        <form asp-action="Edit" method="post">
+            <input type="hidden" asp-for="Id" />
+
+            <div class="table-responsive custom-table-container">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th><label asp-for="Name" class="font-weight-bold">Supplier Name</label></th>
+                            <td><input asp-for="Name" class="form-control" placeholder="Enter supplier name" /></td>
+                        </tr>
+                        <tr>
+                            <th><label asp-for="ContactInfo" class="font-weight-bold">Contact Info</label></th>
+                            <td><input asp-for="ContactInfo" class="form-control" placeholder="Enter contact info" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="form-group button-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-controller="Suppliers" asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
     </div>
-    <div class="form-group">
-        <label asp-for="ContactInfo"></label>
-        <input asp-for="ContactInfo" class="form-control" />
-        <span asp-validation-for="ContactInfo" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Save Changes</button>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-</form>
+
+</body>
+</html>

@@ -1,0 +1,34 @@
+﻿.container {
+    margin-top: 100px;
+}
+
+.carousel-img {
+    width: 100%;
+    height: auto;
+    max-width: 1200px;
+    max-height: 400px;
+    object-fit: cover; 
+}
+
+@media (max-width: 1200px) {
+    .carousel-img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .carousel-img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .carousel-img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+
