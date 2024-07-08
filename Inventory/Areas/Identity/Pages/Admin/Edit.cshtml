@@ -2,138 +2,145 @@
 @model Inventory.Areas.Identity.Pages.Admin.EditModel
 @{
 }
+
+@{
+    ViewData["Title"] = "Edit user";
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit User</title>
-
     <style>
         body {
-            font-family: 'Times New Roman', Times, serif;
-        }
-
-        .container-box {
-            background-color: #ffffff;
-            border: 1px solid #ced4da;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin: 20px auto;
-            max-width: 650px;
-            font-family: 'Times New Roman', Times, serif;
-        }
-
-        .form-container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            width: 400px;
-        }
-
-            .form-container h2 {
-                margin-bottom: 10px;
-            }
-
-            .form-container .form-group {
-                margin-bottom: 14px;
-            }
-
-            .form-container label {
-                font-weight: bold;
-            }
-
-            .form-container input[type="text"],
-            .form-container input[type="email"],
-            .form-container input[type="tel"],
-            .form-container select {
-                border: 1px solid #ced4da;
-                border-radius: 4px;
-                width: 100%;
-                height: 40px;
-            }
-
-            .form-container input[readonly] {
-                background-color: #e9ecef;
-                cursor: not-allowed;
-            }
-
-        .btn-block {
-            font-size: 16px;
-            margin-left: 70px;
-            background-color: #0E9BA8 !important;
-            width: 200px;
-        }
-
-            .btn-block:hover {
-                background-color: #0C8B97 !important;
-                border-color: #0C8B97 !important;
-            }
-
-        .center-content {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: white;
         }
 
         h2 {
-            margin-left: 90px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 30px;
+            margin-top: 100px;
         }
+
+        .table-container {
+            position: relative;
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+        }
+
+        .custom-table-container {
+            max-width: 100%; 
+            margin: 0 auto; 
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .form-group.button-group {
+            text-align: center; 
+            margin-top: 20px;
+        }
+
+        .btn-primary {
+            background-color: #0E9BA8 !important;
+            border-color: #0E9BA8 !important;
+            color: white;
+            font-size: 16px;
+            width: 100px;
+            margin-right: 10px;
+        }
+
+            .btn-primary:hover {
+                background-color: #0C8B97 !important;
+                border-color: #0C8B97 !important;
+                color: white;
+            }
+
+        .btn-secondary {
+            background-color: #6c757d !important;
+            border-color: #6c757d !important;
+            color: white;
+            font-size: 16px;
+            width: 100px;
+        }
+
+            .btn-secondary:hover {
+                background-color: #5a6268 !important;
+                color: white;
+            }
+        .input-readonly {
+            background-color: #e9ecef;
+            color: #495057;
+        }
+
     </style>
 </head>
 <body>
+    <h2>Edit User</h2>
 
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-md-12">
-                <div class="container-box">
-                    <div class="center-content">
-                        <div class="form-container">
-                            <h2>Edit User</h2>
-                            <form method="post">
-                                <input type="hidden" asp-for="Input.Id" />
-                                <div class="form-group">
-                                    <label asp-for="Input.UserName">User Name</label>
-                                    <input asp-for="Input.UserName" class="form-control" required />
-                                    <span asp-validation-for="Input.UserName" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="Input.Email">Email</label>
-                                    <input asp-for="Input.Email" class="form-control" readonly />
-                                    <span asp-validation-for="Input.Email" class="text-danger"></span>
-                                </div>
-                                <div class="form-group">
-                                    <label asp-for="Input.Status">Status</label>
-                                    <select asp-for="Input.Status" class="form-control" required>
-                                        <option value="Active">Active</option>
-                                        <option value="Inactive">Inactive</option>
-                                    </select>
-                                    <span asp-validation-for="Input.Status" class="text-danger"></span>
-                                </div>
-                                <button type="submit" class="btn btn-dark btn-block">Save</button>
-                            </form>
-                            <div class="validation-summary">
-                                @if (!ViewData.ModelState.IsValid)
-                                {
-                                    <div class="alert alert-danger mt-3">
-                                        <ul>
-                                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                                            {
-                                                <li>@error.ErrorMessage</li>
-                                            }
-                                        </ul>
-                                    </div>
-                                }
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="table-container">
+        <form method="post">
+            <input type="hidden" asp-for="Input.Id" />
+            <div class="table-responsive custom-table-container">
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th><label asp-for="Input.UserName" class="font-weight-bold">User Name</label></th>
+                            <td>
+                                <input asp-for="Input.UserName" class="form-control" required />
+                                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label asp-for="Input.Email" class="font-weight-bold">Email</label></th>
+                            <td>
+                                <input asp-for="Input.Email" class="form-control input-readonly" readonly />
+                                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th><label asp-for="Input.Status" class="font-weight-bold">Status</label></th>
+                            <td>
+                                <select asp-for="Input.Status" class="form-control" required>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                                <span asp-validation-for="Input.Status" class="text-danger"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+            <div class="form-group button-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a asp-area="Identity" asp-page="/Admin/UserActivity" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+        <div class="validation-summary">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert alert-danger mt-3">
+                    <ul>
+                        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    </ul>
+                </div>
+            }
         </div>
     </div>
 
     <partial name="_ValidationScriptsPartial" />
-
 </body>
 </html>

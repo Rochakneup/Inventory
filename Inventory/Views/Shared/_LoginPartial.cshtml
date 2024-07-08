@@ -3,111 +3,117 @@
 
 @inject SignInManager<AuthUser> SignInManager
 @inject UserManager<AuthUser> UserManager
-
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
 <!DOCTYPE html>
 <html>
 <head>
     <style>
-        body{
-            font-family:'Times New Roman', Times, serif;
-        }
-
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px; 
-            background-color: #f8f9fa;
-        }
-
-        .navbar-nav {
-            display: flex;
-            list-style-type: none;
-            padding: 0;
+        body {
             margin: 0;
-            font-family: 'Times New Roman', Times, serif;
+            padding: 0;
         }
 
-        .nav-item {
-            margin-left: 15px;
-            font-family: 'Times New Roman', Times, serif;
+
+        .main-content {
+            margin-top: 50px; 
+            padding: 20px;
         }
 
-            .nav-item #login {
-                margin-right: 200px;
+        .dropdown-menu {
+            position: absolute; 
+            margin-left: -110px; 
+            top: calc(100% + 10px); 
+            max-height: calc(100vh - 100px); 
+            overflow-y: auto; /
+            z-index: 1000; 
+        }
+
+        .dropdown-item {
+            padding: 14px 18px; 
+            white-space: normal; 
+        }
+
+        .dropdown-item:hover{
+                background-color: #0C8B97;
             }
 
-
-        .nav-link {
-            text-decoration: none;
-            color: #343a40;
-            padding: 10px;
-            transition: background-color 0.3s ease, color 0.3s ease;
-            font-size:20px;
-            align-items:flex-end;
+        .dropdown-divider {
+            margin: 8px 0; 
         }
 
-            .nav-link:hover {
-                background-color: #f8f9fa;
-                color: black;
-                text-decoration: underline;
-            }
-
-        .navbar-right {
-            display: flex;
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
+        .nav-link:hover{
+            text-decoration: underline;
+            background-color: #f2f2f2;
         }
-
     </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
-    <div class="navbar">
-        <div class="navbar-nav">
-            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Admin"))
-            {
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="Identity" asp-page="/Admin/Dashboard">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link " asp-area="" asp-controller="Products" asp-action="Index">Products</a>
-
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="Identity" asp-page="/Admin/UserActivity">Users</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="Admin" asp-page="/Orders">Orders</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-area="" asp-controller="Suppliers" asp-action="Index">Suppliers</a>
-                </li>
-            }
-        </div>
-
+    @if (SignInManager.IsSignedIn(User))
+    {
         <div class="navbar-right">
-            @if (SignInManager.IsSignedIn(User))
-            {
-                <li class="nav-item">
-                    <a id="manage" class="nav-link" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
-                </li>
-                <li class="nav-item">
-                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                        <button id="logout" type="submit" class="nav-link btn btn-link">Logout</button>
-                    </form>
-                </li>
-            }
-            else
-            {
-                <li class="nav-item">
-                    <a class="nav-link" id="register" asp-area="Identity" asp-page="/Account/Register">Register</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
-                </li>
-            }
+            <li class="nav-item dropdown">
+                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Hello @UserManager.GetUserName(User)!
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index">
+                            <i class="bi bi-person-circle"></i> Profile
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Email">
+                            <i class="bi bi-envelope"></i> Email
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/ChangePassword">
+                            <i class="bi bi-lock"></i> Password
+                        </a>
+                    </li>
+                    @if (hasExternalLogins)
+                    {
+                        <li>
+                            <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/ExternalLogins">
+                                <i class="bi bi-link-45deg"></i> External logins
+                            </a>
+                        </li>
+                    }
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/TwoFactorAuthentication">
+                            <i class="bi bi-shield-lock"></i> Two-factor authentication
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/PersonalData">
+                            <i class="bi bi-person"></i> Personal data
+                        </a>
+                    </li>
+                    <li>
+                        <hr class="dropdown-divider"> 
+                    </li>
+                    <li>
+                        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                            <button id="logout" type="submit" class="dropdown-item">
+                                <i class="bi bi-box-arrow-right"></i> Logout
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+            </li>
         </div>
-    </div>
+    }
+
+    else
+    {
+        <li class="nav-item">
+            <a class="nav-link" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        </li>
+    }
+
+  
 </body>
 </html>

@@ -4,7 +4,7 @@
     ViewData["Title"] = "Register";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h3>@ViewData["Title"]</h3>
 <h2 id="external-login-title">Associate your @Model.ProviderDisplayName account.</h2>
 <hr />
 
@@ -31,3 +31,10 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<style>
+    h3 {
+        margin-top: 100px;
+    }
+
+</style>

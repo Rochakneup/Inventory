@@ -1,7 +1,7 @@
 ﻿@page
 @model ExternalLoginsModel
 @{
-    ViewData["Title"] = "Manage your external logins";
+    ViewData["Title"] = "External logins";
     ViewData["ActivePage"] = ManageNavPages.ExternalLogins;
 }
 
@@ -38,7 +38,7 @@
 }
 @if (Model.OtherLogins?.Count > 0)
 {
-    <h4>Add another service to log in.</h4>
+    <h3>Add another service to log in.</h3>
     <hr />
     <form id="link-login-form" asp-page-handler="LinkLogin" method="post" class="form-horizontal">
         <div id="socialLoginList">
@@ -62,4 +62,11 @@
             background-color: #0C8B97 !important;
             border-color: #0C8B97 !important;
         }
+
+    h3 {
+        margin-top: 100px;
+    }
+
+   
+
 </style>

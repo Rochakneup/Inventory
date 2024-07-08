@@ -1,0 +1,81 @@
+﻿.container-box {
+    background-color: #ffffff;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 650px;
+}
+
+.form-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    max-width: 400px; /* Set a max width to the form container */
+    margin: 0 auto; /* Center the form container */
+}
+
+    .form-container h2 {
+        margin-bottom: 10px;
+    }
+
+    .form-container .form-group {
+        margin-bottom: 14px;
+    }
+
+    .form-container label {
+        font-weight: bold;
+    }
+
+    .form-container input[type="text"],
+    .form-container input[type="email"],
+    .form-container input[type="tel"],
+    .form-container select {
+        border: 1px solid #ced4da;
+        border-radius: 4px;
+        width: 100%;
+        height: 40px;
+    }
+
+    .form-container input[readonly] {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+.btn-block {
+    font-size: 16px;
+    background-color: #0E9BA8 !important;
+    width: 200px; /* Keep width as needed */
+    display: block;
+    margin: 20px auto; /* Center the button horizontally with top and bottom margin */
+    text-align: center;
+}
+
+    .btn-block:hover {
+        background-color: #0C8B97 !important;
+        border-color: #0C8B97 !important;
+    }
+
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h2 {
+    text-align: center; /* Center align the heading */
+    margin-top: 100px; /* Reduce top margin for smaller screens */
+}
+
+.form-control {
+    width: 100%; /* Ensure dropdown spans full width of its container */
+    height: 40px;
+}
+
+@media (max-width: 768px) {
+    .form-container {
+        width: 90%; /* Adjust width for smaller screens */
+    }
+}

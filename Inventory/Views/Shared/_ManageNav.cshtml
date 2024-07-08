@@ -1,4 +1,4 @@
-﻿@inject SignInManager<AuthUser> SignInManager
+﻿<!--@inject SignInManager<AuthUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
 }
@@ -10,7 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Sidebar</title>
     <style>
-       
+        body {
+            font-family: 'Times New Roman', Times, serif;
+        }
 
         .admin-sidebar {
             position: fixed;
@@ -19,7 +21,7 @@
             left: 0;
             z-index: 100;
             background-color: #f8f9fa;
-            width: 250px; 
+            width: 250px;
             overflow-y: auto;
             border-right: 1px solid #ddd;
         }
@@ -30,7 +32,7 @@
             }
 
             .admin-sidebar .nav-link {
-                color: #333; 
+                color: #333;
             }
 
         .nav-item.active .nav-link {
@@ -66,3 +68,4 @@
     </div>
 </body>
 </html>
+-->

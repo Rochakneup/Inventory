@@ -1,19 +1,91 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@using Inventory.Areas.Identity.Data
+
+@inject SignInManager<AuthUser> SignInManager
+@inject UserManager<AuthUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Inventory_Management_System</title>
+    <title>@ViewData["Title"] - Inventory</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Inventory_Management_System.styles.css" asp-append-version="true" />
     <style>
+        .navbar-nav {
+            display: flex;
+            align-items: center; 
+            justify-content: center; 
+            height: 100%;
+            color: black;
+        }
+
+            .navbar-nav .nav-item {
+                margin-right: 10px; 
+            }
+
+            .navbar-nav .nav-link {
+                color: #000;
+            }
+
+                .navbar-nav .nav-link:hover {
+                    background-color: #f8f9fa;
+                    text-decoration: underline;
+                }
+
+        .navbar-collapse {
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-nav.ml-auto {
+            margin-left: auto;
+        }
+
+        .navbar-brand:hover img {
+            transform: scale(1.1); 
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            height: 65px; 
+            width: 100%;
+            position: fixed;
+            top: 0;
+            z-index: 1000; 
+            background-color: #fff; 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+        }
+
+        .openbtn {
+            font-size: 18px;
+            cursor: pointer;
+            background-color: #f8f9fa;
+            color: #343a40;
+            padding: 5px 10px;
+            border: none;
+            display: block;
+        }
+
+            .openbtn:hover {
+                background-color: #ddd;
+            }
+
+        .main-content {
+            margin-top: 65px; 
+            padding: 20px;
+        }
+
         footer {
             background-color: #053D42;
             color: #fff;
             text-align: center;
-            height: 200px;
-            padding: 40px;
+            padding: 10px;
         }
 
             footer .footer-content {
@@ -34,6 +106,11 @@
                 height: 40px;
             }
 
+
+            footer .footer-logo:hover img {
+                transform: scale(1.1); 
+            }
+
             footer .footer-logo p {
                 color: white;
             }
@@ -42,41 +119,18 @@
             color: white;
         }
 
-        .navbar-nav .nav-item .nav-link {
-            color: #000; 
-            font-family:'Times New Roman', Times, serif;
-        }
-
-            .navbar-nav .nav-item .nav-link:hover {
-                /*color: #0E9BA8;*/
-                background-color: #f8f9fa;
-                text-decoration: underline;
-            }
-
-        .navbar-nav .nav-item a[href="@Url.Action("Index", "PublicProducts")"] {
-            font-family:'Times New Roman', Times, serif 
-        }
     </style>
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light  border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand navbar-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/assets/logo.png" alt="Inventory Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
                     Inventory
                 </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link" href="@Url.Action("Index", "PublicProducts")">Products</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav flex-grow-1">
+                <div class="navbar-collapse">
+                    <ul class="navbar-nav ml-auto">
                         <li class="nav-item">
                             <partial name="_LoginPartial" />
                         </li>
@@ -106,6 +160,7 @@
             </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
