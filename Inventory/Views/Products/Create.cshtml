@@ -4,9 +4,7 @@
     ViewData["Title"] = "Add Product";
 }
 
-
 <h1>Add New Product</h1>
-<link rel="stylesheet" href="~/css/create_product.css" asp-append-version="true" />
 
 <div class="table-container">
     <form asp-action="Create" enctype="multipart/form-data">
@@ -34,6 +32,14 @@
                         </td>
                     </tr>
                     <tr>
+                        <th><label asp-for="CategoryId" class="font-weight-bold">Category</label></th>
+                        <td>
+                            <select asp-for="CategoryId" asp-items="ViewBag.CategoryId" class="form-control">
+                                <option value="">-- Select Category --</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
                         <th><label asp-for="Quantity" class="font-weight-bold">Quantity</label></th>
                         <td><input asp-for="Quantity" class="form-control" /></td>
                     </tr>
@@ -50,5 +56,3 @@
         </div>
     </form>
 </div>
-
-

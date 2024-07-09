@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Inventory.Areas.Identity.Data; // Adjust namespace as per your project structure
+using Inventory.Areas.Identity.Data;
 using Inventory.Models;
-using System.Reflection.Emit;
 
 namespace Inventory.Areas.Identity.Data
 {
@@ -18,6 +17,7 @@ namespace Inventory.Areas.Identity.Data
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<Category> Categories { get; set; } // Add the Category DbSet
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -28,27 +28,16 @@ namespace Inventory.Areas.Identity.Data
                 .Property(oi => oi.UnitPrice)
                 .HasColumnType("decimal(18,2)");
             builder.Entity<Product>()
-               .Property(p => p.Price)
-               .HasColumnType("decimal(18, 2)");
-            // Adjust precision and scale as per your requirements
+                .Property(p => p.Price)
+                .HasColumnType("decimal(18,2)");
+
+            // Configure Product-Category relationship
+            builder.Entity<Product>()
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId);
 
             // Add other configurations as needed
-
-            // Example: To configure Product table
-            // builder.Entity<Product>()
-            //    .Property(p => p.Price)
-            //    .HasColumnType("decimal(18,2)");
-
-            // Example: To configure Supplier table
-            // builder.Entity<Supplier>()
-            //    .Property(s => s.Quantity)
-            //    .HasColumnType("int");
-
-            // Example: To configure other entities, follow similar patterns
-
-
-
         }
-
     }
 }

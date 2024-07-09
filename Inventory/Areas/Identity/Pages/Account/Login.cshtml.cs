@@ -97,15 +97,7 @@ namespace Inventory.Areas.Identity.Pages.Account
                     return Page();
                 }
 
-                // Check if the user has not logged in for a week
-                if (user.LoginDate.HasValue && (DateTime.UtcNow - user.LoginDate.Value).TotalDays > 7)
-                {
-                    user.Status = "Inactive";
-                    await _userManager.UpdateAsync(user);
-
-                    ModelState.AddModelError(string.Empty, "Your account has been locked due to inactivity. Please contact support.");
-                    return Page();
-                }
+            
 
                 // Sign in the user
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
