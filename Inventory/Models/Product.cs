@@ -5,11 +5,12 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
-        public string ImageUrl { get; set; }  // URL or path to the product image
+        public string ImageUrl { get; set; }
         public int SupplierId { get; set; }
         public Supplier Supplier { get; set; }
         public int Quantity { get; set; }
         public string Description { get; set; }
-        // Quantity of the product in stock
+        public int CategoryId { get; set; }  // Foreign key for Category
+        public Category Category { get; set; }  // Navigation property for Category
     }
 }

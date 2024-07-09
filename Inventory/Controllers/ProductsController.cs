@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Inventory.Areas.Identity.Data; // Adjust namespace as per your project structure
 using Inventory.Models;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.IO;
 using Microsoft.AspNetCore.Http;
 
 namespace Inventory.Controllers
@@ -24,7 +24,7 @@ namespace Inventory.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var products = await _context.Products.Include(p => p.Supplier).ToListAsync();
+            var products = await _context.Products.Include(p => p.Supplier).Include(p => p.Category).ToListAsync();
             return View(products);
         }
 
@@ -32,12 +32,13 @@ namespace Inventory.Controllers
         public IActionResult Create()
         {
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name");
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Description,Quantity,SupplierId")] Product product, IFormFile ImageFile)
+        public async Task<IActionResult> Create([Bind("Id,Name,Price,Description,Quantity,SupplierId,CategoryId")] Product product, IFormFile ImageFile)
         {
             if (!ModelState.IsValid)
             {
@@ -61,7 +62,9 @@ namespace Inventory.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name", product.SupplierId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -78,14 +81,16 @@ namespace Inventory.Controllers
             {
                 return NotFound();
             }
+
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name", product.SupplierId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
         // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description,Quantity,SupplierId,ImageUrl")] Product product, IFormFile ImageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description,Quantity,SupplierId,CategoryId,ImageUrl")] Product product, IFormFile ImageFile)
         {
             if (id != product.Id)
             {
@@ -99,7 +104,7 @@ namespace Inventory.Controllers
                     if (ImageFile != null && ImageFile.Length > 0)
                     {
                         var fileName = Path.GetFileName(ImageFile.FileName);
-                        var filePath = Path.Combine("wwwroot/images", fileName);
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
 
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
@@ -130,10 +135,11 @@ namespace Inventory.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name", product.SupplierId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
-
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -145,6 +151,7 @@ namespace Inventory.Controllers
 
             var product = await _context.Products
                 .Include(p => p.Supplier)
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
@@ -164,6 +171,7 @@ namespace Inventory.Controllers
 
             var product = await _context.Products
                 .Include(p => p.Supplier)
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
