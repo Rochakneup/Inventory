@@ -1,16 +1,13 @@
 ﻿@page
 @model Inventory.Areas.Identity.Pages.Admin.DashboardModel
 @{
+    ViewData["Title"] = "Admin Dashboard";
 }
 
-@{
-    ViewData["Title"] = "Home";
-}
-
-<h1>Admin Dashboard</h1>
+<h1>@ViewData["Title"]</h1>
 
 <div class="row">
-    <div class="col-md-4 mb-4">
+    <div class="col-md-6 mb-4">
         <div class="card text-white bg-primary">
             <div class="card-body">
                 <h5 class="card-title">Active Users</h5>
@@ -18,7 +15,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4 mb-4">
+    <div class="col-md-6 mb-4">
         <div class="card text-white bg-warning">
             <div class="card-body">
                 <h5 class="card-title">Low Stock Products</h5>
@@ -26,7 +23,10 @@
             </div>
         </div>
     </div>
-    <div class="col-md-4 mb-4">
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-4">
         <div class="card text-white bg-success">
             <div class="card-body">
                 <h5 class="card-title">Suppliers</h5>
@@ -34,42 +34,365 @@
             </div>
         </div>
     </div>
+    <div class="col-md-6 mb-4">
+        <div class="card text-white bg-info">
+            <div class="card-body">
+                <h5 class="card-title">Monthly Orders</h5>
+                <p class="card-text">50</p>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div>
-    <h2>Graphs</h2>
-    <canvas id="productsBySupplierChart" width="400" height="200"></canvas>
+<!-- Graphs Section -->
+<!-- Graphs Section -->
+<div class="row mb-4">
+    <div class="col-md-12 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Orders by Status</h5>
+                <div class="chart-container">
+                    <canvas id="ordersByStatusChart"></canvas>
+                </div>
+                <div class="chart-popup" id="ordersByStatusPopup">
+                    <canvas id="ordersByStatusPopupChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Products by Supplier</h5>
+                <div class="chart-container">
+                    <canvas id="productsBySupplierChart"></canvas>
+                </div>
+                <div class="chart-popup" id="productsBySupplierPopup">
+                    <canvas id="productsBySupplierPopupChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Products by Category</h5>
+                <div class="chart-container">
+                    <canvas id="productsByCategoryChart"></canvas>
+                </div>
+                <div class="chart-popup" id="productsByCategoryPopup">
+                    <canvas id="productsByCategoryPopupChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Product Status</h5>
+                <div class="chart-container">
+                    <canvas id="productStatusPieChart"></canvas>
+                </div>
+                <div class="chart-popup" id="productStatusPiePopup">
+                    <canvas id="productStatusPiePopupChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Overlay for pop-up -->
+<div id="overlay" class="overlay"></div>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        var ctx = document.getElementById('productsBySupplierChart').getContext('2d');
-        var productsBySupplierChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: @Html.Raw(Json.Serialize(Model.Suppliers.Select(s => s.Name))),
-                datasets: [{
-                    label: 'Products by Supplier',
-                    data: @Html.Raw(Json.Serialize(Model.Suppliers.Select(s => s.Products.Count))),
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        // Function to create and update charts
+        function createCharts() {
+            // Show overlay function
+            function showOverlay() {
+                document.getElementById('overlay').style.display = 'block';
+            }
+
+            // Hide overlay function
+            function hideOverlay() {
+                document.getElementById('overlay').style.display = 'none';
+            }
+
+            // Orders by Status Chart
+            var ctx1 = document.getElementById('ordersByStatusChart').getContext('2d');
+            var ordersByStatusChart = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Pending', 'In Progress', 'Shipped', 'Delivered'],
+                    datasets: [{
+                        label: 'Orders Status',
+                        data: [15, 8, 5, 20],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
+                    onClick: function (event, elements) {
+                        if (elements.length > 0) {
+                            showOverlay();
+                            var chart = this;
+                            var popup = document.getElementById('ordersByStatusPopup');
+                            popup.style.display = 'block';
+                            var popupCtx = popup.querySelector('#ordersByStatusPopupChart').getContext('2d');
+                            var popupChart = new Chart(popupCtx, {
+                                type: 'bar',
+                                data: {
+                                    labels: chart.data.labels,
+                                    datasets: [{
+                                        label: chart.data.datasets[0].label,
+                                        data: chart.data.datasets[0].data,
+                                        backgroundColor: chart.data.datasets[0].backgroundColor,
+                                        borderColor: chart.data.datasets[0].borderColor,
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        y: { beginAtZero: true }
+                                    }
+                                }
+                            });
+                            popup.addEventListener('click', function () {
+                                popup.style.display = 'none';
+                                hideOverlay();
+                            });
+                        }
                     }
                 }
-            }
-        });
+            });
+
+            // Products by Supplier Chart
+            var ctx2 = document.getElementById('productsBySupplierChart').getContext('2d');
+            var productsBySupplierChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: @Html.Raw(Json.Serialize(Model.Suppliers.Select(s => s.Name))),
+                    datasets: [{
+                        label: 'Suppliers and their No of Products',
+                        data: @Html.Raw(Json.Serialize(Model.Suppliers.Select(s => s.Products.Count))),
+                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
+                    onClick: function (event, elements) {
+                        if (elements.length > 0) {
+                            showOverlay();
+                            var chart = this;
+                            var popup = document.getElementById('productsBySupplierPopup');
+                            popup.style.display = 'block';
+                            var popupCtx = popup.querySelector('#productsBySupplierPopupChart').getContext('2d');
+                            var popupChart = new Chart(popupCtx, {
+                                type: 'bar',
+                                data: {
+                                    labels: chart.data.labels,
+                                    datasets: [{
+                                        label: chart.data.datasets[0].label,
+                                        data: chart.data.datasets[0].data,
+                                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
+                                        borderColor: 'rgba(54, 162, 235, 1)',
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        y: { beginAtZero: true }
+                                    }
+                                }
+                            });
+                            popup.addEventListener('click', function () {
+                                popup.style.display = 'none';
+                                hideOverlay();
+                            });
+                        }
+                    }
+                }
+            });
+
+            // Products by Category Chart
+            var ctx3 = document.getElementById('productsByCategoryChart').getContext('2d');
+            var productsByCategoryChart = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: ['Category A', 'Category B', 'Category C', 'Category D', 'Category E'],
+                    datasets: [{
+                        label: 'No of Products of each Category',
+                        data: [12, 19, 3, 5, 2],
+                        fill: false,
+                        backgroundColor: 'rgba(75, 192, 192, 0.8)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: function (event, elements) {
+                        if (elements.length > 0) {
+                            showOverlay();
+                            var chart = this;
+                            var popup = document.getElementById('productsByCategoryPopup');
+                            popup.style.display = 'block';
+                            var popupCtx = popup.querySelector('#productsByCategoryPopupChart').getContext('2d');
+                            var popupChart = new Chart(popupCtx, {
+                                type: 'line',
+                                data: {
+                                    labels: chart.data.labels,
+                                    datasets: [{
+                                        label: chart.data.datasets[0].label,
+                                        data: chart.data.datasets[0].data,
+                                        fill: false,
+                                        backgroundColor: chart.data.datasets[0].backgroundColor,
+                                        borderColor: chart.data.datasets[0].borderColor,
+                                        borderWidth: 2
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false
+                                }
+                            });
+                            popup.addEventListener('click', function () {
+                                popup.style.display = 'none';
+                                hideOverlay();
+                            });
+                        }
+                    }
+                }
+            });
+
+            // Product Status Pie Chart
+            var ctx4 = document.getElementById('productStatusPieChart').getContext('2d');
+            var productStatusPieChart = new Chart(ctx4, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Available', 'Out of Stock', 'Low Stock'],
+                    datasets: [{
+                        label: 'Product Status',
+                        data: [30, 20, 10],
+                        backgroundColor: [
+                            'rgba(255, 206, 86, 0.8)',
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: function (event, elements) {
+                        if (elements.length > 0) {
+                            showOverlay();
+                            var chart = this;
+                            var popup = document.getElementById('productStatusPiePopup');
+                            popup.style.display = 'block';
+                            var popupCtx = popup.querySelector('#productStatusPiePopupChart').getContext('2d');
+                            var popupChart = new Chart(popupCtx, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: chart.data.labels,
+                                    datasets: [{
+                                        label: chart.data.datasets[0].label,
+                                        data: chart.data.datasets[0].data,
+                                        backgroundColor: chart.data.datasets[0].backgroundColor,
+                                        borderColor: chart.data.datasets[0].borderColor,
+                                        borderWidth: 1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false
+                                }
+                            });
+                            popup.addEventListener('click', function () {
+                                popup.style.display = 'none';
+                                hideOverlay();
+                            });
+                        }
+                    }
+                }
+            });
+        }
+
+        window.onload = function () {
+            createCharts();
+        };
     </script>
 }
 
 <style>
-    h1{
-        margin-top: 100px;
+    body {
+        margin-top: 80px; 
     }
+
+    .chart-container {
+        position: relative;
+        height: 400px; 
+        width: 100%;
+    }
+
+    .chart-popup {
+        display: none;
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 60px;
+        border-radius: 8px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+        z-index: 1001;
+        width: 90%; 
+        max-width: 800px; 
+        height: 500px; 
+        overflow: auto; 
+    }
+    
+    
 </style>
+
+

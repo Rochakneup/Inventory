@@ -7,17 +7,23 @@
 <h1>Add New Product</h1>
 
 <div class="table-container">
-    <form asp-action="Create" enctype="multipart/form-data">
-        <div class="table-responsive custom-table-container">
-            <table class="table table-bordered">
+    <form asp-action="Create" asp-validation-summary="ModelOnly" enctype="multipart/form-data">
+        <div class="custom-table-container">
+            <table class="table">
                 <tbody>
                     <tr>
                         <th><label asp-for="Name" class="font-weight-bold">Product Name</label></th>
-                        <td><input asp-for="Name" class="form-control" /></td>
+                        <td>
+                            <input asp-for="Name" class="form-control" placeholder="Enter product name" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </td>
                     </tr>
                     <tr>
                         <th><label asp-for="Price" class="font-weight-bold">Price</label></th>
-                        <td><input asp-for="Price" class="form-control" /></td>
+                        <td>
+                            <input asp-for="Price" class="form-control" placeholder="Enter price" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </td>
                     </tr>
                     <tr>
                         <th><label asp-for="ImageUrl" class="font-weight-bold">Image</label></th>
@@ -29,6 +35,7 @@
                             <select asp-for="SupplierId" asp-items="ViewBag.SupplierId" class="form-control">
                                 <option value="">-- Select Supplier --</option>
                             </select>
+                            <span asp-validation-for="SupplierId" class="text-danger"></span>
                         </td>
                     </tr>
                     <tr>
@@ -37,15 +44,21 @@
                             <select asp-for="CategoryId" asp-items="ViewBag.CategoryId" class="form-control">
                                 <option value="">-- Select Category --</option>
                             </select>
+                            <span asp-validation-for="CategoryId" class="text-danger"></span>
                         </td>
                     </tr>
                     <tr>
                         <th><label asp-for="Quantity" class="font-weight-bold">Quantity</label></th>
-                        <td><input asp-for="Quantity" class="form-control" /></td>
+                        <td>
+                            <input asp-for="Quantity" class="form-control" placeholder="Enter quantity" />
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                        </td>
                     </tr>
                     <tr>
                         <th><label asp-for="Description" class="font-weight-bold">Description</label></th>
-                        <td><textarea asp-for="Description" class="form-control"></textarea></td>
+                        <td>
+                            <textarea asp-for="Description" class="form-control" placeholder="Enter description"></textarea>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -56,3 +69,103 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+
+
+
+<style>
+    body {
+        background-color: white;
+        font-family: Arial, sans-serif;
+    }
+
+    h1 {
+        text-align: center;
+        font-weight: bold;
+        font-size: 30px;
+        margin-top: 80px;
+    }
+
+    .table-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .custom-table-container {
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+        .table th, .table td {
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            text-align: left;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .button-group {
+        text-align: center;
+    }
+
+    .btn {
+        font-size: 16px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-primary {
+        background-color: #0E9BA8 !important;
+        border-color: #0E9BA8 !important;
+        color: white;
+        width: 100px;
+        margin-right: 10px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0C8B97 !important;
+            border-color: #0C8B97 !important;
+            color: white;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d !important;
+        border-color: #6c757d !important;
+        color: white;
+        width: 100px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268 !important;
+            color: white;
+        }
+</style>

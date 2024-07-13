@@ -64,7 +64,7 @@
         }
 
         .button-group {
-            text-align: center; 
+            text-align: center;
         }
 
         .btn {
@@ -99,23 +99,33 @@
                 background-color: #5a6268 !important;
                 color: white;
             }
+
+        .text-danger {
+            color: red;
+        }
     </style>
 </head>
 <body>
     <h1>Add Supplier</h1>
 
     <div class="table-container">
-        <form asp-action="Create" method="post">
+        <form asp-action="Create" method="post" asp-validation-summary="ModelOnly">
             <div class="custom-table-container">
                 <table class="table">
                     <tbody>
                         <tr>
                             <th><label asp-for="Name" class="font-weight-bold">Supplier Name</label></th>
-                            <td><input asp-for="Name" class="form-control" placeholder="Enter supplier name" /></td>
+                            <td>
+                                <input asp-for="Name" class="form-control" placeholder="Enter supplier name" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </td>
                         </tr>
                         <tr>
                             <th><label asp-for="ContactInfo" class="font-weight-bold">Contact Info</label></th>
-                            <td><input asp-for="ContactInfo" class="form-control" placeholder="Enter contact info" /></td>
+                            <td>
+                                <input asp-for="ContactInfo" class="form-control" placeholder="Enter contact info" />
+                                <span asp-validation-for="ContactInfo" class="text-danger"></span>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -126,6 +136,12 @@
             </div>
         </form>
     </div>
+
+    @section Scripts {
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    }
 
 </body>
 </html>
