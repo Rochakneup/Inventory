@@ -5,14 +5,13 @@
 
 <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
 
-
-<div class ="container ">
-<div id="productCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-    </div>
+<div class="container">
+    <div id="productCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
         <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -31,45 +30,49 @@
                     </div>
                 </div>
             </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div>
-<br />
-<div class="row">
-    @foreach (var product in Model)
-    {
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <img src="@Url.Content(product.ImageUrl)" class="card-img-top" alt="Product Image">
-                <div class="card-body">
-                    <h5 class="card-title">@product.Name</h5>
-                    <p class="card-text">@product.Description</p>
-                    <p class="card-text">Price: $@product.Price</p>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <a href="@Url.Action("Buy", "PublicProducts", new { id = product.Id })" class="btn btn-primary">Buy</a>
-                    }
-                    else
-                    {
-                        <a href="@Url.Action("Login", "Account")" class="btn btn-primary">Login to Buy</a>
-                    }
-                </div>
-            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
         </div>
-    }
-</div>
+        <br />
+        <div class="row">
+            @foreach (var product in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="@Url.Content(product.ImageUrl)" class="card-img-top" alt="Product Image">
+                        <div class="card-body">
+                            <h5 class="card-title">@product.Name</h5>
+                            <p class="card-text">@product.Description</p>
+                            <p class="card-text">Price: $@product.Price</p>
+                            
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <a href="@Url.Action("Buy", "PublicProducts", new { id = product.Id })" class="btn btn-primary">Buy</a>
+                                <a href="@Url.Action("Details", "PublicProducts", new { id = product.Id })" class="btn btn-primary">Details</a>
+                               
+                            }
+                            else
+                            {
+                                <a href="@Url.Page("/Account/Login", new { area = "Identity" })" class="btn btn-primary">Login to Buy</a>
+                                <a href="@Url.Action("Details", "PublicProducts", new { id = product.Id })" class="btn btn-primary">Details</a>
+                                
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
 
-
-
-@section Scripts {
-    <script>
-        // Custom scripts for your view can go here
-    </script>
-}
+        @section Scripts {
+            <script>
+                // Custom scripts for your view can go here
+            </script>
+        }
+    </div>
 </div>

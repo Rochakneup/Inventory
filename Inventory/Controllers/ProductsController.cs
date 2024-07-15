@@ -141,7 +141,7 @@ namespace Inventory.Controllers
             return View(product);
         }
 
-        // GET: Products/Details/5
+        // GET: Suppliers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -149,17 +149,18 @@ namespace Inventory.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products
-                .Include(p => p.Supplier)
-                .Include(p => p.Category)
+            var supplier = await _context.Suppliers
+                .Include(s => s.Products) // Include the Products navigation property
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            if (supplier == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(supplier);
         }
+
+
 
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)

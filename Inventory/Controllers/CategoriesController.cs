@@ -39,7 +39,7 @@ namespace Inventory.Controllers
             {
                 _context.Add(category);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Create));
+                return RedirectToAction(nameof(Index));
             }
             return View(category);
         }
@@ -70,7 +70,7 @@ namespace Inventory.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {
@@ -120,6 +120,24 @@ namespace Inventory.Controllers
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        // GET: Categories/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var category = await _context.Categories
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category);
         }
 
         private bool CategoryExists(int id)
