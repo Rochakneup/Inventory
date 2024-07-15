@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Inventory.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Inventory.Controllers
 {
@@ -26,6 +25,27 @@ namespace Inventory.Controllers
         {
             var products = await _context.Products.Include(p => p.Supplier).ToListAsync();
             return View(products); // Renders the Index view with a list of products
+        }
+
+        // GET: PublicProducts/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _context.Products
+                .Include(p => p.Supplier)
+                .Include(p => p.Category) // Assuming Category is a navigation property in the Product model
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
         }
 
         // GET: PublicProducts/Buy/5

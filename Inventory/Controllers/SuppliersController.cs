@@ -103,6 +103,8 @@ namespace Inventory.Controllers
             }
 
             var supplier = await _context.Suppliers
+                .Include(s => s.Products)
+                .ThenInclude(p => p.Category) // Include the Category navigation property
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (supplier == null)
             {
@@ -111,6 +113,7 @@ namespace Inventory.Controllers
 
             return View(supplier);
         }
+
 
         // GET: Suppliers/Delete/5
         public async Task<IActionResult> Delete(int? id)
