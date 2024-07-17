@@ -1,48 +1,89 @@
 ﻿@model Inventory.Models.Cart
 
-@{
-    Layout = "_Layout";
-}
+<h2>Your Cart</h2>
 
-<h2>Your Shopping Cart</h2>
-
-@if (Model.CartItems.Count == 0)
-{
-    <p>Your cart is empty.</p>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Unit Price</th>
-                <th>Total</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.CartItems)
+<table class="table">
+    <thead>
+        <tr>
+            <th>Select</th>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Total Price</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.CartItems != null)
+        {
+            foreach (var item in Model.CartItems)
             {
                 <tr>
+                    <td><input type="checkbox" class="product-select" data-id="@item.Id" data-name="@item.ProductName" data-price="@item.UnitPrice" /></td>
                     <td>@item.ProductName</td>
                     <td>@item.Quantity</td>
-                    <td>@item.UnitPrice</td>
-                    <td>@(item.Quantity * item.UnitPrice)</td>
-                    <td>
-                        <form asp-action="RemoveFromCart" asp-controller="Cart" method="post" class="d-inline">
-                            <input type="hidden" name="productId" value="@item.ProductId" />
-                            <button type="submit" class="btn btn-danger">Remove</button>
-                        </form>
-                    </td>
+                    <td>@item.UnitPrice.ToString("C")</td>
+                    <td>@(item.Quantity * item.UnitPrice).ToString("C")</td>
                 </tr>
             }
-        </tbody>
-    </table>
-    <div class="text-end">
-        <form asp-action="PlaceOrder" asp-controller="Cart" method="post">
-            <button type="submit" class="btn btn-success">Checkout</button>
-        </form>
-    </div>
+        }
+    </tbody>
+</table>
+
+<form asp-action="Checkout" method="post" id="checkoutForm">
+    <input type="hidden" name="selectedItems" id="selectedItems" />
+    <button type="submit" class="btn btn-primary">Checkout</button>
+</form>
+
+<!-- Footer for displaying selected products and total -->
+<div id="checkoutFooter" style="display:none;">
+    <h3>Checkout Summary</h3>
+    <ul id="selectedProducts"></ul>
+    <p id="totalAmount"></p>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const checkboxes = document.querySelectorAll('.product-select');
+            const selectedItemsInput = document.getElementById('selectedItems');
+            const selectedProductsList = document.getElementById('selectedProducts');
+            const totalAmountElem = document.getElementById('totalAmount');
+            const footer = document.getElementById('checkoutFooter');
+            const form = document.getElementById('checkoutForm');
+
+            function updateFooter() {
+                let total = 0;
+                let selectedProducts = [];
+                const selectedItems = [];
+
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        const id = checkbox.getAttribute('data-id');
+                        const name = checkbox.getAttribute('data-name');
+                        const price = parseFloat(checkbox.getAttribute('data-price'));
+
+                        selectedItems.push(id);
+                        selectedProducts.push(`<li>${name} - ${price.toFixed(2)} USD</li>`);
+                        total += price;
+                    }
+                });
+
+                selectedItemsInput.value = selectedItems.join(',');
+                selectedProductsList.innerHTML = selectedProducts.join('');
+                totalAmountElem.textContent = `Total Amount: ${total.toFixed(2)} USD`;
+                footer.style.display = selectedItems.length > 0 ? 'block' : 'none';
+            }
+
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', updateFooter);
+            });
+
+            form.addEventListener('submit', function (event) {
+                if (selectedItemsInput.value === '') {
+                    event.preventDefault();
+                    alert('Please select at least one product to checkout.');
+                }
+            });
+        });
+    </script>
 }

@@ -8,7 +8,10 @@ namespace Inventory.Models
         public int Id { get; set; }
         public DateTime OrderDate { get; set; }
         public OrderStatus Status { get; set; }
-        public string UserId { get; set; } // This should match the type of your user ID
+        public string? UserFirstName { get; set; } // Added UserFirstName
+        public string UserEmail { get; set; } // Added UserEmail
+        public string DeliveryAddress { get; set; }
+        public DateTime? DeliveryDate { get; set; }
 
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
@@ -20,6 +23,5 @@ namespace Inventory.Models
         Shipped,
         Completed,
         Cancelled
-        // Add more status options as needed
     }
 }

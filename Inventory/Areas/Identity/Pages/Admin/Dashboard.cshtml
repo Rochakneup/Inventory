@@ -37,14 +37,13 @@
     <div class="col-md-6 mb-4">
         <div class="card text-white bg-info">
             <div class="card-body">
-                <h5 class="card-title">Monthly Orders</h5>
-                <p class="card-text">50</p>
+                <h5 class="card-title">Month Orders</h5>
+                <p class="card-text">@Model.MonthlyOrdersCount</p>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Graphs Section -->
 <!-- Graphs Section -->
 <div class="row mb-4">
     <div class="col-md-12 mb-4">
@@ -106,45 +105,51 @@
     </div>
 </div>
 
-
 <!-- Overlay for pop-up -->
 <div id="overlay" class="overlay"></div>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Function to create and update charts
         function createCharts() {
-            // Show overlay function
             function showOverlay() {
                 document.getElementById('overlay').style.display = 'block';
             }
 
-            // Hide overlay function
             function hideOverlay() {
                 document.getElementById('overlay').style.display = 'none';
             }
+
+            // Data from the server-side model
+            var ordersByStatusData = @Html.Raw(Json.Serialize(Model.OrdersByStatus));
+            var productsBySupplierData = @Html.Raw(Json.Serialize(Model.ProductsBySupplier));
+            var productsByCategoryData = @Html.Raw(Json.Serialize(Model.ProductsByCategory));
+            var productStatusData = @Html.Raw(Json.Serialize(Model.ProductStatus));
 
             // Orders by Status Chart
             var ctx1 = document.getElementById('ordersByStatusChart').getContext('2d');
             var ordersByStatusChart = new Chart(ctx1, {
                 type: 'bar',
                 data: {
-                    labels: ['Pending', 'In Progress', 'Shipped', 'Delivered'],
+                    labels: ordersByStatusData.map(data => data.status),
                     datasets: [{
                         label: 'Orders Status',
-                        data: [15, 8, 5, 20],
+                        data: ordersByStatusData.map(data => data.count),
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.8)',
                             'rgba(54, 162, 235, 0.8)',
                             'rgba(255, 206, 86, 0.8)',
-                            'rgba(75, 192, 192, 0.8)'
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)'
                         ],
                         borderColor: [
                             'rgba(255, 99, 132, 1)',
                             'rgba(54, 162, 235, 1)',
                             'rgba(255, 206, 86, 1)',
-                            'rgba(75, 192, 192, 1)'
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
                         ],
                         borderWidth: 1
                     }]
@@ -196,10 +201,10 @@
             var productsBySupplierChart = new Chart(ctx2, {
                 type: 'bar',
                 data: {
-                    labels: @Html.Raw(Json.Serialize(Model.Suppliers.Select(s => s.Name))),
+                    labels: productsBySupplierData.map(data => data.supplierName),
                     datasets: [{
-                        label: 'Suppliers and their No of Products',
-                        data: @Html.Raw(Json.Serialize(Model.Suppliers.Select(s => s.Products.Count))),
+                        label: 'Number of Products',
+                        data: productsBySupplierData.map(data => data.productCount),
                         backgroundColor: 'rgba(54, 162, 235, 0.8)',
                         borderColor: 'rgba(54, 162, 235, 1)',
                         borderWidth: 1
@@ -220,16 +225,7 @@
                             var popupCtx = popup.querySelector('#productsBySupplierPopupChart').getContext('2d');
                             var popupChart = new Chart(popupCtx, {
                                 type: 'bar',
-                                data: {
-                                    labels: chart.data.labels,
-                                    datasets: [{
-                                        label: chart.data.datasets[0].label,
-                                        data: chart.data.datasets[0].data,
-                                        backgroundColor: 'rgba(54, 162, 235, 0.8)',
-                                        borderColor: 'rgba(54, 162, 235, 1)',
-                                        borderWidth: 1
-                                    }]
-                                },
+                                data: chart.data,
                                 options: {
                                     responsive: true,
                                     maintainAspectRatio: false,
@@ -252,19 +248,21 @@
             var productsByCategoryChart = new Chart(ctx3, {
                 type: 'line',
                 data: {
-                    labels: ['Category A', 'Category B', 'Category C', 'Category D', 'Category E'],
+                    labels: productsByCategoryData.map(data => data.categoryName),
                     datasets: [{
-                        label: 'No of Products of each Category',
-                        data: [12, 19, 3, 5, 2],
-                        fill: false,
+                        label: 'Number of Products',
+                        data: productsByCategoryData.map(data => data.productCount),
                         backgroundColor: 'rgba(75, 192, 192, 0.8)',
                         borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 2
+                        borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    },
                     onClick: function (event, elements) {
                         if (elements.length > 0) {
                             showOverlay();
@@ -273,21 +271,14 @@
                             popup.style.display = 'block';
                             var popupCtx = popup.querySelector('#productsByCategoryPopupChart').getContext('2d');
                             var popupChart = new Chart(popupCtx, {
-                                type: 'line',
-                                data: {
-                                    labels: chart.data.labels,
-                                    datasets: [{
-                                        label: chart.data.datasets[0].label,
-                                        data: chart.data.datasets[0].data,
-                                        fill: false,
-                                        backgroundColor: chart.data.datasets[0].backgroundColor,
-                                        borderColor: chart.data.datasets[0].borderColor,
-                                        borderWidth: 2
-                                    }]
-                                },
+                                type: 'bar',
+                                data: chart.data,
                                 options: {
                                     responsive: true,
-                                    maintainAspectRatio: false
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        y: { beginAtZero: true }
+                                    }
                                 }
                             });
                             popup.addEventListener('click', function () {
@@ -304,19 +295,23 @@
             var productStatusPieChart = new Chart(ctx4, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Available', 'Out of Stock', 'Low Stock'],
+                    labels: ['Available', 'Low Stock', 'Out of Stock'],
                     datasets: [{
                         label: 'Product Status',
-                        data: [30, 20, 10],
+                        data: [
+                            productStatusData.available,
+                            productStatusData.lowStock,
+                            productStatusData.outOfStock
+                        ],
                         backgroundColor: [
-                            'rgba(255, 206, 86, 0.8)',
                             'rgba(255, 99, 132, 0.8)',
-                            'rgba(54, 162, 235, 0.8)'
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 206, 86, 0.8)'
                         ],
                         borderColor: [
-                            'rgba(255, 206, 86, 1)',
                             'rgba(255, 99, 132, 1)',
-                            'rgba(54, 162, 235, 1)'
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)'
                         ],
                         borderWidth: 1
                     }]
@@ -332,17 +327,8 @@
                             popup.style.display = 'block';
                             var popupCtx = popup.querySelector('#productStatusPiePopupChart').getContext('2d');
                             var popupChart = new Chart(popupCtx, {
-                                type: 'doughnut',
-                                data: {
-                                    labels: chart.data.labels,
-                                    datasets: [{
-                                        label: chart.data.datasets[0].label,
-                                        data: chart.data.datasets[0].data,
-                                        backgroundColor: chart.data.datasets[0].backgroundColor,
-                                        borderColor: chart.data.datasets[0].borderColor,
-                                        borderWidth: 1
-                                    }]
-                                },
+                                type: 'pie',
+                                data: chart.data,
                                 options: {
                                     responsive: true,
                                     maintainAspectRatio: false
@@ -358,20 +344,22 @@
             });
         }
 
-        window.onload = function () {
+        document.addEventListener('DOMContentLoaded', function () {
             createCharts();
-        };
+        });
     </script>
 }
 
+
+
 <style>
     body {
-        margin-top: 80px; 
+        margin-top: 80px;
     }
 
     .chart-container {
         position: relative;
-        height: 400px; 
+        height: 400px;
         width: 100%;
     }
 
@@ -386,13 +374,11 @@
         border-radius: 8px;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
         z-index: 1001;
-        width: 90%; 
-        max-width: 800px; 
-        height: 500px; 
-        overflow: auto; 
+        width: 90%;
+        max-width: 800px;
+        height: 500px;
+        overflow: auto;
     }
-    
-    
+
+   
 </style>
-
-

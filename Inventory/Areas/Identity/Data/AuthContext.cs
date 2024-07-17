@@ -34,6 +34,10 @@ public class AuthContext : IdentityDbContext<AuthUser>
             .Property(ci => ci.UnitPrice)
             .HasColumnType("decimal(18,2)");
 
+        builder.Entity<CartItem>()
+            .Property(ci => ci.ProductImageUrl)
+            .HasMaxLength(2048); // Adjust length as needed
+
         builder.Entity<Product>()
             .HasOne(p => p.Category)
             .WithMany(c => c.Products)
@@ -41,4 +45,5 @@ public class AuthContext : IdentityDbContext<AuthUser>
 
         // Additional configuration
     }
+
 }

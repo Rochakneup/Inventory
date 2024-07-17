@@ -24,8 +24,32 @@ namespace Inventory.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var products = await _context.Products.Include(p => p.Supplier).Include(p => p.Category).ToListAsync();
+            var products = await _context.Products
+                .Include(p => p.Supplier)
+                .Include(p => p.Category)
+                .ToListAsync();
             return View(products);
+        }
+
+        // GET: Products/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _context.Products
+                .Include(p => p.Supplier)
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product); // Ensure the view expects a Product model
         }
 
         // GET: Products/Create
@@ -76,7 +100,11 @@ namespace Inventory.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products
+                .Include(p => p.Supplier)
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
             if (product == null)
             {
                 return NotFound();
@@ -84,10 +112,9 @@ namespace Inventory.Controllers
 
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name", product.SupplierId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
-            return View(product);
+            return View(product); // Ensure the view expects a Product model
         }
 
-        // POST: Products/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Description,Quantity,SupplierId,CategoryId,ImageUrl")] Product product, IFormFile ImageFile)
@@ -101,6 +128,19 @@ namespace Inventory.Controllers
             {
                 try
                 {
+                    var existingProduct = await _context.Products.FindAsync(id);
+                    if (existingProduct == null)
+                    {
+                        return NotFound();
+                    }
+
+                    existingProduct.Name = product.Name;
+                    existingProduct.Price = product.Price;
+                    existingProduct.Description = product.Description;
+                    existingProduct.Quantity = product.Quantity;
+                    existingProduct.SupplierId = product.SupplierId;
+                    existingProduct.CategoryId = product.CategoryId;
+
                     if (ImageFile != null && ImageFile.Length > 0)
                     {
                         var fileName = Path.GetFileName(ImageFile.FileName);
@@ -111,15 +151,13 @@ namespace Inventory.Controllers
                             await ImageFile.CopyToAsync(stream);
                         }
 
-                        product.ImageUrl = $"/images/{fileName}";
+                        existingProduct.ImageUrl = $"/images/{fileName}";
                     }
                     else
                     {
-                        // Keep the existing image URL if no new image is uploaded
-                        _context.Entry(product).Property(p => p.ImageUrl).IsModified = false;
+                        _context.Entry(existingProduct).Property(p => p.ImageUrl).IsModified = false;
                     }
 
-                    _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -141,24 +179,6 @@ namespace Inventory.Controllers
             return View(product);
         }
 
-        // GET: Suppliers/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var supplier = await _context.Suppliers
-                .Include(s => s.Products) // Include the Products navigation property
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (supplier == null)
-            {
-                return NotFound();
-            }
-
-            return View(supplier);
-        }
 
 
 
@@ -174,12 +194,13 @@ namespace Inventory.Controllers
                 .Include(p => p.Supplier)
                 .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (product == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(product); // Ensure the view expects a Product model
         }
 
         // POST: Products/Delete/5

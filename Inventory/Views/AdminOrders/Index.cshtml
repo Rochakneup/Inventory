@@ -1,0 +1,110 @@
+﻿@model IEnumerable<Inventory.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<button id="export-pdf" class="btn btn-danger">Export to PDF</button>
+<button id="export-excel" class="btn btn-success">Export to Excel</button>
+
+<table id="orderTable" class="table">
+    <thead>
+        <tr>
+            <th>Order ID</th>
+            <th>Order Date</th>
+            <th>Status</th>
+            <th>User First Name</th>
+            <th>User Email</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.OrderDate.ToString("d")</td>
+                <td>@order.Status</td>
+                <td>@order.UserFirstName</td>
+                <td>@order.UserEmail</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@order.Id" class="btn btn-primary">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<style>
+    /* Your existing styles here */
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.21/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+<script>
+    document.getElementById('export-pdf').addEventListener('click', function () {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text("Order List", 10, 10);
+
+        doc.autoTable({
+            html: '#orderTable',
+            startY: 20
+        });
+
+        doc.save('order_list.pdf');
+    });
+
+    document.getElementById('export-excel').addEventListener('click', function () {
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.table_to_sheet(document.getElementById('orderTable'));
+        XLSX.utils.book_append_sheet(wb, ws, "Order List");
+        XLSX.writeFile(wb, 'order_list.xlsx');
+    });
+</script>
+<style>
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: white;
+    }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+    }
+
+        .btn-success:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+
+    .alert {
+        padding: 15px;
+        margin-bottom: 20px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+
+    .alert-danger {
+        color: #721c24;
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+    }
+</style>
