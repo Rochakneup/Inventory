@@ -50,18 +50,19 @@
                             <h5 class="card-title">@product.Name</h5>
                             <p class="card-text">@product.Description</p>
                             <p class="card-text">Price: $@product.Price</p>
-                            
+
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <a href="@Url.Action("Buy", "PublicProducts", new { id = product.Id })" class="btn btn-primary">Buy</a>
+                                <form asp-action="AddToCart" asp-controller="Cart" method="post" class="d-inline">
+                                    <input type="hidden" name="productId" value="@product.Id" />
+                                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                </form>
                                 <a href="@Url.Action("Details", "PublicProducts", new { id = product.Id })" class="btn btn-primary">Details</a>
-                               
                             }
                             else
                             {
                                 <a href="@Url.Page("/Account/Login", new { area = "Identity" })" class="btn btn-primary">Login to Buy</a>
                                 <a href="@Url.Action("Details", "PublicProducts", new { id = product.Id })" class="btn btn-primary">Details</a>
-                                
                             }
                         </div>
                     </div>
