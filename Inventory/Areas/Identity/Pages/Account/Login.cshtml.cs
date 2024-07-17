@@ -119,7 +119,7 @@ namespace Inventory.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        return LocalRedirect("~/Home/Index");
+                        return LocalRedirect("/PublicProducts/Index");
                     }
                 }
                 if (result.RequiresTwoFactor)

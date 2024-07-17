@@ -1,19 +1,15 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Inventory.Models;
 
-namespace Inventory.Models
+public class CartItem
 {
-    public class CartItem
-    {
-        public int Id { get; set; }
-        public int CartId { get; set; } // Foreign key to Cart
-        public int ProductId { get; set; } // Foreign key to Product
-        public int Quantity { get; set; }
-        public decimal UnitPrice { get; set; }
+    public int Id { get; set; }
+    public int CartId { get; set; }
+    public int ProductId { get; set; }
+    public string ProductName { get; set; } // Property for product name
+    public string ProductImageUrl { get; set; } // Property for image URL
+    public int Quantity { get; set; }
+    public decimal UnitPrice { get; set; }
 
-        [NotMapped]
-        public string ProductName { get; set; } // This property will not be mapped to the database
-
-        public Cart Cart { get; set; }
-        public Product Product { get; set; }
-    }
+    public Cart Cart { get; set; }
+    public Product Product { get; set; }
 }

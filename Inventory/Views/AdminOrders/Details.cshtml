@@ -1,0 +1,69 @@
+﻿@model Inventory.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <h2>Order Information</h2>
+    <dl class="row">
+        <dt class="col-sm-3">Order ID:</dt>
+        <dd class="col-sm-9">@Model.Id</dd>
+
+        <dt class="col-sm-3">Order Date:</dt>
+        <dd class="col-sm-9">@Model.OrderDate.ToString("d")</dd>
+
+        <dt class="col-sm-3">Status:</dt>
+        <dd class="col-sm-9">@Model.Status</dd>
+
+        <dt class="col-sm-3">User First Name:</dt>
+        <dd class="col-sm-9">@Model.UserFirstName</dd>
+
+        <dt class="col-sm-3">User Email:</dt>
+        <dd class="col-sm-9">@Model.UserEmail</dd>
+
+        <dt class="col-sm-3">Delivery Date:</dt>
+        <dd class="col-sm-9">@Model.DeliveryDate?.ToString("d")</dd>
+
+        <dt class="col-sm-3">Delivery Address:</dt>
+        <dd class="col-sm-9">@Model.DeliveryAddress</dd>
+    </dl>
+</div>
+
+<div>
+    <h2>Order Items</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product Image</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Unit Price</th>
+                <th>Total Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.Product.ImageUrl))
+                        {
+                            <img src="@item.Product.ImageUrl" alt="Product Image" style="width: 100px; height: 100px;" />
+                        }
+                        else
+                        {
+                            <span>No Image</span>
+                        }
+                    </td>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitPrice.ToString("C")</td>
+                    <td>@(item.Quantity * item.UnitPrice).ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

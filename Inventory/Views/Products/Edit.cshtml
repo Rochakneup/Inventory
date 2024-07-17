@@ -48,6 +48,14 @@
                         <th><label asp-for="Description" class="font-weight-bold">Description</label></th>
                         <td><textarea asp-for="Description" class="form-control"></textarea></td>
                     </tr>
+                    <tr>
+                        <th><label asp-for="CategoryId" class="font-weight-bold">Category</label></th>
+                        <td>
+                            <select asp-for="CategoryId" asp-items="ViewBag.CategoryId" class="form-control">
+                                <option value="">-- Select Category --</option>
+                            </select>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
@@ -59,16 +67,15 @@
     </form>
 </div>
 
-
 <style>
     h1 {
         margin-top: 80px;
-        text-align: center; 
+        text-align: center;
     }
 
     .table-container {
         position: relative;
-        max-width: 600px; 
+        max-width: 600px;
         margin: 0 auto;
         background-color: #fff;
         padding: 20px;
@@ -77,8 +84,8 @@
     }
 
     .custom-table-container {
-        max-width: 100%; 
-        margin: 0 auto; 
+        max-width: 100%;
+        margin: 0 auto;
     }
 
     .table th, .table td {
@@ -87,7 +94,7 @@
     }
 
     .form-group.button-group {
-        text-align: center; 
+        text-align: center;
         margin-top: 20px;
     }
 

@@ -1,154 +1,139 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Inventory.Areas.Identity.Data;
 using Inventory.Models;
+using Inventory.Areas.Identity.Data;
+using Microsoft.AspNetCore.Identity;
 using System.Linq;
-using System;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
 namespace Inventory.Controllers
 {
-    [Authorize]
     public class CartController : Controller
     {
         private readonly AuthContext _context;
+        private readonly UserManager<AuthUser> _userManager;
 
-        public CartController(AuthContext context)
+        public CartController(AuthContext context, UserManager<AuthUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        // Adds a product to the user's cart
+        public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
-            var cart = GetCart();
-            return View(cart);
-        }
+            var user = await _userManager.GetUserAsync(User);
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .FirstOrDefaultAsync(c => c.UserId == user.Id);
 
-        [HttpPost]
-        public IActionResult AddToCart(int productId)
-        {
-            var product = _context.Products.Find(productId);
-            if (product != null)
+            if (cart == null)
             {
-                var cart = GetCart();
-                var cartItem = cart.CartItems.FirstOrDefault(c => c.ProductId == productId);
-
-                if (cartItem != null)
-                {
-                    cartItem.Quantity++;
-                }
-                else
-                {
-                    cart.CartItems.Add(new CartItem
-                    {
-                        ProductId = productId,
-                        ProductName = product.Name,
-                        Quantity = 1,
-                        UnitPrice = product.Price
-                    });
-                }
-
-                SaveCart(cart);
+                cart = new Cart { UserId = user.Id };
+                _context.Carts.Add(cart);
+                await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction("Index", "Cart");
-        }
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null) return NotFound();
 
-        [HttpPost]
-        public IActionResult RemoveFromCart(int productId)
-        {
-            var cart = GetCart();
-            var cartItem = cart.CartItems.FirstOrDefault(c => c.ProductId == productId);
-
+            var cartItem = cart.CartItems.FirstOrDefault(ci => ci.ProductId == productId);
             if (cartItem != null)
             {
-                cart.CartItems.Remove(cartItem);
-                SaveCart(cart);
+                cartItem.Quantity += quantity;
             }
+            else
+            {
+                cartItem = new CartItem
+                {
+                    CartId = cart.Id,
+                    ProductId = productId,
+                    ProductName = product.Name,
+                    ProductImageUrl = product.ImageUrl,
+                    Quantity = quantity,
+                    UnitPrice = product.Price
+                };
+                cart.CartItems.Add(cartItem);
+            }
+
+            _context.CartItems.Update(cartItem);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }
 
-        private Cart GetCart()
+        // Displays the user's cart
+        public async Task<IActionResult> Index()
         {
-            var userId = User.Identity.Name;
-            var cart = _context.Carts
+            var user = await _userManager.GetUserAsync(User);
+            var cart = await _context.Carts
                 .Include(c => c.CartItems)
-                .FirstOrDefault(c => c.UserId == userId);
+                .ThenInclude(ci => ci.Product)
+                .FirstOrDefaultAsync(c => c.UserId == user.Id);
 
-            if (cart == null)
-            {
-                cart = new Cart
-                {
-                    UserId = userId,
-                    CreatedAt = DateTime.Now,
-                    CartItems = new List<CartItem>()
-                };
-                _context.Carts.Add(cart);
-                _context.SaveChanges();
-            }
-
-            // Populate ProductName for each cart item
-            foreach (var item in cart.CartItems)
-            {
-                var product = _context.Products.Find(item.ProductId);
-                if (product != null)
-                {
-                    item.ProductName = product.Name;
-                }
-            }
-
-            return cart;
-        }
-
-        private void SaveCart(Cart cart)
-        {
-            _context.Update(cart);
-            _context.SaveChanges();
-        }
-
-        public IActionResult Checkout()
-        {
-            var cart = GetCart();
             return View(cart);
         }
 
+        // Handles checkout and creates an order
         [HttpPost]
-        public IActionResult PlaceOrder()
+        public async Task<IActionResult> Checkout(int[] selectedItems)
         {
-            var cart = GetCart();
-            if (cart.CartItems.Count == 0)
-            {
-                return RedirectToAction("Index");
-            }
+            var user = await _userManager.GetUserAsync(User);
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Product)
+                .FirstOrDefaultAsync(c => c.UserId == user.Id);
+
+            if (cart == null) return NotFound();
 
             var order = new Order
             {
-                UserId = cart.UserId,
-                OrderDate = DateTime.Now,
+                OrderDate = DateTime.UtcNow,
                 Status = OrderStatus.Pending,
-                OrderItems = cart.CartItems.Select(c => new OrderItem
-                {
-                    ProductId = c.ProductId,
-                    Quantity = c.Quantity,
-                    UnitPrice = c.UnitPrice
-                }).ToList()
+                UserFirstName = user.Firstname, // Set the user's first name
+                UserEmail = user.Email, // Set the user's email
+                DeliveryAddress = user.Address, // Assuming you have an Address property in your AuthUser model
+                OrderItems = new List<OrderItem>()
             };
 
-            _context.Orders.Add(order);
-            _context.Carts.Remove(cart);
-            _context.SaveChanges();
+            foreach (var itemId in selectedItems)
+            {
+                var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Id == itemId);
+                if (cartItem != null)
+                {
+                    // Create the order item
+                    var orderItem = new OrderItem
+                    {
+                        ProductId = cartItem.ProductId,
+                        Quantity = cartItem.Quantity,
+                        UnitPrice = cartItem.UnitPrice
+                    };
+                    order.OrderItems.Add(orderItem);
 
-            return RedirectToAction("OrderConfirmation", new { orderId = order.Id });
+                    // Update product quantity
+                    var product = await _context.Products.FindAsync(cartItem.ProductId);
+                    if (product != null)
+                    {
+                        product.Quantity -= cartItem.Quantity;
+                        _context.Products.Update(product);
+                    }
+
+                    // Remove cart item
+                    _context.CartItems.Remove(cartItem);
+                }
+            }
+
+            // Add the order and save changes
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("OrderConfirmation");
         }
 
-        public IActionResult OrderConfirmation(int orderId)
+        // Displays the order confirmation page
+        public IActionResult OrderConfirmation()
         {
-            var order = _context.Orders
-                .Include(o => o.OrderItems)
-                .FirstOrDefault(o => o.Id == orderId);
-
-            return View(order);
+            return View();
         }
     }
 }

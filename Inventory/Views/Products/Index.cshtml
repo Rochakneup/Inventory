@@ -1,14 +1,18 @@
 ﻿@model IEnumerable<Inventory.Models.Product>
+
 @{
     ViewData["Title"] = "Product List";
 }
 
+<h1>@ViewData["Title"]</h1>
 
-<h1>Products</h1>
 <div class="container-box">
     <a asp-action="Create" class="btn btn-create">Add New Product</a>
+    <button id="export-pdf" class="btn btn-danger">Export to PDF</button>
+    <button id="export-excel" class="btn btn-success">Export to Excel</button>
+
     <div class="table-responsive">
-        <table class="table">
+        <table id="productTable" class="table">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -43,50 +47,30 @@
 </div>
 
 <style>
-    h1 {
-        text-align: center;
-        font-weight: bold;
-        margin-top: 150px;
-    }
-
-    .container-box {
-        padding: 30px;
-        margin: 20px 0;
-        background-color: #fff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        border-radius: 8px;
-    }
-
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-        .table th,
-        .table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        .table th {
-            background-color: #f2f2f2;
-            text-align: left;
-        }
-
-        .table td {
-            text-align: left;
-        }
-
-    .btn-create {
-        background-color: #0E9BA8 !important;
-        border-color: #0E9BA8 !important;
-        color: white;
-        margin: 20px;
-    }
-
-        .btn-create:hover {
-            background-color: #0C8B97 !important;
-            border-color: #0C8B97 !important;
-            color: white;
-        }
+    /* Your existing styles here */
 </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.21/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+<script>
+    document.getElementById('export-pdf').addEventListener('click', function () {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text("Product List", 10, 10);
+
+        doc.autoTable({
+            html: '#productTable',
+            startY: 20
+        });
+
+        doc.save('product_list.pdf');
+    });
+
+    document.getElementById('export-excel').addEventListener('click', function () {
+        const wb = XLSX.utils.book_new();
+        const ws = XLSX.utils.table_to_sheet(document.getElementById('productTable'));
+        XLSX.utils.book_append_sheet(wb, ws, "Product List");
+        XLSX.writeFile(wb, 'product_list.xlsx');
+    });
+</script>
