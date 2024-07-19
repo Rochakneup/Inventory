@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// CartController.cs
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Inventory.Models;
 using Inventory.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
 
 namespace Inventory.Controllers
 {
@@ -90,9 +94,9 @@ namespace Inventory.Controllers
             {
                 OrderDate = DateTime.UtcNow,
                 Status = OrderStatus.Pending,
-                UserFirstName = user.Firstname, // Set the user's first name
-                UserEmail = user.Email, // Set the user's email
-                DeliveryAddress = user.Address, // Assuming you have an Address property in your AuthUser model
+                UserFirstName = user.Firstname,
+                UserEmail = user.Email,
+                DeliveryAddress = user.Address,
                 OrderItems = new List<OrderItem>()
             };
 
@@ -125,6 +129,10 @@ namespace Inventory.Controllers
 
             // Add the order and save changes
             _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+
+            // Clear the cart
+            _context.Carts.Remove(cart);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("OrderConfirmation");

@@ -4,27 +4,93 @@
     ViewData["Title"] = "Category Details";
 }
 
-<h2>Details</h2>
+<h1 class="text-center mb-4">@ViewData["Title"]</h1>
 
-<div>
-    <h4>Category</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-    </dl>
+<div class="container my-4">
+    <div class="p-4 border rounded shadow-sm bg-white">
+        <div>
+            <h4>Category Details</h4>
+            <hr />
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th style="width: 150px;">Name</th>
+                        <td>@Html.DisplayFor(model => model.Name)</td>
+                    </tr>
+                    <tr>
+                        <th>Description</th>
+                        <td>@Html.DisplayFor(model => model.Description)</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="d-flex justify-content-end mt-4">
+            <a asp-action="Index" class="btn-back">Back</a>
+        </div>
+    </div>
 </div>
-<div>
-    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-    <a class="btn btn-primary" asp-action="Index">Back to List</a>
-</div>
+
+<style>
+    h1 {
+        margin-top: 80px;
+        text-align: center;
+    }
+
+    .container {
+        max-width: 800px;
+    }
+
+    .p-4 {
+        padding: 1.5rem !important;
+    }
+
+    .border {
+        border: 1px solid #0E9BA8;
+    }
+
+    .rounded {
+        border-radius: 10px;
+    }
+
+    .shadow-sm {
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+
+    .bg-white {
+        background-color: #fff;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: left;
+        padding: 8px;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .mb-4 {
+        margin-bottom: 1.5rem;
+    }
+
+    .mt-4 {
+        margin-top: 1.5rem;
+    }
+
+    .me-2 {
+        margin-right: 0.5rem;
+    }
+
+    .row {
+        margin-bottom: 1rem;
+    }
+
+    .btn-back {
+        text-decoration: none;
+    }
+
+        .btn-back:hover {
+            text-decoration: underline;
+        }
+</style>

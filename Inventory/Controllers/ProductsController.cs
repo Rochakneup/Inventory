@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Http;
 
 namespace Inventory.Controllers
 {
-    [Authorize(Roles = "Admin")] // Restrict access to admins only
     public class ProductsController : Controller
     {
         private readonly AuthContext _context;
@@ -49,7 +48,7 @@ namespace Inventory.Controllers
                 return NotFound();
             }
 
-            return View(product); // Ensure the view expects a Product model
+            return View(product);
         }
 
         // GET: Products/Create
@@ -64,14 +63,13 @@ namespace Inventory.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Price,Description,Quantity,SupplierId,CategoryId")] Product product, IFormFile ImageFile)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
                     var fileName = Path.GetFileName(ImageFile.FileName);
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
 
-                    // Ensure the directory exists
                     Directory.CreateDirectory(Path.GetDirectoryName(filePath));
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
@@ -112,7 +110,7 @@ namespace Inventory.Controllers
 
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name", product.SupplierId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
-            return View(product); // Ensure the view expects a Product model
+            return View(product);
         }
 
         [HttpPost]
@@ -124,7 +122,7 @@ namespace Inventory.Controllers
                 return NotFound();
             }
 
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 try
                 {
@@ -179,9 +177,6 @@ namespace Inventory.Controllers
             return View(product);
         }
 
-
-
-
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -200,8 +195,27 @@ namespace Inventory.Controllers
                 return NotFound();
             }
 
-            return View(product); // Ensure the view expects a Product model
+            return View(product);
         }
+        // GET: Products/Search
+        public async Task<IActionResult> Search(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            // Convert both the query and the product name to lower case for case-insensitive comparison
+            var products = await _context.Products
+                .Include(p => p.Supplier)
+                .Include(p => p.Category)
+                .Where(p => p.Name.ToLower().Contains(query.ToLower()))
+                .ToListAsync();
+
+            return View("Index", products); // Reuse the Index view to display search results
+        }
+
+
 
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]

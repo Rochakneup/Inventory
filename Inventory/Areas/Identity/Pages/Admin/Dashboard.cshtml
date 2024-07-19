@@ -246,7 +246,7 @@
             // Products by Category Chart
             var ctx3 = document.getElementById('productsByCategoryChart').getContext('2d');
             var productsByCategoryChart = new Chart(ctx3, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: productsByCategoryData.map(data => data.categoryName),
                     datasets: [{
@@ -327,7 +327,7 @@
                             popup.style.display = 'block';
                             var popupCtx = popup.querySelector('#productStatusPiePopupChart').getContext('2d');
                             var popupChart = new Chart(popupCtx, {
-                                type: 'pie',
+                                type: 'doughnut',
                                 data: chart.data,
                                 options: {
                                     responsive: true,
