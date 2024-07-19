@@ -4,26 +4,93 @@
     ViewData["Title"] = "Edit Order";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1>Edit Order</h1>
 
-<form asp-action="Edit">
-    <div class="form-group">
-        <label asp-for="Status" class="control-label"></label>
-        <select asp-for="Status" class="form-control" asp-items="Html.GetEnumSelectList<Inventory.Models.OrderStatus>()"></select>
-        <span asp-validation-for="Status" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="DeliveryDate" class="control-label"></label>
-        <input asp-for="DeliveryDate" class="form-control" />
-        <span asp-validation-for="DeliveryDate" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="DeliveryAddress" class="control-label"></label>
-        <input asp-for="DeliveryAddress" class="form-control" />
-        <span asp-validation-for="DeliveryAddress" class="text-danger"></span>
-    </div>
-    <input type="hidden" asp-for="Id" />
-    <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-primary" />
-    </div>
-</form>
+<div class="table-container">
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group">
+            <label asp-for="Status" class="font-weight-bold">Status</label>
+            <select asp-for="Status" class="form-control">
+                @foreach (var status in Enum.GetValues(typeof(Inventory.Models.OrderStatus)))
+                {
+                    <option value="@status">@status</option>
+                }
+            </select>
+            <span asp-validation-for="Status" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DeliveryDate" class="font-weight-bold">Delivery Date</label>
+            <input asp-for="DeliveryDate" class="form-control" />
+            <span asp-validation-for="DeliveryDate" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="DeliveryAddress" class="font-weight-bold">Delivery Address</label>
+            <input asp-for="DeliveryAddress" class="form-control" />
+            <span asp-validation-for="DeliveryAddress" class="text-danger"></span>
+        </div>
+
+        <div class="form-group button-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-controller="AdminOrders" asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<style>
+    h1 {
+        margin-top: 80px;
+        text-align: center;
+    }
+
+    .table-container {
+        position: relative;
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        text-align: left;
+    }
+
+    .form-group.button-group {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .btn-primary {
+        background-color: #0E9BA8 !important;
+        border-color: #0E9BA8 !important;
+        color: white;
+        font-size: 16px;
+        width: 100px;
+        margin-right: 10px;
+    }
+
+        .btn-primary:hover {
+            background-color: #0C8B97 !important;
+            border-color: #0C8B97 !important;
+            color: white;
+        }
+
+    .btn-secondary {
+        background-color: #6c757d !important;
+        border-color: #6c757d !important;
+        color: white;
+        font-size: 16px;
+        width: 100px;
+    }
+
+        .btn-secondary:hover {
+            background-color: #5a6268 !important;
+            color: white;
+        }
+</style>

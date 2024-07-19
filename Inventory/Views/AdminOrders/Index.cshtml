@@ -4,57 +4,139 @@
     ViewData["Title"] = "Orders";
 }
 
-<h1>@ViewData["Title"]</h1>
+<h1 class="text-center mb-4">@ViewData["Title"]</h1>
+<div class="container my-4">
+    <div class="p-4 border rounded shadow-sm bg-white">
+        <div class="row justify-content-between align-items-center mb-4">
+            <div class="col-12 col-md-8 mb-3 mb-md-0">
+                <form method="get" class="d-flex">
+                    
+                </form>
+            </div>
+            <div class="col-12 col-md-4 text-md-end">
+                <button id="export-pdf" class="btn btn-outline-danger ms-2" title="Export PDF">
+                    <i class="bi bi-file-earmark-pdf"></i>
+                </button>
+                <button id="export-excel" class="btn btn-outline-success ms-2" title="Export Excel">
+                    <i class="bi bi-file-earmark-spreadsheet"></i>
+                </button>
+            </div>
+        </div>
 
-<button id="export-pdf" class="btn btn-danger">Export to PDF</button>
-<button id="export-excel" class="btn btn-success">Export to Excel</button>
-
-<table id="orderTable" class="table">
-    <thead>
-        <tr>
-            <th>Order ID</th>
-            <th>Order Date</th>
-            <th>Status</th>
-            <th>User First Name</th>
-            <th>User Email</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var order in Model)
-        {
-            <tr>
-                <td>@order.Id</td>
-                <td>@order.OrderDate.ToString("d")</td>
-                <td>@order.Status</td>
-                <td>@order.UserFirstName</td>
-                <td>@order.UserEmail</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-info">Details</a>
-                    <a asp-action="Edit" asp-route-id="@order.Id" class="btn btn-primary">Edit</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <div class="table-responsive">
+            <table id="orderTable" class="table table-striped table-hover border" style="border: 10px solid #0E9BA8">
+                <thead class="table-light">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Order Date</th>
+                        <th>Status</th>
+                        <th>User First Name</th>
+                        <th>User Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>@order.Id</td>
+                            <td>@order.OrderDate.ToString("d")</td>
+                            <td>@order.Status</td>
+                            <td>@order.UserFirstName</td>
+                            <td>@order.UserEmail</td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@order.Id" class="btn btn-info btn-sm" style="background-color: transparent; border: none;">
+                                    <i class="bi bi-info-circle text-info"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@order.Id" class="btn btn-primary btn-sm" style="background-color: transparent; border: none;">
+                                    <i class="bi bi-pencil-square text-primary"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 <style>
-    /* Your existing styles here */
+    h1 {
+        font-weight: bold;
+        margin-top: 150px;
+    }
+
+    .btn-success {
+        background-color: #0E9BA8 !important;
+        border-color: #0E9BA8 !important;
+    }
+
+        .btn-success:hover {
+            background-color: #0C8B97 !important;
+            border-color: #0C8B97 !important;
+        }
+
+    .btn-outline-secondary:hover {
+        background-color: #0C8B97 !important;
+    }
+
+    .input-group .form-control {
+        border: 1px solid #0E9BA8 !important;
+    }
+
+        .input-group .form-control:focus {
+            box-shadow: none !important;
+        }
+
+    .text-black {
+        color: white !important;
+        background-color: #0E9BA8;
+    }
+
+    .table-responsive {
+        margin: auto;
+        max-width: 100%;
+    }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, .05);
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, .075);
+    }
+
+    .badge {
+        font-size: 0.85em;
+    }
+
+    .border, .shadow-sm, .bg-white {
+        border: 1px solid #0E9BA8;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        background-color: #fff;
+    }
+
+    .btn-primary:hover {
+        transform: scale(1.1);
+    }
+
+    .btn-danger:hover {
+        transform: scale(1.1);
+    }
 </style>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.21/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.26/jspdf.plugin.autotable.min.js"></script>
+
 <script>
     document.getElementById('export-pdf').addEventListener('click', function () {
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         doc.text("Order List", 10, 10);
 
-        doc.autoTable({
-            html: '#orderTable',
-            startY: 20
-        });
+        const table = document.getElementById('orderTable');
+        doc.autoTable({ html: table, startY: 20 });
 
         doc.save('order_list.pdf');
     });
@@ -63,48 +145,9 @@
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.table_to_sheet(document.getElementById('orderTable'));
         XLSX.utils.book_append_sheet(wb, ws, "Order List");
+
         XLSX.writeFile(wb, 'order_list.xlsx');
     });
 </script>
-<style>
-    .btn-danger {
-        background-color: #dc3545;
-        border-color: #dc3545;
-        color: white;
-    }
 
-        .btn-danger:hover {
-            background-color: #c82333;
-            border-color: #bd2130;
-        }
-
-    .btn-success {
-        background-color: #28a745;
-        border-color: #28a745;
-        color: white;
-    }
-
-        .btn-success:hover {
-            background-color: #218838;
-            border-color: #1e7e34;
-        }
-
-    .alert {
-        padding: 15px;
-        margin-bottom: 20px;
-        border: 1px solid transparent;
-        border-radius: 4px;
-    }
-
-    .alert-success {
-        color: #155724;
-        background-color: #d4edda;
-        border-color: #c3e6cb;
-    }
-
-    .alert-danger {
-        color: #721c24;
-        background-color: #f8d7da;
-        border-color: #f5c6cb;
-    }
-</style>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">

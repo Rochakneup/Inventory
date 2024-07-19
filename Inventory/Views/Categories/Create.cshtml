@@ -32,7 +32,7 @@
         <div class="form-group button-group">
             <button type="submit" class="btn btn-primary">Create</button>
            
-                <a asp-action="Index">Back to List</a>
+                <a asp-action="Index" class="btn-back">Back</a>
             
 
            
@@ -124,15 +124,11 @@
             color: white;
         }
 
-    .btn-secondary {
-        background-color: #6c757d !important;
-        border-color: #6c757d !important;
-        color: white;
-        width: 100px;
-    }
+   .btn-back{
+       text-decoration: none;
+   }
 
-        .btn-secondary:hover {
-            background-color: #5a6268 !important;
-            color: white;
-        }
-</style>
+   .btn-back:hover{
+        text-decoration: underline;
+   }
+   </style>

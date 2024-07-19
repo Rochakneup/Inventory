@@ -1,8 +1,40 @@
 ﻿@{
     ViewData["Title"] = "Order Confirmation";
 }
+<h2>Order Confirmation</h2>
 
-<h1>@ViewData["Title"]</h1>
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-sm p-4">
+                <p>Your order has been successfully placed. Thank you for shopping with us!</p>
+                <a asp-action="Index" class="btn btn-back-home">Back</a>
+            </div>
+        </div>
+    </div>
+</div>
 
-<p>Your order has been successfully placed. Thank you for shopping with us!</p>
-<a href="@Url.Action("Index", "Cart")" class="btn btn-primary">Return to Cart</a>
+<style>
+    h2 {
+        margin-top: 100px;
+        text-align: center;
+    }
+
+    .btn-back-home {
+        background-color: #0E9BA8;
+        color: white;
+        width: 150px;
+        padding: 0.375rem 0.75rem;
+        text-align: center;
+    }
+
+        .btn-back-home:hover {
+            background-color: #0c8695;
+            color: white;
+        }
+
+    .container {
+        max-width: 800px;
+        margin: auto;
+    }
+</style>

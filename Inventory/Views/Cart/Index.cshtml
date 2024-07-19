@@ -1,44 +1,80 @@
 ﻿@model Inventory.Models.Cart
 
-<h2>Your Cart</h2>
+<style>
+    .table-responsive {
+        margin: auto;
+        max-width: 100%;
+    }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Select</th>
-            <th>Product Name</th>
-            <th>Quantity</th>
-            <th>Unit Price</th>
-            <th>Total Price</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model != null && Model.CartItems != null)
-        {
-            foreach (var item in Model.CartItems)
-            {
-                <tr>
-                    <td><input type="checkbox" class="product-select" data-id="@item.Id" data-name="@item.ProductName" data-price="@item.UnitPrice" /></td>
-                    <td>@item.ProductName</td>
-                    <td>@item.Quantity</td>
-                    <td>@item.UnitPrice.ToString("C")</td>
-                    <td>@(item.Quantity * item.UnitPrice).ToString("C")</td>
-                </tr>
-            }
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, .05);
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(0, 0, 0, .075);
+    }
+
+    h2 {
+        margin-top: 100px;
+    }
+
+    .btn-primary {
+        background-color: #0E9BA8 !important;
+        border-color: #0E9BA8 !important;
+        color: #fff !important;
+    }
+
+        .btn-primary:hover {
+            background-color: #0C8B97 !important;
+            border-color: #0C8B97 !important;
         }
-    </tbody>
-</table>
+</style>
 
-<form asp-action="Checkout" method="post" id="checkoutForm">
-    <input type="hidden" name="selectedItems" id="selectedItems" />
-    <button type="submit" class="btn btn-primary">Checkout</button>
-</form>
+<h2 class="text-center">Your Cart</h2>
 
-<!-- Footer for displaying selected products and total -->
-<div id="checkoutFooter" style="display:none;">
-    <h3>Checkout Summary</h3>
-    <ul id="selectedProducts"></ul>
-    <p id="totalAmount"></p>
+<div class="container my-5">
+    <div class="row">
+        <div class="col-md-8">
+            <table id="categoryTable" class="table table-striped table-hover border" style="border: 10px solid #0E9BA8">
+                <thead>
+                    <tr>
+                        <th>Select</th>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Total Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.CartItems != null)
+                    {
+                        foreach (var item in Model.CartItems)
+                        {
+                            <tr>
+                                <td><input type="checkbox" class="product-select" data-id="@item.Id" data-name="@item.ProductName" data-price="@item.UnitPrice" data-quantity="@item.Quantity" /></td>
+                                <td>@item.ProductName</td>
+                                <td>@item.Quantity</td>
+                                <td>Rs.@item.UnitPrice</td>
+                                <td>Rs.@(item.Quantity * item.UnitPrice)</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-md-4">
+            <div id="checkoutFooter" class="card shadow-sm p-3">
+                <h3>Checkout Summary</h3>
+                <ul id="selectedProducts" class="list-unstyled"></ul>
+                <p id="totalAmount"></p>
+                <form asp-action="Checkout" method="post" id="checkoutForm">
+                    <input type="hidden" name="selectedItems" id="selectedItems" />
+                    <button type="submit" class="btn btn-primary">Checkout</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
@@ -61,17 +97,17 @@
                         const id = checkbox.getAttribute('data-id');
                         const name = checkbox.getAttribute('data-name');
                         const price = parseFloat(checkbox.getAttribute('data-price'));
+                        const quantity = parseInt(checkbox.getAttribute('data-quantity'));
 
                         selectedItems.push(id);
-                        selectedProducts.push(`<li>${name} - ${price.toFixed(2)} USD</li>`);
-                        total += price;
+                        selectedProducts.push(`<li>${name} - ${quantity} x Rs. ${price.toFixed(2)} </li>`);
+                        total += price * quantity;
                     }
                 });
 
                 selectedItemsInput.value = selectedItems.join(',');
                 selectedProductsList.innerHTML = selectedProducts.join('');
-                totalAmountElem.textContent = `Total Amount: ${total.toFixed(2)} USD`;
-                footer.style.display = selectedItems.length > 0 ? 'block' : 'none';
+                totalAmountElem.textContent = `Total Amount: Rs. ${total.toFixed(2)} `;
             }
 
             checkboxes.forEach(checkbox => {
@@ -84,6 +120,9 @@
                     alert('Please select at least one product to checkout.');
                 }
             });
+
+            // Initial call to updateFooter to populate the summary initially
+            updateFooter();
         });
     </script>
 }
