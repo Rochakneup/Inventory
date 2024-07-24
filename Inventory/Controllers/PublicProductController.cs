@@ -20,12 +20,23 @@ namespace Inventory.Controllers
             _userManager = userManager;
         }
 
+       
         // GET: PublicProducts
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? categoryId)
         {
-            var products = await _context.Products.Include(p => p.Supplier).ToListAsync();
-            return View(products); // Renders the Index view with a list of products
+            var productsQuery = _context.Products.Include(p => p.Supplier).Include(p => p.Category).AsQueryable();
+
+            if (categoryId.HasValue)
+            {
+                productsQuery = productsQuery.Where(p => p.CategoryId == categoryId.Value);
+            }
+
+            var products = await productsQuery.ToListAsync();
+            ViewData["Categories"] = await _context.Categories.ToListAsync(); // Pass categories to the view
+            return View(products);
         }
+
+
 
         // GET: PublicProducts/Details/5
         public async Task<IActionResult> Details(int? id)

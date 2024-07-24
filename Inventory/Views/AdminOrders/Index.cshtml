@@ -2,22 +2,35 @@
 
 @{
     ViewData["Title"] = "Orders";
+
+    var statuses = Enum.GetValues(typeof(Inventory.Models.OrderStatus)).Cast<Inventory.Models.OrderStatus>();
 }
 
 <h1 class="text-center mb-4">@ViewData["Title"]</h1>
+
 <div class="container my-4">
     <div class="p-4 border rounded shadow-sm bg-white">
         <div class="row justify-content-between align-items-center mb-4">
             <div class="col-12 col-md-8 mb-3 mb-md-0">
-                <form method="get" class="d-flex">
-                    
+                <form method="get" class="d-flex" id="searchForm">
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="searchString" placeholder="Search orders by ID or user" aria-label="Search orders" aria-describedby="button-search" value="@ViewBag.CurrentFilter">
+                        <select class="form-select" id="stockStatus" name="stockStatus" aria-label="Filter by Stock Status">
+                            <option value="all" selected>All</option>
+                            @foreach (var status in statuses)
+                            {
+                                <option value="@status">@status</option>
+                            }
+                        </select>
+                        <button class="btn btn-outline-secondary" type="submit" id="button-search">Search</button>
+                    </div>
                 </form>
             </div>
-            <div class="col-12 col-md-4 text-md-end">
+            <div class="col-12 col-md-4 d-flex justify-content-end align-items-center">
                 <button id="export-pdf" class="btn btn-outline-danger ms-2" title="Export PDF">
                     <i class="bi bi-file-earmark-pdf"></i>
                 </button>
-                <button id="export-excel" class="btn btn-outline-success ms-2" title="Export Excel">
+                <button id="export-excel" class="btn btn-outline-secondary ms-2" title="Export Excel">
                     <i class="bi bi-file-earmark-spreadsheet"></i>
                 </button>
             </div>
@@ -38,7 +51,7 @@
                 <tbody>
                     @foreach (var order in Model)
                     {
-                        <tr>
+                        <tr data-status="@order.Status.ToString()">
                             <td>@order.Id</td>
                             <td>@order.OrderDate.ToString("d")</td>
                             <td>@order.Status</td>
@@ -66,14 +79,34 @@
         margin-top: 150px;
     }
 
-    .btn-success {
-        background-color: #0E9BA8 !important;
-        border-color: #0E9BA8 !important;
+    .btn-warning:hover {
+        transform: scale(1.1);
     }
 
-        .btn-success:hover {
+    .btn-danger:hover {
+        transform: scale(1.1);
+    }
+
+    .btn-primary {
+        background-color: #0E9BA8 !important;
+        border-color: #0E9BA8 !important;
+        color: #fff !important;
+    }
+
+        .btn-primary:hover {
             background-color: #0C8B97 !important;
             border-color: #0C8B97 !important;
+        }
+
+    .btn-danger {
+        background-color: transparent !important;
+        border-color: transparent !important;
+        color: #0E9BA8 !important;
+    }
+
+        .btn-danger:hover {
+            color: #c82333 !important;
+            text-decoration: underline !important;
         }
 
     .btn-outline-secondary:hover {
@@ -116,12 +149,19 @@
         background-color: #fff;
     }
 
-    .btn-primary:hover {
-        transform: scale(1.1);
+    .details-link {
+        color: #0E9BA8 !important;
+        text-decoration: none;
     }
 
-    .btn-danger:hover {
-        transform: scale(1.1);
+        .details-link:hover {
+            color: #0E9BA8 !important;
+            text-decoration: underline !important;
+        }
+
+    .btn:focus, .form-control:focus {
+        outline: 2px solid #0E9BA8;
+        outline-offset: 2px;
     }
 </style>
 
@@ -145,8 +185,33 @@
         const wb = XLSX.utils.book_new();
         const ws = XLSX.utils.table_to_sheet(document.getElementById('orderTable'));
         XLSX.utils.book_append_sheet(wb, ws, "Order List");
-
         XLSX.writeFile(wb, 'order_list.xlsx');
+    });
+
+    // Search form submission handling
+    document.getElementById('searchForm').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const searchString = document.querySelector('input[name="searchString"]').value.trim().toLowerCase();
+        const statusFilter = document.querySelector('select[name="stockStatus"]').value;
+
+        const rows = document.querySelectorAll('#orderTable tbody tr');
+        rows.forEach(row => {
+            const orderId = row.querySelector('td:nth-child(1)').textContent.trim().toLowerCase();
+            const userName = row.querySelector('td:nth-child(4)').textContent.trim().toLowerCase();
+            const userEmail = row.querySelector('td:nth-child(5)').textContent.trim().toLowerCase();
+            const statusValue = row.getAttribute('data-status');
+
+            let statusMatch = true;
+            if (statusFilter !== "all" && statusFilter.toLowerCase() !== statusValue.toLowerCase()) {
+                statusMatch = false;
+            }
+
+            if ((orderId.includes(searchString) || userName.includes(searchString) || userEmail.includes(searchString)) && statusMatch) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
     });
 </script>
 

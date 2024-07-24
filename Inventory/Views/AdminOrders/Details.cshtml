@@ -71,7 +71,7 @@
                     <td>@item.Product.Name</td>
                     <td>@item.Quantity</td>
                     <td>@item.UnitPrice.ToString("C")</td>
-                    <td>@(item.Quantity * item.UnitPrice)</td>
+                    <td>@(item.Quantity * item.UnitPrice).ToString("C")</td>
                 </tr>
             }
         </tbody>
@@ -79,38 +79,3 @@
 </div>
 
 <a asp-action="Index" class="custom-link">Back</a>
-
-<style>
-    h1 {
-        margin-top: 80px;
-        text-align: center;
-    }
-
-    .table-container {
-        position: relative;
-        max-width: 800px;
-        margin: 20px auto;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .table th, .table td {
-        vertical-align: middle;
-        text-align: left;
-    }
-
-    .custom-link {
-        display: block;
-        text-align: end;
-        margin-top: 20px;
-        color: #0E9BA8;
-        text-decoration: none;
-    }
-
-        .custom-link:hover {
-            color: #0C8B97;
-            text-decoration: underline;
-        }
-</style>

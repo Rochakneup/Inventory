@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,6 +26,9 @@ namespace Inventory.Areas.Identity.Pages.Admin
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
 
+        [BindProperty(SupportsGet = true)]
+        public DateTime? LoginDate { get; set; }
+
         public IList<AuthUser> Users { get; set; }
 
         public async Task OnGetAsync()
@@ -36,6 +40,12 @@ namespace Inventory.Areas.Identity.Pages.Admin
                 usersQuery = usersQuery.Where(u => u.UserName.Contains(SearchString)
                                                 || u.Email.Contains(SearchString)
                                                 || (u.Firstname + " " + u.Lastname).Contains(SearchString));
+            }
+
+            if (LoginDate.HasValue)
+            {
+                // Filter users who logged in on the specified date
+                usersQuery = usersQuery.Where(u => u.LoginDate.HasValue && u.LoginDate.Value.Date == LoginDate.Value.Date);
             }
 
             Users = await usersQuery.ToListAsync();

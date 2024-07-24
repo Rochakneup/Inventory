@@ -1,0 +1,30 @@
+﻿@model Inventory.Models.Cart
+
+<!-- Display cart items -->
+<table>
+    <thead>
+        <tr>
+            <th>Product Name</th>
+            <th>Quantity</th>
+            <th>Unit Price</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CartItems)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.Quantity</td>
+                <td>@item.UnitPrice.ToString("C")</td>
+                <td>
+                    <form asp-action="RemoveFromCart" method="post">
+                        <input type="hidden" name="cartItemId" value="@item.Id" />
+                        <button type="submit" class="btn btn-danger">Remove</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

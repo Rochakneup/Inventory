@@ -90,6 +90,9 @@ namespace Inventory.Controllers
 
             if (cart == null) return NotFound();
 
+            // Log cart details
+            Console.WriteLine($"Cart contains {cart.CartItems.Count} items.");
+
             var order = new Order
             {
                 OrderDate = DateTime.UtcNow,
@@ -105,6 +108,9 @@ namespace Inventory.Controllers
                 var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Id == itemId);
                 if (cartItem != null)
                 {
+                    // Log cart item details
+                    Console.WriteLine($"Adding item to order: ProductId {cartItem.ProductId}, Quantity {cartItem.Quantity}");
+
                     // Create the order item
                     var orderItem = new OrderItem
                     {
@@ -120,6 +126,8 @@ namespace Inventory.Controllers
                     {
                         product.Quantity -= cartItem.Quantity;
                         _context.Products.Update(product);
+                        // Log product update
+                        Console.WriteLine($"Updated product quantity for ProductId {product.Id}: New Quantity {product.Quantity}");
                     }
 
                     // Remove cart item
@@ -137,6 +145,29 @@ namespace Inventory.Controllers
 
             return RedirectToAction("OrderConfirmation");
         }
+        // CartController.cs
+
+        // Removes a product from the user's cart
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromCart(int cartItemId)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .FirstOrDefaultAsync(c => c.UserId == user.Id);
+
+            if (cart == null) return NotFound();
+
+            var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Id == cartItemId);
+            if (cartItem == null) return NotFound();
+
+            _context.CartItems.Remove(cartItem);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
+
 
         // Displays the order confirmation page
         public IActionResult OrderConfirmation()

@@ -43,6 +43,16 @@ public class AuthContext : IdentityDbContext<AuthUser>
             .WithMany(c => c.Products)
             .HasForeignKey(p => p.CategoryId);
 
+        builder.Entity<Order>()
+       .HasMany(o => o.OrderItems)
+       .WithOne(oi => oi.Order)
+       .HasForeignKey(oi => oi.OrderId);
+
+        builder.Entity<OrderItem>()
+            .HasOne(oi => oi.Product)
+            .WithMany()
+            .HasForeignKey(oi => oi.ProductId);
+
         // Additional configuration
     }
 

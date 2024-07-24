@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Inventory.Models;
 using Inventory.Areas.Identity.Data;
-using Microsoft.AspNetCore.Identity;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -17,35 +16,43 @@ namespace Inventory.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string status, string searchString)
         {
-            var orders = await _context.Orders
+            var ordersQuery = _context.Orders
                 .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Product)
-                .ToListAsync();
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                if (Enum.TryParse(status, out OrderStatus orderStatus))
+                {
+                    ordersQuery = ordersQuery.Where(o => o.Status == orderStatus);
+                }
+            }
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                ordersQuery = ordersQuery.Where(o => o.Id.ToString().Contains(searchString)
+                                                    || o.UserFirstName.ToLower().Contains(searchString)
+                                                    || o.UserEmail.ToLower().Contains(searchString));
+            }
+
+            var orders = await ordersQuery.ToListAsync();
+            ViewBag.CurrentFilter = searchString;
+            ViewBag.CurrentStatus = status;
 
             return View(orders);
         }
 
-
-        public async Task<IActionResult> Details(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             var order = await _context.Orders
                 .Include(o => o.OrderItems)
                 .ThenInclude(oi => oi.Product)
                 .FirstOrDefaultAsync(o => o.Id == id);
 
-            if (order == null)
-            {
-                return NotFound();
-            }
-
-            return View(order);
-        }
-
-        public async Task<IActionResult> Edit(int id)
-        {
-            var order = await _context.Orders.FindAsync(id);
             if (order == null)
             {
                 return NotFound();
@@ -62,20 +69,80 @@ namespace Inventory.Controllers
                 return BadRequest();
             }
 
-            var orderToUpdate = await _context.Orders.FindAsync(id);
+            var orderToUpdate = await _context.Orders
+                .Include(o => o.OrderItems)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
             if (orderToUpdate == null)
             {
                 return NotFound();
             }
 
-            orderToUpdate.Status = order.Status;
-            orderToUpdate.DeliveryDate = order.DeliveryDate;
-            orderToUpdate.DeliveryAddress = order.DeliveryAddress;
+            // Check for model state validity
+            if (!ModelState.IsValid)
+            {
+                return View(orderToUpdate);
+            }
 
-            _context.Orders.Update(orderToUpdate);
-            await _context.SaveChangesAsync();
+            // Handle concurrency issues
+            try
+            {
+                orderToUpdate.Status = order.Status;
+                orderToUpdate.DeliveryDate = order.DeliveryDate;
+                orderToUpdate.DeliveryAddress = order.DeliveryAddress;
+
+                _context.Orders.Update(orderToUpdate);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!OrderExists(order.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
             return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .FirstOrDefaultAsync(o => o.Id == id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            Console.WriteLine($"Order ID: {order.Id}");
+            Console.WriteLine($"Number of Order Items: {order.OrderItems.Count}");
+            foreach (var item in order.OrderItems)
+            {
+                Console.WriteLine($"Product ID: {item.ProductId}, Product Name: {item.Product?.Name}");
+            }
+
+            return View(order);
+        }
+
+
+
+
+
+
+
+
+
+        private bool OrderExists(int id)
+        {
+            return _context.Orders.Any(e => e.Id == id);
         }
     }
 }
