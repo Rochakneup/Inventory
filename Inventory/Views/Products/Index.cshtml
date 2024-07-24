@@ -12,7 +12,13 @@
             <div class="col-12 col-md-8 mb-3 mb-md-0">
                 <form method="get" class="d-flex" id="searchForm">
                     <div class="input-group">
-                        <input type="text" class="form-control" name="searchString" placeholder="Search products" aria-label="Search products" aria-describedby="button-search" value="@ViewBag.CurrentFilter">
+                        <input type="text" class="form-control" name="searchString" placeholder="Search products or suppliers" aria-label="Search products or suppliers" aria-describedby="button-search" value="@ViewBag.CurrentFilter">
+                        <select class="form-select" id="stockStatus" name="stockStatus" aria-label="Filter by Stock Status">
+                            <option value="all" selected>All</option>
+                            <option value="inStock">In Stock</option>
+                            <option value="lowStock">Low Stock</option>
+                            <option value="outOfStock">Out of Stock</option>
+                        </select>
                         <button class="btn btn-outline-secondary" type="submit" id="button-search">Search</button>
                     </div>
                 </form>
@@ -38,19 +44,48 @@
                         <th>Price</th>
                         <th>Supplier</th>
                         <th>Image</th>
+                        <th>Stock Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
+                        string stockStatus;
+                        if (item.Quantity == 0)
+                        {
+                            stockStatus = "outOfStock";
+                        }
+                        else if (item.Quantity <= 10)
+                        {
+                            stockStatus = "lowStock";
+                        }
+                        else
+                        {
+                            stockStatus = "inStock";
+                        }
+
+                        <tr data-stock-status="@stockStatus">
                             <td>@item.Id</td>
                             <td>@item.Name</td>
                             <td>@item.Description</td>
                             <td>@item.Price</td>
                             <td>@item.Supplier.Name</td>
                             <td><img src="@item.ImageUrl" alt="@item.Name" style="max-width: 100px; max-height: 100px;" /></td>
+                            <td>
+                                @if (item.Quantity == 0)
+                                {
+                                    <span class="badge bg-danger">Out of Stock</span>
+                                }
+                                else if (item.Quantity <= 10)
+                                {
+                                    <span class="badge bg-warning text-dark">Low Stock</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">In Stock</span>
+                                }
+                            </td>
                             <td>
                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-link text-primary details-link">
                                     Details
@@ -105,8 +140,6 @@
             color: #c82333 !important;
             text-decoration: underline !important;
         }
-
-
 
     .btn-outline-secondary:hover {
         background-color: #0C8B97 !important;
@@ -186,13 +219,21 @@
     document.getElementById('searchForm').addEventListener('submit', function (event) {
         event.preventDefault();
         const searchString = document.querySelector('input[name="searchString"]').value.trim().toLowerCase();
+        const stockStatus = document.querySelector('select[name="stockStatus"]').value;
 
         const rows = document.querySelectorAll('#productTable tbody tr');
         rows.forEach(row => {
             const productName = row.querySelector('td:nth-child(2)').textContent.trim().toLowerCase();
             const productDescription = row.querySelector('td:nth-child(3)').textContent.trim().toLowerCase();
+            const supplierName = row.querySelector('td:nth-child(5)').textContent.trim().toLowerCase();
+            const stockStatusValue = row.getAttribute('data-stock-status');
 
-            if (productName.includes(searchString) || productDescription.includes(searchString)) {
+            let stockStatusMatch = true;
+            if (stockStatus !== "all" && stockStatus !== stockStatusValue) {
+                stockStatusMatch = false;
+            }
+
+            if ((productName.includes(searchString) || productDescription.includes(searchString) || supplierName.includes(searchString)) && stockStatusMatch) {
                 row.style.display = '';
             } else {
                 row.style.display = 'none';

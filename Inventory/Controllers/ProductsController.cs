@@ -74,7 +74,8 @@ namespace Inventory.Controllers
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
-                        await ImageFile.CopyToAsync(stream);
+                        await ImageFile.CopyToAsync(stream)
+;
                     }
 
                     product.ImageUrl = $"/images/{fileName}";
@@ -126,7 +127,8 @@ namespace Inventory.Controllers
             {
                 try
                 {
-                    var existingProduct = await _context.Products.FindAsync(id);
+                    var existingProduct = await _context.Products.FindAsync(id)
+;
                     if (existingProduct == null)
                     {
                         return NotFound();
@@ -146,7 +148,8 @@ namespace Inventory.Controllers
 
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
-                            await ImageFile.CopyToAsync(stream);
+                            await ImageFile.CopyToAsync(stream)
+;
                         }
 
                         existingProduct.ImageUrl = $"/images/{fileName}";
@@ -222,7 +225,8 @@ namespace Inventory.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products.FindAsync(id)
+;
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

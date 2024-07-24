@@ -1,0 +1,67 @@
+﻿@page
+@model Inventory.Areas.Identity.Pages.User.UserAccountModel
+@{
+    ViewData["Title"] = "Order History";
+}
+
+<style>
+    .status-summary {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+
+    .order-card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 15px;
+        padding: 15px;
+    }
+
+    .pending {
+        border-color: #f0ad4e;
+    }
+
+    .completed {
+        border-color: #5bc0de;
+    }
+
+    .order-status {
+        font-weight: bold;
+    }
+</style>
+
+<h2 class="text-center">Order History</h2>
+
+<div class="status-summary">
+    <div>
+        <h4>Pending Orders</h4>
+        <p>@Model.PendingOrdersCount</p>
+    </div>
+    <div>
+        <h4>Completed Orders</h4>
+        <p>@Model.CompletedOrdersCount</p>
+    </div>
+</div>
+
+<div class="transition-container">
+    <div class="transition-content">
+        @foreach (var order in Model.Orders)
+        {
+            <div class="order-card @(order.Status.ToString().ToLower())">
+                <h5>Order ID: @order.Id</h5>
+                <p>Date: @order.OrderDate.ToShortDateString()</p>
+                <p>Status: <span class="order-status">@order.Status</span></p>
+                <p>Delivery Address: @order.DeliveryAddress</p>
+                <p>Delivery Date: @(order.DeliveryDate.HasValue ? order.DeliveryDate.Value.ToShortDateString() : "Not Delivered")</p>
+                <h6>Order Items:</h6>
+                <ul>
+                    @foreach (var item in order.OrderItems)
+                    {
+                        <li>@item.Product.Name - Quantity: @item.Quantity, Price: Rs.@item.UnitPrice</li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+</div>

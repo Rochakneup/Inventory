@@ -72,8 +72,22 @@
 </style>
 
 <div class="container">
-    <!-- Search Bar -->
- 
+    <!-- Categories List -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="text-center">
+                <h4>Filter by Category</h4>
+                <div class="btn-group" role="group">
+                    <a href="@Url.Action("Index", new { categoryId = (int?)null })" class="btn btn-secondary">All Categories</a>
+                    @foreach (var category in ViewData["Categories"] as List<Inventory.Models.Category>)
+                    {
+                        <a href="@Url.Action("Index", new { categoryId = category.Id })" class="btn btn-secondary">@category.Name</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Carousel -->
     <div id="productCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
         <div class="carousel-indicators">

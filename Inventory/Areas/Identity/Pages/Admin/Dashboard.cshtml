@@ -246,7 +246,7 @@
             // Products by Category Chart
             var ctx3 = document.getElementById('productsByCategoryChart').getContext('2d');
             var productsByCategoryChart = new Chart(ctx3, {
-                type: 'bar',
+                type: 'line',
                 data: {
                     labels: productsByCategoryData.map(data => data.categoryName),
                     datasets: [{
@@ -295,13 +295,13 @@
             var productStatusPieChart = new Chart(ctx4, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Available', 'Low Stock', 'Out of Stock'],
+                    labels: ['Available', 'Low Stock', 'Outof Stock'], 
                     datasets: [{
                         label: 'Product Status',
                         data: [
                             productStatusData.available,
                             productStatusData.lowStock,
-                            productStatusData.outOfStock
+                            productStatusData.outOfStock 
                         ],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.8)',
@@ -311,7 +311,7 @@
                         borderColor: [
                             'rgba(255, 99, 132, 1)',
                             'rgba(54, 162, 235, 1)',
-                            'rgba(255, 206, 86, 1)'
+                            'rgba(255, 206, 86, 0.8)'
                         ],
                         borderWidth: 1
                     }]
@@ -342,6 +342,7 @@
                     }
                 }
             });
+
         }
 
         document.addEventListener('DOMContentLoaded', function () {

@@ -55,7 +55,7 @@ namespace Inventory.Areas.Identity.Pages.Admin
                 .ToList();
 
             // Products by Supplier
-            var products = await _context.Products.Include(p => p.Supplier).ToListAsync();
+            var products = await _context.Products.Include(p => p.Supplier).Include(p => p.Category).ToListAsync();
             ProductsBySupplier = products
                 .GroupBy(p => p.Supplier?.Name ?? "No Supplier") // Handle null Supplier
                 .Select(g => new SupplierData
@@ -79,11 +79,11 @@ namespace Inventory.Areas.Identity.Pages.Admin
 
             // Product Status
             var productStatuses = new Dictionary<string, int>
-    {
-        { "Available", 0 },
-        { "Low Stock", 0 },
-        { "Out of Stock", 0 }
-    };
+            {
+                { "Available", 0 },
+                { "Low Stock", 0 },
+                { "Out of Stock", 0 }
+            };
 
             foreach (var product in products)
             {
@@ -110,8 +110,6 @@ namespace Inventory.Areas.Identity.Pages.Admin
 
             return Page();
         }
-
-
     }
 
     public class StatusData
