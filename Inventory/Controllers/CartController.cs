@@ -1,6 +1,4 @@
-﻿// CartController.cs
-
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -27,6 +25,9 @@ namespace Inventory.Controllers
         public async Task<IActionResult> AddToCart(int productId, int quantity)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            // Retrieve or create the cart
             var cart = await _context.Carts
                 .Include(c => c.CartItems)
                 .FirstOrDefaultAsync(c => c.UserId == user.Id);
@@ -45,6 +46,7 @@ namespace Inventory.Controllers
             if (cartItem != null)
             {
                 cartItem.Quantity += quantity;
+                _context.CartItems.Update(cartItem);
             }
             else
             {
@@ -58,11 +60,10 @@ namespace Inventory.Controllers
                     UnitPrice = product.Price
                 };
                 cart.CartItems.Add(cartItem);
+                _context.CartItems.Add(cartItem);
             }
 
-            _context.CartItems.Update(cartItem);
             await _context.SaveChangesAsync();
-
             return RedirectToAction("Index");
         }
 
@@ -70,6 +71,8 @@ namespace Inventory.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
             var cart = await _context.Carts
                 .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.Product)
@@ -83,15 +86,14 @@ namespace Inventory.Controllers
         public async Task<IActionResult> Checkout(int[] selectedItems)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
             var cart = await _context.Carts
                 .Include(c => c.CartItems)
                 .ThenInclude(ci => ci.Product)
                 .FirstOrDefaultAsync(c => c.UserId == user.Id);
 
             if (cart == null) return NotFound();
-
-            // Log cart details
-            Console.WriteLine($"Cart contains {cart.CartItems.Count} items.");
 
             var order = new Order
             {
@@ -108,10 +110,6 @@ namespace Inventory.Controllers
                 var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Id == itemId);
                 if (cartItem != null)
                 {
-                    // Log cart item details
-                    Console.WriteLine($"Adding item to order: ProductId {cartItem.ProductId}, Quantity {cartItem.Quantity}");
-
-                    // Create the order item
                     var orderItem = new OrderItem
                     {
                         ProductId = cartItem.ProductId,
@@ -120,38 +118,33 @@ namespace Inventory.Controllers
                     };
                     order.OrderItems.Add(orderItem);
 
-                    // Update product quantity
                     var product = await _context.Products.FindAsync(cartItem.ProductId);
                     if (product != null)
                     {
                         product.Quantity -= cartItem.Quantity;
                         _context.Products.Update(product);
-                        // Log product update
-                        Console.WriteLine($"Updated product quantity for ProductId {product.Id}: New Quantity {product.Quantity}");
                     }
 
-                    // Remove cart item
                     _context.CartItems.Remove(cartItem);
                 }
             }
 
-            // Add the order and save changes
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            // Clear the cart
             _context.Carts.Remove(cart);
             await _context.SaveChangesAsync();
 
             return RedirectToAction("OrderConfirmation");
         }
-        // CartController.cs
 
         // Removes a product from the user's cart
         [HttpPost]
         public async Task<IActionResult> RemoveFromCart(int cartItemId)
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
             var cart = await _context.Carts
                 .Include(c => c.CartItems)
                 .FirstOrDefaultAsync(c => c.UserId == user.Id);
@@ -166,8 +159,6 @@ namespace Inventory.Controllers
 
             return RedirectToAction("Index");
         }
-
-
 
         // Displays the order confirmation page
         public IActionResult OrderConfirmation()

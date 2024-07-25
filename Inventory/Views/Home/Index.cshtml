@@ -4,115 +4,8 @@
     Layout = "/Views/Shared/_LayoutWithFooter.cshtml";
 }
 
+
 <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
-
-<div class="container">
-  
-
-    <div id="productCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="/assets/bg1.jpg" class="d-block w-100 carousel-img" alt="Slide 1">
-                <div class="carousel-caption d-none d-md-block"></div>
-            </div>
-            <div class="carousel-item">
-                <img src="/assets/bg2.jpg" class="d-block w-100 carousel-img" alt="Slide 2">
-                <div class="carousel-caption d-none d-md-block"></div>
-            </div>
-            <div class="carousel-item">
-                <img src="/assets/bg3.jpg" class="d-block w-100 carousel-img" alt="Slide 3">
-                <div class="carousel-caption d-none d-md-block"></div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
-    <br />
-
-    <!-- Headline Section -->
-    <div class="text-center mb-4">
-        <h2 class="display-4">Explore Our Products</h2>
-        <p class="lead">Discover a variety of products curated just for you. Browse through our latest collections and find your favorites!</p>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="search-container">
-                <input type="text" id="searchBar" class="form-control" placeholder="Search products..." />
-                <button id="searchBtn" class="btn btn-primary btn-search">Search</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Product Cards -->
-    <div id="productContainer" class="row">
-        @foreach (var product in Model)
-        {
-            <div class="col-md-4 mb-4 product-card" data-name="@product.Name">
-                <div class="card">
-                    <img src="@Url.Content(product.ImageUrl)" class="card-img-top" alt="Product Image">
-                    <div class="card-body">
-                        <h5 class="card-title">@product.Name</h5>
-                        <p class="card-text">@product.Description</p>
-                        <p class="card-text">Price: Rs. @product.Price</p>
-
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <form asp-action="AddToCart" asp-controller="Cart" method="post" class="d-inline">
-                                <div class="form-group">
-                                    <label for="quantity@product.Id">Quantity</label>
-                                    <input type="number" id="quantity@product.Id" name="quantity" value="1" min="1" class="form-control" style="width: 100px;" />
-                                </div>
-                                <input type="hidden" name="productId" value="@product.Id" />
-                                <button type="submit" class="btn btn-primary mt-2">Add to Cart</button>
-                            </form>
-                            <a href="@Url.Action("Details", "PublicProducts", new { id = product.Id })" class="btn btn-primary mt-2">Details</a>
-                        }
-                        else
-                        {
-                            <a href="@Url.Page("/Account/Login", new { area = "Identity" })" class="btn btn-primary">Login to Buy</a>
-                            <a href="@Url.Action("Details", "PublicProducts", new { id = product.Id })" class="btn btn-primary">Details</a>
-                        }
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-
-    @section Scripts {
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const searchInput = document.querySelector('#searchBar');
-                const productContainer = document.querySelector('#productContainer');
-                const productCards = productContainer.querySelectorAll('.product-card');
-
-                searchInput.addEventListener('input', function () {
-                    const query = searchInput.value.toLowerCase();
-
-                    productCards.forEach(card => {
-                        const productName = card.getAttribute('data-name').toLowerCase();
-                        if (productName.includes(query)) {
-                            card.style.display = ''; // Show the product card
-                        } else {
-                            card.style.display = 'none'; // Hide the product card
-                        }
-                    });
-                });
-            });
-        </script>
-    }
-</div>
 
 <style>
     .card {
@@ -178,14 +71,127 @@
         font-size: 0.875rem; /* Smaller button size */
         padding: 0.5rem 1rem; /* Adjust padding */
     }
-
-    .search-container form {
-        display: flex;
-        width: 100%;
-        max-width: 700px; /* Ensure the form does not exceed the search bar width */
-    }
-
-    .form-control {
-        margin-bottom: 0; /* Remove bottom margin */
-    }
 </style>
+
+<div class="container">
+    <!-- Categories List -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="text-center">
+                <h4>Filter by Category</h4>
+                <div class="btn-group" role="group">
+                    <a href="@Url.Action("Index", new { categoryId = (int?)null })" class="btn btn-secondary">All Categories</a>
+                    @foreach (var category in ViewData["Categories"] as List<Inventory.Models.Category>)
+                    {
+                        <a href="@Url.Action("Index", new { categoryId = category.Id })" class="btn btn-secondary">@category.Name</a>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Carousel -->
+    <div id="productCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#productCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/assets/bg1.jpg" class="d-block w-100 carousel-img" alt="Slide 1">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+            <div class="carousel-item">
+                <img src="/assets/bg2.jpg" class="d-block w-100 carousel-img" alt="Slide 2">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+            <div class="carousel-item">
+                <img src="/assets/bg3.jpg" class="d-block w-100 carousel-img" alt="Slide 3">
+                <div class="carousel-caption d-none d-md-block"></div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <br />
+
+    <!-- Headline Section -->
+    <div class="text-center mb-4">
+        <h2 class="display-4">Explore Our Products</h2>
+        <p class="lead">Discover a variety of products curated just for you. Browse through our latest collections and find your favorites!</p>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="search-container">
+                <input type="text" id="searchBar" class="form-control" placeholder="Search products..." />
+                <button id="searchBtn" class="btn btn-primary btn-search">Search</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Product Cards -->
+    <div id="productContainer" class="row">
+        @foreach (var product in Model)
+        {
+            <div class="col-md-4 mb-4 product-card" data-name="@product.Name">
+                <div class="card">
+                    <img src="@Url.Content(product.ImageUrl)" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <h5 class="card-title">@product.Name</h5>
+                        <p class="card-text">@product.Description</p>
+                        <p class="card-text">Price: Rs.@product.Price</p>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <form asp-action="AddToCart" asp-controller="Cart" method="post" class="d-inline">
+                                <div class="form-group">
+                                    <label for="quantity@product.Id">Quantity</label>
+                                    <input type="number" id="quantity@product.Id" name="quantity" value="1" min="1" class="form-control" style="width: 100px;" />
+                                </div>
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <button type="submit" class="btn btn-primary mt-2">Add to Cart</button>
+                            </form>
+                            <a href="@Url.Action("Details", "PublicProducts", new { id = product.Id })" class="btn btn-primary mt-2">Details</a>
+                        }
+                        else
+                        {
+                            <a href="@Url.Page("/Account/Login", new { area = "Identity" })" class="btn btn-primary">Login to Buy</a>
+                            <a href="@Url.Action("Details", "PublicProducts", new { id = product.Id })" class="btn btn-primary">Details</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @section Scripts {
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const searchInput = document.querySelector('#searchBar');
+                const productContainer = document.querySelector('#productContainer');
+                const productCards = productContainer.querySelectorAll('.product-card');
+
+                searchInput.addEventListener('input', function () {
+                    const query = searchInput.value.toLowerCase();
+
+                    productCards.forEach(card => {
+                        const productName = card.getAttribute('data-name').toLowerCase();
+                        if (productName.includes(query)) {
+                            card.style.display = ''; // Show the product card
+                        } else {
+                            card.style.display = 'none'; // Hide the product card
+                        }
+                    });
+                });
+            });
+        </script>
+    }
