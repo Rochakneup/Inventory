@@ -21,15 +21,67 @@ namespace Inventory.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        // GET: Home/Index
+        public async Task<IActionResult> Index(int? categoryId)
         {
-            var products = await _context.Products.Include(p => p.Supplier).ToListAsync();
+            var productsQuery = _context.Products.Include(p => p.Supplier).Include(p => p.Category).AsQueryable();
+
+            if (categoryId.HasValue)
+            {
+                productsQuery = productsQuery.Where(p => p.CategoryId == categoryId.Value);
+            }
+
+            var products = await productsQuery.ToListAsync();
+            ViewData["Categories"] = await _context.Categories.ToListAsync(); // Pass categories to the view
+
             if (products == null || !products.Any())
             {
                 ViewBag.Message = "No products found.";
                 return View(new List<Product>());
             }
+
             return View(products);
+        }
+
+        // GET: Home/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _context.Products
+                .Include(p => p.Supplier)
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+        }
+
+        // GET: Home/Buy/5
+        [Authorize]
+        public async Task<IActionResult> Buy(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _context.Products.FindAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            // Implement buy logic here
+            // For now, just redirect to product details
+            return RedirectToAction("Details", new { id });
         }
 
         [Authorize]
