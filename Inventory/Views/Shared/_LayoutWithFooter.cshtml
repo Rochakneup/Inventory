@@ -85,35 +85,39 @@
             background-color: #053D42;
             color: #fff;
             text-align: center;
-            padding: 10px;
+            height: 200px; /* Set a fixed height for the footer */
+            display: flex;
+            align-items: center; /* Center the content vertically */
+            justify-content: center; /* Center the content horizontally */
         }
 
             footer .footer-content {
                 display: flex;
-                justify-content: space-around;
-            }
-
-                footer .footer-content nav a {
-                    color: #fff;
-                    text-decoration: none;
-                }
-
-            footer .footer-contact p {
-                color: white;
+                flex-direction: column;
+                align-items: center; /* Center content horizontally */
+                gap: 10px; /* Space between footer items */
+                color: #fff;
             }
 
             footer .footer-logo img {
-                height: 40px;
+                height: 40px; /* Adjust logo size if needed */
             }
 
-
-            footer .footer-logo:hover img {
-                transform: scale(1.1); 
+            footer .footer-logo span {
+                display: block;
+                font-size: 1.25rem; /* Larger font size for better visibility */
             }
 
-            footer .footer-logo p {
-                color: white;
+            footer .footer-contact {
+                margin-top: 10px; /* Space above contact information */
             }
+
+                footer .footer-contact p {
+                    margin: 5px 0; /* Space between contact details */
+                    font-size: 1rem; /* Larger font size for contact details */
+                }
+
+
 
         span {
             color: white;
@@ -125,7 +129,7 @@
     <header>
         <nav class="navbar navbar-expand navbar-light border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="PublicProducts" asp-action="Index">
+                <a class="navbar-brand" asp-controller="PublicProducts" asp-action="Index">
                     <img src="~/assets/logo.png" alt="Inventory Logo" style="height: 40px; vertical-align: middle; margin-right: 10px;">
                     Inventory
                 </a>
@@ -146,20 +150,20 @@
     </div>
 
     <footer class="border-top footer text-muted">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-logo">
-                    <img src="~/assets/logo.png" alt="Inventory">
-                    <span>Inventory</span>
-                </div>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <img src="~/assets/logo.png" alt="Inventory">
+                <span>Inventory</span>
             </div>
             <div class="footer-contact">
                 <p>Your Ultimate Inventory Management Solution</p>
-                <p>name@email.com</p>
-                <p>(+1) 123 456 7893</p>
+                <p>rochak@inventory.com</p>
+                <p>+977 9876789873</p>
             </div>
         </div>
     </footer>
+
+
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

@@ -11,16 +11,18 @@
         <div class="row justify-content-between align-items-center mb-4">
             <div class="col-12 col-md-8 mb-3 mb-md-0">
                 <form method="get" class="d-flex" id="searchForm">
-                    <div class="input-group">
+                    <div class="input-group mb-3 me-3">
                         <input type="text" class="form-control" name="searchString" placeholder="Search products or suppliers" aria-label="Search products or suppliers" aria-describedby="button-search" value="@ViewBag.CurrentFilter">
+                    </div>
+                    <div class="input-group mb-3 me-3">
                         <select class="form-select" id="stockStatus" name="stockStatus" aria-label="Filter by Stock Status">
                             <option value="all" selected>All</option>
                             <option value="inStock">In Stock</option>
                             <option value="lowStock">Low Stock</option>
                             <option value="outOfStock">Out of Stock</option>
                         </select>
-                        <button class="btn btn-outline-secondary" type="submit" id="button-search">Search</button>
                     </div>
+                    <button class="btn btn-outline-secondary" type="submit" id="button-search">Search</button>
                 </form>
             </div>
             <div class="col-12 col-md-4 d-flex justify-content-end align-items-center">
@@ -28,7 +30,7 @@
                 <button id="export-pdf" class="btn btn-outline-danger ms-2" title="Export PDF">
                     <i class="bi bi-file-earmark-pdf"></i>
                 </button>
-                <button id="export-excel" class="btn btn-outline-secondary ms-2" title="Export Excel">
+                <button id="export-excel" class="btn btn-outline-success ms-2" title="Export Excel">
                     <i class="bi bi-file-earmark-spreadsheet"></i>
                 </button>
             </div>
@@ -75,17 +77,24 @@
                             <td>
                                 @if (item.Quantity == 0)
                                 {
-                                    <span class="badge bg-danger">Out of Stock</span>
+                                    <span class="badge bg-danger">
+                                        <i class="bi bi-x-circle"></i> Out of Stock
+                                    </span>
                                 }
                                 else if (item.Quantity <= 10)
                                 {
-                                    <span class="badge bg-warning text-dark">Low Stock</span>
+                                    <span class="badge bg-warning text-dark">
+                                        <i class="bi bi-exclamation-triangle"></i> Low Stock
+                                    </span>
                                 }
                                 else
                                 {
-                                    <span class="badge bg-success">In Stock</span>
+                                    <span class="badge bg-success">
+                                        <i class="bi bi-check-circle"></i> In Stock
+                                    </span>
                                 }
                             </td>
+
                             <td>
                                 <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-link text-primary details-link">
                                     Details
@@ -125,6 +134,12 @@
         color: #fff !important;
     }
 
+    .badge i {
+        margin-right: 0.5em; /* Space between the icon and text */
+        vertical-align: middle; /* Align icon vertically with text */
+    }
+
+
         .btn-primary:hover {
             background-color: #0C8B97 !important;
             border-color: #0C8B97 !important;
@@ -145,6 +160,25 @@
         background-color: #0C8B97 !important;
     }
 
+    .input-group {
+        margin-right: 10px; /* Space between input fields */
+    }
+
+    .form-select {
+        margin-right: 10px; /* Space between select and search button */
+    }
+
+    #searchForm .input-group, #searchForm .form-select {
+        flex: 1; /* Make the input fields flexible */
+    }
+
+    #searchForm button {
+        height: 38px; /* Set the height to match the Add New Product button */
+        display: flex;
+        align-items: center; /* Vertically center content inside the button */
+    }
+
+
     .input-group .form-control {
         border: 1px solid #0E9BA8 !important;
     }
@@ -152,6 +186,16 @@
         .input-group .form-control:focus {
             box-shadow: none !important;
         }
+
+    .input-group .form-select {
+        border: 1px solid #0E9BA8 !important;
+    }
+
+        .input-group .form-select:focus {
+            box-shadow: none !important; 
+            border-color: #0E9BA8 !important;
+        }
+
 
     .text-black {
         color: white !important;

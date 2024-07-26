@@ -79,7 +79,7 @@ namespace Inventory.Controllers
             }
 
             // Check for model state validity
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 return View(orderToUpdate);
             }

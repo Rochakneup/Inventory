@@ -20,7 +20,7 @@ namespace Inventory.Controllers
             _userManager = userManager;
         }
 
-       
+
         // GET: PublicProducts
         public async Task<IActionResult> Index(int? categoryId)
         {
