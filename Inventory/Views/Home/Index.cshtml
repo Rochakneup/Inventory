@@ -4,7 +4,6 @@
     Layout = "/Views/Shared/_LayoutWithFooter.cshtml";
 }
 
-
 <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
 
 <style>
@@ -44,6 +43,17 @@
             border-color: #0C8B97 !important;
         }
 
+    .btn-secondary {
+        background-color: #0E9BA8 !important;
+        border-color: #0E9BA8 !important;
+        color: #fff !important;
+    }
+
+        .btn-secondary:hover {
+            background-color: #0C8B97 !important;
+            border-color: #0C8B97 !important;
+        }
+
     .display-4 {
         font-size: 2.5rem;
         font-weight: 300;
@@ -59,37 +69,26 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        margin-bottom: 1rem; /* Add some margin at the bottom */
+        margin-bottom: 1rem;
     }
 
     #searchBar {
-        width: 700px; /* Set the width of the search bar */
-        margin-right: 10px;
+        width: 500px;
+        margin: 0 10px;
     }
 
     .btn-search {
-        font-size: 0.875rem; /* Smaller button size */
-        padding: 0.5rem 1rem; /* Adjust padding */
+        font-size: 0.875rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .dropdown-menu {
+        max-height: 200px;
+        overflow-y: auto;
     }
 </style>
 
 <div class="container">
-    <!-- Categories List -->
-    <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="text-center">
-                <h4>Filter by Category</h4>
-                <div class="btn-group" role="group">
-                    <a href="@Url.Action("Index", new { categoryId = (int?)null })" class="btn btn-secondary">All Categories</a>
-                    @foreach (var category in ViewData["Categories"] as List<Inventory.Models.Category>)
-                    {
-                        <a href="@Url.Action("Index", new { categoryId = category.Id })" class="btn btn-secondary">@category.Name</a>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Carousel -->
     <div id="productCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
         <div class="carousel-indicators">
@@ -128,15 +127,27 @@
         <p class="lead">Discover a variety of products curated just for you. Browse through our latest collections and find your favorites!</p>
     </div>
 
+    <!-- Search and Category Filter -->
     <div class="row mb-4">
         <div class="col-md-12">
             <div class="search-container">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        All Categories
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                        <li><a class="dropdown-item" href="@Url.Action("Index", new { categoryId = (int?)null })" data-category="All Categories">All Categories</a></li>
+                        @foreach (var category in ViewData["Categories"] as List<Inventory.Models.Category>)
+                        {
+                            <li><a class="dropdown-item" href="@Url.Action("Index", new { categoryId = category.Id })" data-category="@category.Name">@category.Name</a></li>
+                        }
+                    </ul>
+                </div>
                 <input type="text" id="searchBar" class="form-control" placeholder="Search products..." />
                 <button id="searchBtn" class="btn btn-primary btn-search">Search</button>
             </div>
         </div>
     </div>
-
 
     <!-- Product Cards -->
     <div id="productContainer" class="row">
@@ -172,13 +183,18 @@
             </div>
         }
     </div>
-
     @section Scripts {
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 const searchInput = document.querySelector('#searchBar');
                 const productContainer = document.querySelector('#productContainer');
                 const productCards = productContainer.querySelectorAll('.product-card');
+                const categoryDropdown = document.querySelector('#categoryDropdown');
+                const categoryItems = document.querySelectorAll('.dropdown-menu .dropdown-item');
+
+                // Set the dropdown button text on page load based on localStorage or default to 'All Categories'
+                const storedCategory = localStorage.getItem('selectedCategory');
+                categoryDropdown.textContent = (storedCategory && storedCategory !== 'null') ? storedCategory : 'All Categories';
 
                 searchInput.addEventListener('input', function () {
                     const query = searchInput.value.toLowerCase();
@@ -192,6 +208,18 @@
                         }
                     });
                 });
+
+                // Update dropdown button text on selection and store in localStorage
+                categoryItems.forEach(item => {
+                    item.addEventListener('click', function () {
+                        const selectedCategory = this.getAttribute('data-category');
+                        categoryDropdown.textContent = selectedCategory;
+                        localStorage.setItem('selectedCategory', selectedCategory);
+                    });
+                });
             });
         </script>
     }
+
+
+</div>

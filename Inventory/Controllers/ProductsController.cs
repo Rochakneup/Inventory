@@ -63,7 +63,7 @@ namespace Inventory.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Price,Description,Quantity,SupplierId,CategoryId")] Product product, IFormFile ImageFile)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 if (ImageFile != null && ImageFile.Length > 0)
                 {
@@ -123,12 +123,11 @@ namespace Inventory.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 try
                 {
-                    var existingProduct = await _context.Products.FindAsync(id)
-;
+                    var existingProduct = await _context.Products.FindAsync(id);
                     if (existingProduct == null)
                     {
                         return NotFound();
@@ -148,17 +147,18 @@ namespace Inventory.Controllers
 
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
-                            await ImageFile.CopyToAsync(stream)
-;
+                            await ImageFile.CopyToAsync(stream);
                         }
 
                         existingProduct.ImageUrl = $"/images/{fileName}";
                     }
                     else
                     {
+                        // Keep existing image if no new file is uploaded
                         _context.Entry(existingProduct).Property(p => p.ImageUrl).IsModified = false;
                     }
 
+                    _context.Update(existingProduct);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

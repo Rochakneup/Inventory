@@ -24,21 +24,30 @@ namespace Inventory.Areas.Identity.Pages.User
         public IList<Order> Orders { get; set; } = new List<Order>();
         public int PendingOrdersCount { get; set; }
         public int CompletedOrdersCount { get; set; }
+        public int ShippedOrdersCount { get; set; }
+        public int InProgressOrdersCount { get; set; }
+        public int CancelledOrdersCount { get; set; }
 
-        public async Task OnGetAsync()
-        {
-            var user = await _userManager.GetUserAsync(User);
-            if (user != null)
-            {
-                Orders = await _context.Orders
-                    .Include(o => o.OrderItems)
-                    .ThenInclude(oi => oi.Product) // Include Product details
-                    .Where(o => o.UserEmail == user.Email)
-                    .ToListAsync();
 
-                PendingOrdersCount = Orders.Count(o => o.Status == OrderStatus.Pending);
-                CompletedOrdersCount = Orders.Count(o => o.Status == OrderStatus.Completed);
-            }
-        }
+
+       public async Task OnGetAsync()
+{
+    var user = await _userManager.GetUserAsync(User);
+    if (user != null)
+    {
+        Orders = await _context.Orders
+            .Include(o => o.OrderItems)
+            .ThenInclude(oi => oi.Product) // Include Product details
+            .Where(o => o.UserEmail == user.Email)
+            .ToListAsync();
+
+        PendingOrdersCount = Orders.Count(o => o.Status == OrderStatus.Pending);
+        CompletedOrdersCount = Orders.Count(o => o.Status == OrderStatus.Completed);
+        ShippedOrdersCount = Orders.Count(o => o.Status == OrderStatus.Shipped);
+        InProgressOrdersCount = Orders.Count(o => o.Status == OrderStatus.InProgress);
+        CancelledOrdersCount = Orders.Count(o => o.Status == OrderStatus.Cancelled);
+    }
+}
+
     }
 }
