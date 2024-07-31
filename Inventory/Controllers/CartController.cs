@@ -64,7 +64,7 @@ namespace Inventory.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "PublicProducts");
         }
 
         // Displays the user's cart
@@ -132,8 +132,11 @@ namespace Inventory.Controllers
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            _context.Carts.Remove(cart);
-            await _context.SaveChangesAsync();
+            if (!cart.CartItems.Any())
+            {
+                _context.Carts.Remove(cart);
+                await _context.SaveChangesAsync();
+            }
 
             return RedirectToAction("OrderConfirmation");
         }

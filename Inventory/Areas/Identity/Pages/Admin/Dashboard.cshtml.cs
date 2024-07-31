@@ -38,12 +38,28 @@ namespace Inventory.Areas.Identity.Pages.Admin
             LowStockProductsCount = await _context.Products.CountAsync(p => p.Quantity <= 10);
             SuppliersCount = await _context.Suppliers.CountAsync();
 
-            // Monthly Orders Count
+            // Monthly Orders Count for the current month and previous month
             var currentMonth = DateTime.Now.Month;
-            MonthlyOrdersCount = await _context.Orders.CountAsync(o => o.OrderDate.Month == currentMonth);
+            var currentYear = DateTime.Now.Year;
 
-            // Orders by Status
-            var orders = await _context.Orders.ToListAsync();
+            var startDate = new DateTime(currentYear, currentMonth, 1);
+            var endDate = startDate.AddMonths(1).AddDays(-1);
+            var previousMonthStartDate = startDate.AddMonths(-1);
+            var previousMonthEndDate = previousMonthStartDate.AddMonths(1).AddDays(-1);
+
+            MonthlyOrdersCount = await _context.Orders.CountAsync(o =>
+                (o.OrderDate >= startDate && o.OrderDate <= endDate) ||
+                (o.OrderDate >= previousMonthStartDate && o.OrderDate <= previousMonthEndDate)
+            );
+
+            // Orders by Status for the current and previous months
+            var orders = await _context.Orders
+                .Where(o =>
+                    (o.OrderDate >= startDate && o.OrderDate <= endDate) ||
+                    (o.OrderDate >= previousMonthStartDate && o.OrderDate <= previousMonthEndDate)
+                )
+                .ToListAsync();
+
             OrdersByStatus = orders
                 .GroupBy(o => o.Status)
                 .Select(g => new StatusData
@@ -79,11 +95,11 @@ namespace Inventory.Areas.Identity.Pages.Admin
 
             // Product Status
             var productStatuses = new Dictionary<string, int>
-            {
-                { "Available", 0 },
-                { "Low Stock", 0 },
-                { "Out of Stock", 0 }
-            };
+    {
+        { "Available", 0 },
+        { "Low Stock", 0 },
+        { "Out of Stock", 0 }
+    };
 
             foreach (var product in products)
             {
@@ -110,6 +126,7 @@ namespace Inventory.Areas.Identity.Pages.Admin
 
             return Page();
         }
+
     }
 
     public class StatusData
