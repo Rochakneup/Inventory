@@ -134,6 +134,26 @@ namespace Inventory.Controllers
 
 
 
+        [HttpPost]
+        public async Task<IActionResult> CancelOrder(int id)
+        {
+            var order = await _context.Orders.FindAsync(id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            order.Status = OrderStatus.Cancelled;
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+
+            // Redirect to Home/Index
+            return RedirectToAction("Index", "PublicProducts");
+        }
+
+
+
 
 
 
