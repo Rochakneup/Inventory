@@ -81,9 +81,9 @@ namespace Inventory.Controllers
             return View(cart);
         }
 
-        // Handles checkout and creates an order
-        [HttpPost]
-        public async Task<IActionResult> Checkout(int[] selectedItems)
+        // Displays the checkout page
+        [HttpGet]
+        public async Task<IActionResult> Checkout()
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null) return RedirectToAction("Login", "Account");
@@ -93,7 +93,26 @@ namespace Inventory.Controllers
                 .ThenInclude(ci => ci.Product)
                 .FirstOrDefaultAsync(c => c.UserId == user.Id);
 
-            if (cart == null) return NotFound();
+            if (cart == null) return RedirectToAction("Index");
+
+            return View(cart);
+        }
+
+        // Handles checkout and creates an order
+        [HttpPost]
+        public async Task<IActionResult> Checkout(string selectedItems)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null) return RedirectToAction("Login", "Account");
+
+            var cart = await _context.Carts
+                .Include(c => c.CartItems)
+                .ThenInclude(ci => ci.Product)
+                .FirstOrDefaultAsync(c => c.UserId == user.Id);
+
+            if (cart == null || !cart.CartItems.Any()) return RedirectToAction("Index");
+
+            var selectedItemsList = selectedItems.Split(',').Select(int.Parse).ToList();
 
             var order = new Order
             {
@@ -105,7 +124,7 @@ namespace Inventory.Controllers
                 OrderItems = new List<OrderItem>()
             };
 
-            foreach (var itemId in selectedItems)
+            foreach (var itemId in selectedItemsList)
             {
                 var cartItem = cart.CartItems.FirstOrDefault(ci => ci.Id == itemId);
                 if (cartItem != null)
@@ -124,19 +143,13 @@ namespace Inventory.Controllers
                         product.Quantity -= cartItem.Quantity;
                         _context.Products.Update(product);
                     }
-
-                    _context.CartItems.Remove(cartItem);
                 }
             }
 
             _context.Orders.Add(order);
+            _context.CartItems.RemoveRange(cart.CartItems.Where(ci => selectedItemsList.Contains(ci.Id)));
+            if (!cart.CartItems.Any()) _context.Carts.Remove(cart);
             await _context.SaveChangesAsync();
-
-            if (!cart.CartItems.Any())
-            {
-                _context.Carts.Remove(cart);
-                await _context.SaveChangesAsync();
-            }
 
             return RedirectToAction("OrderConfirmation");
         }

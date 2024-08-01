@@ -11,5 +11,5 @@ public class CartItem
     public decimal UnitPrice { get; set; }
 
     public Cart Cart { get; set; }
-    public Product Product { get; set; }
+    public Product Product { get; set; }        
 }
