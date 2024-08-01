@@ -6,6 +6,12 @@ namespace Inventory.Models
 {
     public class Cart
     {
+        public Cart() { 
+            CartItems = new List<CartItem>();   
+
+        
+        
+        }   
         [Key]
         public int Id { get; set; }
         public string UserId { get; set; } // Foreign key to AuthUser
