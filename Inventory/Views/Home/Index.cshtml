@@ -4,9 +4,57 @@
 }
 
 <link rel="stylesheet" href="~/css/index.css" asp-append-version="true" />
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 
 <style>
-    /* Existing Styles */
+    .category-list {
+        display: flex;
+        gap: 10px; 
+        justify-content: center;
+        align-items: center; 
+        margin-bottom: 1rem; 
+    }
+
+    .btn-category {
+        background-color: #0E9BA8;
+        border-color: #0E9BA8;
+        color: #fff;
+        padding: 0.5rem 1rem; 
+        border-radius: 5px; 
+    }
+
+        .btn-category:hover {
+            background-color: #0C8B97;
+            border-color: #0C8B97;
+        }
+
+
+    .search-container {
+        display: flex;
+        justify-content: center; 
+        align-items: center;
+    }
+
+    /* Styles for TempData Messages */
+    .tempdata-container {
+        position: fixed;
+        top: 60px;
+        right: 10px; 
+        max-width: 300px;
+        z-index: 1000; 
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start; 
+    }
+
+    .tempdata-alert {
+        width: 100%;
+        margin-bottom: 10px;
+        max-width: 300px; 
+        word-wrap: break-word;
+    }
+
     .card {
         width: 300px;
         margin: auto;
@@ -87,23 +135,23 @@
         bottom: 20px;
         right: 20px;
         width: 300px;
-        height: 400px; /* Minimized height */
+        height: 400px;
         border-radius: 10px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         overflow: hidden;
         font-family: Arial, sans-serif;
-        display: none; /* Initially hidden */
+        display: none; 
     }
 
     .chat-header {
         background-color: #0E9BA8;
-        padding: 10px; /* Adjusted padding */
+        padding: 10px; 
         text-align: center;
         border-bottom: 1px solid #ddd;
-        position: relative; /* Position relative to place the close button */
+        position: relative; 
     }
 
-       
+
 
         .chat-header .close-btn {
             position: absolute;
@@ -114,46 +162,25 @@
             font-weight: bold;
         }
 
-    .chat-body {
-        background-color: #ffffff;
-        padding: 10px; /* Adjusted padding */
-        height: 250px; /* Adjusted height */
-        overflow-y: auto; /* Enable vertical scrolling */
-        display: flex; /* Use flexbox */
-        flex-direction: column; /* Align messages vertically */
-        align-items: flex-start; /* Align content to the start (left) */
-        justify-content: flex-start; /* Start aligning messages from top */
+    #initialMessages {
+        margin-bottom: 1rem; 
     }
-
-
-    .chat-img {
-        width: 50%; /* Adjust as needed */
-        height: auto;
-        max-height: 100px; /* Adjust as needed */
-        margin: 20px 0 10px ; /* Adjust spacing as needed */
-    }
-
-    .chat-header h6 {
-        margin: 0; /* Remove default margin */
-        color: white; /* Adjust color as needed */
-        text-align: left; /* Align text to the left */
-        padding-left: 10px; /* Optional: Add some padding from the left edge */
-    }
-
 
     .chat-buttons {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
-        gap: 5px; /* Adjusted gap */
+        gap: 5px;
+        padding: 5px;
     }
+
 
         .chat-buttons button {
             background-color: #e6f7ff;
             border: 1px solid #b3e0ff;
             border-radius: 5px;
-            padding: 5px 10px; /* Adjusted padding */
-            font-size: 12px; /* Adjusted font size */
+            padding: 5px 10px; 
+            font-size: 12px; 
             cursor: pointer;
             transition: background-color 0.3s;
         }
@@ -162,35 +189,61 @@
                 background-color: #cceeff;
             }
 
+    .chat-body {
+        background-color: #ffffff;
+        padding: 10px;
+        height: 250px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center; 
+    }
+
+    .chat-img {
+        width: 50%; 
+        height: auto;
+        max-height: 100px; 
+        margin: auto; 
+    }
+
+    .chat-header h6 {
+        margin: 0;
+        color: white; 
+        text-align: left; 
+        padding-left: 10px; 
+    }
+
+
+
     .chat-input {
         border-top: 1px solid #ddd;
         padding: 10px;
         background-color: #f7f7f7;
+        display: flex; 
+        align-items: center; 
     }
 
         .chat-input input {
-            width: 100%;
-            padding: 10px;
+            flex: 1; 
+            padding: 5px;
             border: 1px solid #ddd;
             border-radius: 5px;
+            margin-right: 10px; 
         }
 
+        .chat-input button {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #0E9BA8;
+            color: #fff;
+            cursor: pointer;
+        }
 
-  /*  .chat-icon {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #0E9BA8;
-        border-radius: 50%;
-        cursor: pointer;
-        z-index: 1000;
-    }
+            .chat-input button:hover {
+                background-color: #0C8B97;
+            }
 
-    .chat-icon-img {
-        width: 50px;
-        height: 50px; 
-        border-radius: 50%;
-    }*/
     .chat-icon {
         position: fixed;
         bottom: 20px;
@@ -202,22 +255,22 @@
     }
 
     .chat-icon-img {
-        width: 50px; /* Adjust the size as needed */
-        height: 50px; /* Adjust the size as needed */
+        width: 50px; 
+        height: 50px; 
         border-radius: 50%;
     }
 
     .chat-bubble {
         position: absolute;
-        bottom: 10px; /* Position above the icon */
-        left: -20%; /* Position to the left of the icon */
+        bottom: 10px; 
+        left: -20%; 
         background-color: #0E9BA8;
         color: white;
         padding: 8px 12px;
         border-radius: 10px;
         font-size: 0.875rem;
-        display: none; /* Initially hidden */
-        white-space: nowrap; /* Prevents text from wrapping */
+        display: none;
+        white-space: nowrap;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         transform: translateX(-100%);
     }
@@ -231,8 +284,8 @@
         padding: 5px 10px;
         border-radius: 15px;
         display: inline-block;
-        max-width: 80%; /* Limit the width of the message */
-        align-self: flex-end; /* Align user messages to the right */
+        max-width: 80%; 
+        align-self: flex-end;
     }
 
     .bot-message {
@@ -242,11 +295,14 @@
         padding: 5px 10px;
         border-radius: 15px;
         display: inline-block;
-        max-width: 80%; /* Limit the width of the message */
-        align-self: flex-start; /* Align bot messages to the left */
+        max-width: 80%; 
+        align-self: flex-start; 
     }
 
+    
+
 </style>
+
 <div class="container">
     <!-- Carousel -->
     <div id="productCarousel" class="carousel slide mt-4" data-bs-ride="carousel">
@@ -286,35 +342,25 @@
         <p class="lead">Discover a variety of products curated just for you. Browse through our latest collections and find your favorites!</p>
     </div>
 
-    <!-- Search and Category Filter -->
     <div class="row mb-4">
         <div class="col-md-12">
+            <!-- Category Filter -->
+            <div class="category-list mb-2">
+                <a href="@Url.Action("Index", new { categoryId = (int?)null })" class="btn btn-category">All Categories</a>
+                @foreach (var category in ViewData["Categories"] as List<Inventory.Models.Category>)
+                {
+                    <a href="@Url.Action("Index", new { categoryId = category.Id })" class="btn btn-category">@category.Name</a>
+                }
+            </div>
+
+            <!-- Search Bar -->
             <div class="search-container">
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="categoryDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                        All Categories
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                        <li><a class="dropdown-item" href="@Url.Action("Index", new { categoryId = (int?)null })" data-category="All Categories">All Categories</a></li>
-                        @foreach (var category in ViewData["Categories"] as List<Inventory.Models.Category>)
-                        {
-                            <li><a class="dropdown-item" href="@Url.Action("Index", new { categoryId = category.Id })" data-category="@category.Name">@category.Name</a></li>
-                        }
-                    </ul>
-                </div>
                 <input type="text" id="searchBar" class="form-control" placeholder="Search products..." />
                 <button id="searchBtn" class="btn btn-primary btn-search">Search</button>
             </div>
         </div>
     </div>
 
-    <!-- Display Error Message -->
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">
-            @TempData["ErrorMessage"]
-        </div>
-    }
 
     <!-- Product Cards -->
     <div id="productContainer" class="row">
@@ -359,12 +405,12 @@
     </div>
 
     <div class="chat-icon" id="chatIcon">
-        <img src="/assets/flabby.jpg" alt="Flabby Icon" class="chat-icon-img">
+        <img src="/assets/flabby1.jpg" alt="Flabby Icon" class="chat-icon-img">
         <div class="chat-bubble" id="chatBubble">Hi there! Need help?</div>
     </div>
 
 
-
+    <!-- Updated Chat Window Section -->
     <div class="chat-window" id="chatWindow">
         <div class="chat-header">
             <h6>flabby</h6>
@@ -372,87 +418,128 @@
         </div>
         <div class="chat-body" id="chatBody">
             <img src="/assets/flabby.jpg" alt="Chat Image" class="chat-img">
+            <!-- Initial Message Displayed First -->
+            <div id="initialMessages"></div>
+            <!-- Prompt Questions -->
+            <div class="chat-buttons">
+                <button onclick="askQuestion('What items are currently in stock?')">What items are currently in stock?</button>
+                <button onclick="askQuestion('What is the estimated delivery time?')">What is the estimated delivery time?</button>
+                <button onclick="askQuestion('How can I find specific products on your site?')">How can I find specific products on your site?</button>
+                <button onclick="askQuestion('What are the top-selling products this month?')">What are the top-selling products this month?</button>
+            </div>
         </div>
         <div class="chat-input">
             <input type="text" id="chatInput" placeholder="Type here...">
+            <button id="sendBtn" class="btn btn-primary">Send</button>
         </div>
     </div>
 
 
 
-</div>
-
     @section Scripts {
-
-<script>
-    document.getElementById('chatIcon').addEventListener('mouseover', function () {
-        document.getElementById('chatBubble').style.display = 'block';
-    });
-
-    document.getElementById('chatIcon').addEventListener('mouseout', function () {
-        document.getElementById('chatBubble').style.display = 'none';
-    });
-
-
-    let initialMessagesDisplayed = false; // Flag to track if initial messages have been displayed
-
-    document.getElementById('chatIcon').addEventListener('click', function () {
-        var chatWindow = document.getElementById('chatWindow');
-        if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
-            chatWindow.style.display = 'block';
-            if (!initialMessagesDisplayed) {
-                displayInitialMessages();
-                initialMessagesDisplayed = true; // Set the flag to true after displaying initial messages
+        <script>
+            function displayInitialMessages() {
+                const initialMessages = [
+                ];
+                const initialMessagesContainer = document.getElementById('initialMessages');
+                initialMessages.forEach(message => displayMessage('Bot', message, initialMessagesContainer));
             }
-        } else {
-            chatWindow.style.display = 'none';
-        }
-    });
 
-    document.getElementById('closeBtn').addEventListener('click', function () {
-        document.getElementById('chatWindow').style.display = 'none';
-    });
+            document.getElementById('chatIcon').addEventListener('mouseover', function () {
+                document.getElementById('chatBubble').style.display = 'block';
+            });
 
-    const predefinedResponses = {
-            "What items are currently in stock?": "Here are some items currently in stock: 1. Red T-shirt, 2. Blue Jeans, 3. Green Jacket. For a full list, please check our inventory page.",
-            "What are the top- selling products this month ?": "The top-selling products this month are: 1. Blue T-shirt, 2. Black Jeans, 3. White Sneakers.",
-            "What is the estimated delivery time?": "The estimated delivery time depends on your location and the shipping method selected. Generally, Standard Shipping takes 5-7 business days, Express Delivery takes 2-3 business days, and Next-Day Delivery arrives the next business day.",
-            "How can I find specific products on your site?": "You can use the search bar at the top of the page to find specific products. Simply enter the product name or keywords, and you'll see relevant results."
-    };
+            document.getElementById('chatIcon').addEventListener('mouseout', function () {
+                document.getElementById('chatBubble').style.display = 'none';
+            });
 
-    document.getElementById('chatInput').addEventListener('keypress', function (e) {
-        if (e.key === 'Enter') {
-            const userMessage = e.target.value;
-            if (userMessage.trim() !== '') {
-                displayMessage('User', userMessage);
-                if (predefinedResponses[userMessage]) {
-                    displayMessage('Bot', predefinedResponses[userMessage]);
+            let initialMessagesDisplayed = false; 
+            document.getElementById('chatIcon').addEventListener('click', function () {
+                var chatWindow = document.getElementById('chatWindow');
+                if (chatWindow.style.display === 'none' || chatWindow.style.display === '') {
+                    chatWindow.style.display = 'block';
+                    if (!initialMessagesDisplayed) {
+                        displayInitialMessages();
+                        initialMessagesDisplayed = true; 
+                    }
                 } else {
-                    displayMessage('Bot', "I'm not sure how to answer that. Can I help you with something else?");
+                    chatWindow.style.display = 'none';
                 }
-                e.target.value = '';
+            });
+
+            document.getElementById('sendBtn').addEventListener('click', function () {
+                sendMessage();
+            });
+
+            document.getElementById('closeBtn').addEventListener('click', function () {
+                document.getElementById('chatWindow').style.display = 'none';
+            });
+
+            const predefinedResponses = {
+                "What items are currently in stock?": "Here are some items currently in stock: 1. Red T-shirt, 2. Blue Jeans, 3. Green Jacket. For a full list, please check our inventory page.",
+                "What are the top-selling products this month?": "The top-selling products this month are: 1. Blue T-shirt, 2. Black Jeans, 3. White Sneakers.",
+                "What is the estimated delivery time?": "The estimated delivery time depends on your location and the shipping method selected. Generally, Standard Shipping takes 5-7 business days, Express Delivery takes 2-3 business days, and Next-Day Delivery arrives the next business day.",
+                "How can I find specific products on your site?": "You can use the search bar at the top of the page to find specific products. Simply enter the product name or keywords, and you'll see relevant results."
+            };
+
+         
+
+            function sendMessage() {
+                const chatInput = document.getElementById('chatInput');
+                const userMessage = chatInput.value;
+                if (userMessage.trim() !== '') {
+                    displayMessage('User', userMessage);
+                    if (predefinedResponses[userMessage]) {
+                        displayMessage('Bot', predefinedResponses[userMessage]);
+                    } else {
+                        displayMessage('Bot', "I'm not sure how to answer that. Can I help you with something else?");
+                    }
+                    chatInput.value = '';
+                }
             }
-        }
-    });
 
-    function displayMessage(sender, message) {
-        const chatBody = document.getElementById('chatBody');
-        const messageElement = document.createElement('div');
-        messageElement.className = sender === 'User' ? 'user-message' : 'bot-message';
-        messageElement.textContent = message;
-        chatBody.appendChild(messageElement);
-        chatBody.scrollTop = chatBody.scrollHeight; // Automatically scroll to the bottom
+            function displayMessage(sender, message) {
+                const chatBody = document.getElementById('chatBody');
+                const messageElement = document.createElement('div');
+                messageElement.className = sender === 'User' ? 'user-message' : 'bot-message';
+                messageElement.textContent = message;
+                chatBody.appendChild(messageElement);
+                chatBody.scrollTop = chatBody.scrollHeight; // Automatically scroll to the bottom
+            }
+
+            function displayInitialMessages() {
+                const initialMessages = [
+                    "What's up?, Hey there. This is Flabby, your SmartBot from Inventory."
+                ];
+                initialMessages.forEach(message => displayMessage('Bot', message));
+            }
+
+            function askQuestion(question) {
+                console.log("Asking question: ", question);
+                document.getElementById('chatInput').value = question;
+                document.getElementById('chatInput').dispatchEvent(new Event('keypress', { key: 'Enter' }));
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                const searchInput = document.querySelector('#searchBar');
+                const productContainer = document.querySelector('#productContainer');
+                const productCards = productContainer.querySelectorAll('.product-card');
+
+                searchInput.addEventListener('input', function () {
+                    const query = searchInput.value.toLowerCase();
+
+                    productCards.forEach(card => {
+                        const productName = card.getAttribute('data-name').toLowerCase();
+                        if (productName.includes(query)) {
+                            card.style.display = ''; // Show the product card
+                        } else {
+                            card.style.display = 'none'; // Hide the product card
+                        }
+                    });
+                });
+            });
+        </script>
     }
 
 
-    function displayInitialMessages() {
-        const initialMessages = [
-            "What's up?",
-            "Hey there. This is Flabby, your SmartBot from Inventory.",
-        ];
-        initialMessages.forEach(message => displayMessage('Bot', message));
-    }
-</script>
-}
 
-</div>

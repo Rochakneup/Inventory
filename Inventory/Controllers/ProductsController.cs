@@ -81,10 +81,15 @@ namespace Inventory.Controllers
                     product.ImageUrl = $"/images/{fileName}";
                 }
 
+                TempData["message"] = "Product created.";
+
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+
 
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name", product.SupplierId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
@@ -108,6 +113,8 @@ namespace Inventory.Controllers
             {
                 return NotFound();
             }
+
+
 
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "Name", product.SupplierId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
@@ -157,6 +164,8 @@ namespace Inventory.Controllers
                         // Keep existing image if no new file is uploaded
                         _context.Entry(existingProduct).Property(p => p.ImageUrl).IsModified = false;
                     }
+                    TempData["message"] = "Product edited.";
+
 
                     _context.Update(existingProduct);
                     await _context.SaveChangesAsync();
@@ -227,6 +236,9 @@ namespace Inventory.Controllers
         {
             var product = await _context.Products.FindAsync(id)
 ;
+            TempData["error"] = "Product deleted.";
+
+
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

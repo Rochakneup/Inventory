@@ -38,6 +38,9 @@ namespace Inventory.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["message"] = "Supplier created.";
+
+
                 _context.Add(supplier);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -58,6 +61,7 @@ namespace Inventory.Controllers
             {
                 return NotFound();
             }
+
             return View(supplier);
         }
 
@@ -73,6 +77,8 @@ namespace Inventory.Controllers
 
             if (!ModelState.IsValid)
             {
+                TempData["message"] = "Supplier edited.";
+
                 try
                 {
                     _context.Update(supplier);
@@ -91,6 +97,7 @@ namespace Inventory.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             return View(supplier);
         }
 
@@ -142,6 +149,9 @@ namespace Inventory.Controllers
             {
                 return NotFound();
             }
+
+            TempData["error"] = "Supplier deleted.";
+
 
             _context.Suppliers.Remove(supplier);
             await _context.SaveChangesAsync();

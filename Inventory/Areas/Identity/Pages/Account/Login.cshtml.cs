@@ -78,40 +78,38 @@ namespace Inventory.Areas.Identity.Pages.Account
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);
 
+
+
                 if (user == null)
                 {
                     ModelState.AddModelError(string.Empty, "Invalid login attempt.");
                     return Page();
                 }
 
-                // Allow login if user has never logged in before, even if status is inactive
                 if (user.LoginDate == null && user.Status == "Inactive")
                 {
                     user.Status = "Active";
                 }
 
-                // Check if the user is inactive and has logged in before
                 if (user.Status == "Inactive" && user.LoginDate != null)
                 {
                     ModelState.AddModelError(string.Empty, "Your account is inactive. Please contact support.");
                     return Page();
                 }
 
-            
-
-                // Sign in the user
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
 
                 if (result.Succeeded)
                 {
-                    // Update the login date
                     user.LoginDate = DateTime.UtcNow;
                     user.Status = "Active";
                     await _userManager.UpdateAsync(user);
 
                     _logger.LogInformation("User logged in.");
 
-                    // Check the user's roles and redirect accordingly
+                    // Set success message in TempData
+                    TempData["message"] = "Login Successful! Welcome Back!";
+
                     var roles = await _userManager.GetRolesAsync(user);
                     if (roles.Contains("Admin"))
                     {
@@ -138,7 +136,6 @@ namespace Inventory.Areas.Identity.Pages.Account
                 }
             }
 
-            // If we got this far, something failed, redisplay form
             return Page();
         }
     }
