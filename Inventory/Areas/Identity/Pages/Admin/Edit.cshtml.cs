@@ -88,6 +88,9 @@ namespace Inventory.Areas.Identity.Pages.Admin
 
                 var result = await _userManager.UpdateAsync(user);
 
+                TempData["message"] = "User edited successfully.";
+
+
                 if (result.Succeeded)
                 {
                     return RedirectToPage("/Admin/UserActivity", new { area = "Identity" });

@@ -91,6 +91,9 @@ namespace Inventory.Controllers
                 orderToUpdate.DeliveryDate = order.DeliveryDate;
                 orderToUpdate.DeliveryAddress = order.DeliveryAddress;
 
+                TempData["message"] = "Order edited.";
+
+
                 _context.Orders.Update(orderToUpdate);
                 await _context.SaveChangesAsync();
             }

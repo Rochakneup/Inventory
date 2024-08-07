@@ -43,6 +43,9 @@ namespace Inventory.Areas.Identity.Pages.Admin
 
             var result = await _userManager.DeleteAsync(user);
 
+            TempData["error"] = "User deleted.";
+
+
             if (result.Succeeded)
             {
                 return RedirectToPage("/Admin/USerActivity", new { area = "Identity" });

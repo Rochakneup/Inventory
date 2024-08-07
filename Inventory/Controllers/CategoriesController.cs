@@ -35,6 +35,8 @@ namespace Inventory.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description")] Category category)
         {
+            TempData["message"] = "Category added.";
+
             if (!ModelState.IsValid)
             {
                 _context.Add(category);
@@ -72,6 +74,8 @@ namespace Inventory.Controllers
 
             if (!ModelState.IsValid)
             {
+                TempData["message"] = "Category edited.";
+
                 try
                 {
                     _context.Update(category);
@@ -116,6 +120,8 @@ namespace Inventory.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            TempData["error"] = "Category deleted.";
+
             var category = await _context.Categories.FindAsync(id);
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
