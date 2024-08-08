@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Inventory.Models;
+using Inventory.Models; // Adjust if the model is in a different namespace
 using System.Linq;
 using System.Threading.Tasks;
 using Inventory.Areas.Identity.Data;
@@ -20,35 +20,23 @@ namespace Inventory.Controllers
             _userManager = userManager;
         }
 
-
         // GET: PublicProducts
-        public async Task<IActionResult> Index(int? categoryId)
+        public IActionResult Index(int? categoryId)
         {
-            var productsQuery = _context.Products.Include(p => p.Supplier).Include(p => p.Category).AsQueryable();
+            var categories = _context.Categories.ToList(); // Fetch categories from the database or service
+            ViewData["Categories"] = categories;
 
-            if (categoryId.HasValue)
-            {
-                productsQuery = productsQuery.Where(p => p.CategoryId == categoryId.Value);
-            }
-
-            var products = await productsQuery.ToListAsync();
-            ViewData["Categories"] = await _context.Categories.ToListAsync(); // Pass categories to the view
+            // Fetch and filter products based on categoryId, etc.
+            var products = _context.Products.ToList();
             return View(products);
         }
 
 
-
         // GET: PublicProducts/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var product = await _context.Products
-                .Include(p => p.Supplier)
-                .Include(p => p.Category) // Assuming Category is a navigation property in the Product model
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (product == null)
@@ -59,33 +47,14 @@ namespace Inventory.Controllers
             return View(product);
         }
 
-        // GET: PublicProducts/Buy/5
-        [Authorize]
-        public async Task<IActionResult> Buy(int? id)
+        [HttpGet]
+        public async Task<IActionResult> GetPredefinedResponses()
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
-
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null)
-            {
-                // If user is not authenticated, redirect to login
-                return RedirectToAction("Login", "Account");
-            }
-            else
-            {
-                // Implement buy logic here
-                // For now, just redirect to product details
-                return RedirectToAction("Details", new { id });
-            }
+            // Example of retrieving predefined responses from the database
+            var responses = await _context.ChatbotResponses.ToListAsync();
+            return Json(responses);
         }
+
+        // Other actions as needed...
     }
 }
