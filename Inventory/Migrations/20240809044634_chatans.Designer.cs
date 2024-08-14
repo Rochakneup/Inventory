@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    partial class AuthContextModelSnapshot : ModelSnapshot
+    [Migration("20240809044634_chatans")]
+    partial class chatans
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -303,12 +306,6 @@ namespace Inventory.Migrations
                             Id = 6,
                             Answer = "You can contact our customer support team via email at support@example.com. We will be happy to assist you with any questions or concerns.",
                             Question = "How can I contact customer support?"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Answer = "You're Welcome!",
-                            Question = "Thankyou"
                         });
                 });
 
