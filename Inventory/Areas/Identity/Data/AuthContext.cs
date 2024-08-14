@@ -56,13 +56,16 @@ public class AuthContext : IdentityDbContext<AuthUser>
             .HasForeignKey(oi => oi.ProductId);
 
         builder.Entity<PredefinedResponse>().HasData(
-    new PredefinedResponse { Id = 1, Question = "What is your name?", Answer = "I am a chatbot!" },
-    new PredefinedResponse { Id = 2, Question = "What producs do you have?", Answer = "we have differnet types of products from different catgorise from elcetrical to clothes you can surf around to find more products ." },
-    new PredefinedResponse { Id = 3, Question = "How to order?", Answer = "You can add the products and then from the cart yo can select the products and check out to place the order." },
-    new PredefinedResponse { Id = 4, Question = "How long for the product to arive to my loacation ?", Answer = "It takes  2-3 working days for the products to be delivered to your location." },
-    new PredefinedResponse { Id = 5, Question = "What do you do?", Answer = "I answer questions." },
-    new PredefinedResponse { Id = 6, Question = "Thankyou", Answer = "welcome.Fell free to ask any other questions" }
-    
+     new PredefinedResponse { Id = 1, Question = "Can you help me find a product?", Answer = "I'm unable to help with finding specific categories, but you can browse through our website or use the search feature to find the products you're looking for." },
+     new PredefinedResponse { Id = 2, Question = "What are your shipping options?", Answer = "We offer various shipping options including standard, expedited, and express delivery. You can choose the one that best fits your needs during checkout." },
+     new PredefinedResponse { Id = 3, Question = "How can I track my order?", Answer = "To track your order, please use the tracking number sent to you via email. You can enter this number on our website's order tracking page to see the current status of your shipment." },
+     new PredefinedResponse { Id = 4, Question = "What is your return policy?", Answer = "We offer a 30-day return policy for most items. If you're not satisfied with your purchase, you can return it within 30 days for a full refund or exchange." },
+     new PredefinedResponse { Id = 5, Question = "Do you offer discounts or promotions?", Answer = "Yes, we frequently offer discounts and promotions. Be sure to check our website's promotions page or subscribe to our newsletter for the latest deals." },
+     new PredefinedResponse { Id = 6, Question = "How can I contact customer support?", Answer = "You can contact our customer support team via email at support@example.com. We will be happy to assist you with any questions or concerns." },
+     new PredefinedResponse { Id = 7, Question = "Thankyou", Answer = "You're Welcome!" }
+
+
+
 );
 
         // Additional configuration
