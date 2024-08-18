@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    partial class AuthContextModelSnapshot : ModelSnapshot
+    [Migration("20240814082319_gptdata")]
+    partial class gptdata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -271,52 +274,38 @@ namespace Inventory.Migrations
                         new
                         {
                             Id = 1,
-                            Answer = "I'm unable to help with finding specific categories, but you can browse through our website or use the search feature to find the products you're looking for.",
-                            Question = "Can you help me find a product?"
+                            Answer = "I am a chatbot!",
+                            Question = "What is your name?"
                         },
                         new
                         {
                             Id = 2,
-
                             Answer = "We have different types of products from different categories, from electrical to clothes. You can surf around to find more products.",
                             Question = "What products do you have?"
-
                         },
                         new
                         {
                             Id = 3,
-
                             Answer = "You can add the products, and then from the cart, you can select the products and check out to place the order.",
                             Question = "How to order?"
-
                         },
                         new
                         {
                             Id = 4,
-
                             Answer = "It takes 2-3 working days for the products to be delivered to your location.",
                             Question = "How long for the product to arrive at my location?"
-
                         },
                         new
                         {
                             Id = 5,
-                            Answer = "Yes, we frequently offer discounts and promotions. Be sure to check our website's promotions page or subscribe to our newsletter for the latest deals.",
-                            Question = "Do you offer discounts or promotions?"
+                            Answer = "I answer questions.",
+                            Question = "What do you do?"
                         },
                         new
                         {
                             Id = 6,
-
-                            Answer = "You can contact our customer support team via email at support@example.com. We will be happy to assist you with any questions or concerns.",
-                            Question = "How can I contact customer support?"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Answer = "You're Welcome!",
-                            Question = "Thankyou"
-
+                            Answer = "You're welcome. Feel free to ask any other questions.",
+                            Question = "Thank you"
                         });
                 });
 
