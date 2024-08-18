@@ -6,6 +6,25 @@
 
 <h1>@ViewData["Title"]</h1>
 
+
+
+
+<!-- Search Bar -->
+<form method="post">
+    <div class="form-group">
+        <input type="text" asp-for="SearchQuery" class="form-control" placeholder="Search..." />
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+@if (Model.GptApiResponse != null)
+{
+    <div class="alert alert-info mt-3">
+        <strong>GPT Response:</strong> <pre>@Model.GptApiResponse</pre>
+    </div>
+}
+
+<!-- Dashboard Statistics -->
 <div class="row">
     <div class="col-md-6 mb-4">
         <div class="card text-white bg-primary">
@@ -295,13 +314,13 @@
             var productStatusPieChart = new Chart(ctx4, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Available', 'Low Stock', 'Outof Stock'], 
+                    labels: ['Available', 'Low Stock', 'Outof Stock'],
                     datasets: [{
                         label: 'Product Status',
                         data: [
                             productStatusData.available,
                             productStatusData.lowStock,
-                            productStatusData.outOfStock 
+                            productStatusData.outOfStock
                         ],
                         backgroundColor: [
                             'rgba(255, 99, 132, 0.8)',
@@ -381,5 +400,4 @@
         overflow: auto;
     }
 
-   
 </style>

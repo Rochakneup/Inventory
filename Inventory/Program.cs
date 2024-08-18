@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Inventory.HostedServices;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Inventory.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+var openAiApiKey = builder.Configuration["OpenAI:ApiKey"];
 
 // Configuration
 var Configuration = builder.Configuration;
@@ -40,6 +42,14 @@ builder.Services.AddDbContext<AuthContext>(options =>
 builder.Services.AddDefaultIdentity<AuthUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AuthContext>();
+
+// Register GptService with HttpClient
+builder.Services.AddHttpClient<GptService>(client =>
+{
+    client.DefaultRequestHeaders.Add("Authorization", $"Bearer {openAiApiKey}");
+});
+builder.Services.AddScoped<DashboardService>();
+builder.Services.AddScoped<GptService>();
 
 builder.Services.Configure<AdminSettings>(Configuration.GetSection("AdminSettings"));
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
