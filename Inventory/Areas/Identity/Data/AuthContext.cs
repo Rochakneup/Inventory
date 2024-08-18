@@ -60,6 +60,7 @@ public class AuthContext : IdentityDbContext<AuthUser>
 
         // Seed data for PredefinedResponse
         builder.Entity<PredefinedResponse>().HasData(
+
             new PredefinedResponse { Id = 1, Question = "What is your name?", Answer = "I am a chatbot!" },
             new PredefinedResponse { Id = 2, Question = "What products do you have?", Answer = "We have different types of products from different categories, from electrical to clothes. You can surf around to find more products." },
             new PredefinedResponse { Id = 3, Question = "How to order?", Answer = "You can add the products, and then from the cart, you can select the products and check out to place the order." },
@@ -67,6 +68,7 @@ public class AuthContext : IdentityDbContext<AuthUser>
             new PredefinedResponse { Id = 5, Question = "What do you do?", Answer = "I answer questions." },
             new PredefinedResponse { Id = 6, Question = "Thank you", Answer = "You're welcome. Feel free to ask any other questions." }
         );
+
 
         // Additional configuration
     }

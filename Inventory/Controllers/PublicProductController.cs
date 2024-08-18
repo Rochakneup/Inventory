@@ -47,14 +47,30 @@ namespace Inventory.Controllers
             return View(product);
         }
 
+        // Controller action to get predefined responses
         [HttpGet]
         public async Task<IActionResult> GetPredefinedResponses()
         {
-            // Example of retrieving predefined responses from the database
+            // Fetch predefined responses from the database
             var responses = await _context.ChatbotResponses.ToListAsync();
             return Json(responses);
         }
 
-        // Other actions as needed...
+        // Optionally, add an action to get a specific response by question
+        [HttpGet]
+        public async Task<IActionResult> GetResponseByQuestion(string question)
+        {
+            var response = await _context.ChatbotResponses
+                .Where(r => r.Question.ToLower() == question.ToLower())
+                .FirstOrDefaultAsync();
+
+            if (response == null)
+            {
+                return Json(new { Answer = "How can I help you today?" }); // Default response
+            }
+
+            return Json(response);
+        }
+
     }
 }

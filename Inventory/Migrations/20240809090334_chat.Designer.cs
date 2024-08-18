@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Inventory.Migrations
 {
     [DbContext(typeof(AuthContext))]
-    partial class AuthContextModelSnapshot : ModelSnapshot
+    [Migration("20240809090334_chat")]
+    partial class chat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,7 +51,7 @@ namespace Inventory.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -236,7 +239,7 @@ namespace Inventory.Migrations
                         .HasColumnType("int");
 
                     b.Property<decimal>("UnitPrice")
-                        .HasColumnType("decimal(18,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -277,26 +280,20 @@ namespace Inventory.Migrations
                         new
                         {
                             Id = 2,
-
-                            Answer = "We have different types of products from different categories, from electrical to clothes. You can surf around to find more products.",
-                            Question = "What products do you have?"
-
+                            Answer = "We offer various shipping options including standard, expedited, and express delivery. You can choose the one that best fits your needs during checkout.",
+                            Question = "What are your shipping options?"
                         },
                         new
                         {
                             Id = 3,
-
-                            Answer = "You can add the products, and then from the cart, you can select the products and check out to place the order.",
-                            Question = "How to order?"
-
+                            Answer = "To track your order, please use the tracking number sent to you via email. You can enter this number on our website's order tracking page to see the current status of your shipment.",
+                            Question = "How can I track my order?"
                         },
                         new
                         {
                             Id = 4,
-
-                            Answer = "It takes 2-3 working days for the products to be delivered to your location.",
-                            Question = "How long for the product to arrive at my location?"
-
+                            Answer = "We offer a 30-day return policy for most items. If you're not satisfied with your purchase, you can return it within 30 days for a full refund or exchange.",
+                            Question = "What is your return policy?"
                         },
                         new
                         {
@@ -307,7 +304,6 @@ namespace Inventory.Migrations
                         new
                         {
                             Id = 6,
-
                             Answer = "You can contact our customer support team via email at support@example.com. We will be happy to assist you with any questions or concerns.",
                             Question = "How can I contact customer support?"
                         },
@@ -316,7 +312,6 @@ namespace Inventory.Migrations
                             Id = 7,
                             Answer = "You're Welcome!",
                             Question = "Thankyou"
-
                         });
                 });
 
@@ -344,7 +339,7 @@ namespace Inventory.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,4)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
