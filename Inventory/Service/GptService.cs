@@ -64,7 +64,7 @@ public class GptService
             Content = JsonContent.Create(requestBody)
         };
 
-        request.Headers.Add("Authorization", $"Bearer "); // Replace with your actual API key
+        request.Headers.Add("Authorization", $"Bearer"); // Replace with your actual API key
 
         try
         {

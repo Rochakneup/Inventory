@@ -6,23 +6,112 @@
 
 <h1>@ViewData["Title"]</h1>
 
-
+<link rel="stylesheet" href="~/css/dashboard.css" asp-append-version="true" />
 
 
 <!-- Search Bar -->
-<form method="post">
-    <div class="form-group">
-        <input type="text" asp-for="SearchQuery" class="form-control" placeholder="Search..." />
+<form method="post" class="d-flex justify-content-center mb-3" id="search-form">
+    <div class="form-group d-flex align-items-center">
+        <input type="text" asp-for="SearchQuery" class="form-control search-bar" placeholder="Ask me anything..." />
+        <button type="submit" class="btn btn-primary search-btn">
+            <i class="bi bi-search"></i>
+        </button>
+        <!-- Loading Indicator -->
+        <div id="loading-indicator" class="ms-2">
+            <div class="dot-flashing"></div>
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Search</button>
 </form>
+
+
+
+
 
 @if (Model.GptApiResponse != null)
 {
-    <div class="alert alert-info mt-3">
-        <strong>GPT Response:</strong> <pre>@Model.GptApiResponse</pre>
+    <!-- Bootstrap Modal -->
+    <div class="modal fade" id="gptResponseModal" tabindex="-1" aria-labelledby="gptResponseModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="gptResponseModalLabel">GPT Response</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                    <pre id="typing-text" style="white-space: pre-wrap; word-wrap: break-word;"></pre>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to decode HTML entities
+            function decodeHtml(html) {
+                var txt = document.createElement("textarea");
+                txt.innerHTML = html;
+                return txt.value;
+            }
+
+            // Show and hide loading indicator
+            function showLoadingIndicator() {
+                document.getElementById('loading-indicator').style.display = 'flex';
+            }
+
+            function hideLoadingIndicator() {
+                document.getElementById('loading-indicator').style.display = 'none';
+            }
+
+            // Show modal and typewriter effect if there's a response
+            if ("@Model.GptApiResponse") {
+                var text = decodeHtml("@Model.GptApiResponse");
+                var index = 0;
+                var speed = 50; // Adjust typing speed here (milliseconds per character)
+                var typingTextElement = document.getElementById("typing-text");
+
+                var gptResponseModal = new bootstrap.Modal(document.getElementById('gptResponseModal'));
+                gptResponseModal.show();
+
+                function typeWriter() {
+                    if (index < text.length) {
+                        typingTextElement.textContent += text.charAt(index);
+                        index++;
+                        setTimeout(typeWriter, speed);
+                    } else {
+                        hideLoadingIndicator();
+                    }
+                }
+
+                typeWriter();
+            }
+
+            // Event listener for form submission
+            document.getElementById('search-form').addEventListener('submit', function (event) {
+                showLoadingIndicator();
+
+                // Add a delay to simulate waiting for the response
+                setTimeout(function () {
+                    // Ensure loading indicator is hidden if response is already processed
+                    if (document.getElementById('typing-text').textContent) {
+                        hideLoadingIndicator();
+                    }
+                }, 3000); // Adjust as needed to simulate response time
+            });
+        });
+
+
+
+
+    </script>
 }
+
+
+
+
+
 
 <!-- Dashboard Statistics -->
 <div class="row">
@@ -372,32 +461,4 @@
 
 
 
-<style>
-    body {
-        margin-top: 80px;
-    }
 
-    .chart-container {
-        position: relative;
-        height: 400px;
-        width: 100%;
-    }
-
-    .chart-popup {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: white;
-        padding: 60px;
-        border-radius: 8px;
-        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-        z-index: 1001;
-        width: 90%;
-        max-width: 800px;
-        height: 500px;
-        overflow: auto;
-    }
-
-</style>
