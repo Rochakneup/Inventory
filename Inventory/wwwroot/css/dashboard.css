@@ -1,0 +1,90 @@
+﻿namespace Inventory.wwwroot.css
+{
+    public class dashboard
+    {
+    }
+}
+body {
+    margin-top: 80px;
+}
+
+.chart-container {
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
+
+.chart-popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 60px;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1001;
+    width: 90%;
+    max-width: 800px;
+    height: 500px;
+    overflow: auto;
+}
+
+#loading-indicator {
+    display: none;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.dot-flashing {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: green;
+    animation: dotFlashing 1.5s infinite;
+    margin-left: 30px;
+}
+
+    .dot-flashing:before, .dot-flashing:after {
+        content: '';
+        display: inline-block;
+        position: absolute;
+        top: 0;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+
+    .dot-flashing:before {
+        left: -20px;
+        background-color: blue;
+        animation: dotFlashing 1.5s infinite;
+        animation-delay: 0.3s;
+    }
+
+    .dot-flashing:after {
+        left: 20px;
+        background-color: yellow;
+        animation: dotFlashing 1.5s infinite;
+        animation-delay: 0.6s;
+    }
+
+@keyframes dotFlashing {
+    0% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.5);
+    }
+
+    100% {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+}
+
